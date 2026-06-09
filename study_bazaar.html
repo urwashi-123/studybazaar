@@ -1,0 +1,2614 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
+    <meta name="theme-color" content="#1a56db" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>StudyBazaar — Buy · Sell · Share Knowledge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent
+        }
+
+        :root {
+            --pr: #1a56db;
+            --sc: #f97316;
+            --bg: #f0f4ff;
+            --tx: #1a1a2e;
+            --mt: #6b7280;
+            --bd: #e5e7eb;
+            --ok: #10b981;
+            --er: #ef4444;
+            --lt: #dbeafe;
+            --pr2: #1e40af
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--tx);
+            overflow-x: hidden;
+            min-height: 100vh
+        }
+
+        nav {
+            background: #fff;
+            padding: 9px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(26, 86, 219, .12);
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            gap: 8px
+        }
+
+        .logo-wrap {
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+            line-height: 1.1;
+            flex-shrink: 0
+        }
+
+        .logo-main {
+            font-size: 1.18rem;
+            font-weight: 900
+        }
+
+        .st {
+            color: var(--pr)
+        }
+
+        .bz {
+            color: var(--sc)
+        }
+
+        .logo-sub {
+            font-size: .5rem;
+            color: var(--mt);
+            font-weight: 600;
+            letter-spacing: .5px
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1px
+        }
+
+        .nl {
+            font-size: .73rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 5px 6px;
+            border-radius: 7px;
+            transition: .2s;
+            white-space: nowrap;
+            color: var(--tx)
+        }
+
+        .nl:hover {
+            background: var(--bg);
+            color: var(--pr)
+        }
+
+        .nl.danger {
+            color: var(--er)
+        }
+
+        .hmb {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            flex-direction: column;
+            gap: 4px;
+            flex-shrink: 0
+        }
+
+        .hmb span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--tx);
+            border-radius: 2px
+        }
+
+        .mob-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .5);
+            z-index: 190
+        }
+
+        .mob-inner {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 260px;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto
+        }
+
+        .mob-header {
+            background: linear-gradient(135deg, var(--pr), #3b82f6);
+            padding: 22px 16px
+        }
+
+        .mob-header .lm {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #fff
+        }
+
+        .mob-header .lm span {
+            color: #fed7aa
+        }
+
+        .mob-header .ls {
+            font-size: .52rem;
+            color: rgba(255, 255, 255, .7);
+            letter-spacing: .5px;
+            margin-top: 2px
+        }
+
+        .mob-links {
+            padding: 12px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 3px
+        }
+
+        .mob-links .nl {
+            font-size: .86rem;
+            padding: 10px 12px;
+            border-radius: 8px
+        }
+
+        .install-banner {
+            background: linear-gradient(135deg, var(--pr), #3b82f6);
+            color: #fff;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: .81rem
+        }
+
+        .install-banner.hide {
+            display: none
+        }
+
+        .btn {
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: .82rem;
+            transition: .2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            line-height: 1.3;
+            white-space: nowrap
+        }
+
+        .btn:active {
+            transform: scale(.97)
+        }
+
+        .btn-pr {
+            background: var(--pr);
+            color: #fff
+        }
+
+        .btn-pr:hover {
+            background: var(--pr2)
+        }
+
+        .btn-sc {
+            background: var(--sc);
+            color: #fff
+        }
+
+        .btn-ol {
+            background: transparent;
+            border: 2px solid var(--pr);
+            color: var(--pr)
+        }
+
+        .btn-ol:hover {
+            background: var(--pr);
+            color: #fff
+        }
+
+        .btn-er {
+            background: var(--er);
+            color: #fff
+        }
+
+        .btn-ok {
+            background: var(--ok);
+            color: #fff
+        }
+
+        .btn-sm {
+            padding: 5px 11px;
+            font-size: .76rem
+        }
+
+        .btn-xs {
+            padding: 3px 8px;
+            font-size: .71rem
+        }
+
+        .page {
+            display: none
+        }
+
+        .page.active {
+            display: block
+        }
+
+        .sec {
+            padding: 22px 14px;
+            max-width: 1080px;
+            margin: 0 auto
+        }
+
+        .g2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 14px
+        }
+
+        .g3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 12px
+        }
+
+        .g4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .06);
+            border: 1px solid var(--bd)
+        }
+
+        .warn-b {
+            background: #fffbeb;
+            border: 1.5px solid #fcd34d;
+            border-radius: 10px;
+            padding: 10px 13px;
+            margin-bottom: 12px;
+            font-size: .8rem;
+            line-height: 1.6;
+            color: #78350f
+        }
+
+        .info-b {
+            background: #eff6ff;
+            border: 1.5px solid var(--pr);
+            border-radius: 10px;
+            padding: 9px 13px;
+            margin-bottom: 11px;
+            font-size: .8rem;
+            color: #1e40af;
+            line-height: 1.6
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1a56db, #3b82f6 55%, #f97316);
+            color: #fff;
+            padding: 44px 16px;
+            text-align: center
+        }
+
+        .hero h1 {
+            font-size: clamp(1.5rem, 5vw, 2.4rem);
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 10px
+        }
+
+        .hero h1 em {
+            color: #ffd700;
+            font-style: normal
+        }
+
+        .hero p {
+            font-size: clamp(.86rem, 2vw, .97rem);
+            opacity: .93;
+            max-width: 520px;
+            margin: 0 auto 18px
+        }
+
+        .stats-bar {
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            gap: clamp(10px, 4vw, 32px);
+            padding: 12px 14px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--bd)
+        }
+
+        .stat h3 {
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            font-weight: 900;
+            color: var(--pr);
+            text-align: center
+        }
+
+        .stat p {
+            font-size: .71rem;
+            color: var(--mt);
+            text-align: center
+        }
+
+        .bk-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--bd);
+            transition: .2s;
+            position: relative
+        }
+
+        .bk-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(26, 86, 219, .13)
+        }
+
+        .bk-img {
+            width: 100%;
+            height: 95px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            background: linear-gradient(135deg, #dbeafe, #fef3c7)
+        }
+
+        .bk-body {
+            padding: 10px
+        }
+
+        .bk-title {
+            font-weight: 700;
+            font-size: .84rem;
+            margin-bottom: 2px
+        }
+
+        .bk-meta {
+            font-size: .71rem;
+            color: var(--mt);
+            margin-bottom: 4px
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: .64rem;
+            font-weight: 700
+        }
+
+        .b-str {
+            background: var(--lt);
+            color: var(--pr)
+        }
+
+        .b-used {
+            background: #fef9c3;
+            color: #854d0e
+        }
+
+        .b-new {
+            background: #dcfce7;
+            color: #166534
+        }
+
+        .b-note {
+            background: #e0f2fe;
+            color: #0369a1
+        }
+
+        .b-req {
+            background: #fce7f3;
+            color: #9d174d
+        }
+
+        .b-wri {
+            background: #fef3c7;
+            color: #92400e
+        }
+
+        .p-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin: 3px 0
+        }
+
+        .p-old {
+            font-size: .71rem;
+            color: var(--mt);
+            text-decoration: line-through
+        }
+
+        .p-now {
+            font-size: .93rem;
+            font-weight: 800;
+            color: var(--ok)
+        }
+
+        .loc-tag {
+            font-size: .68rem;
+            color: var(--ok);
+            font-weight: 600
+        }
+
+        .ach {
+            font-size: .62rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--pr), #3b82f6);
+            color: #fff;
+            padding: 2px 6px;
+            border-radius: 7px
+        }
+
+        .fav-btn {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            background: rgba(255, 255, 255, .9);
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            font-size: .9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .2s;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, .1)
+        }
+
+        .fav-btn:hover {
+            transform: scale(1.15)
+        }
+
+        .fav-btn.saved {
+            color: var(--er)
+        }
+
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--mt)
+        }
+
+        .empty-state .ei {
+            font-size: 2.8rem;
+            margin-bottom: 9px
+        }
+
+        .empty-state h4 {
+            font-size: .9rem;
+            font-weight: 600;
+            color: var(--tx);
+            margin-bottom: 5px
+        }
+
+        .empty-state p {
+            font-size: .81rem
+        }
+
+        .stags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 13px
+        }
+
+        .stag {
+            padding: 5px 11px;
+            border-radius: 15px;
+            background: #fff;
+            border: 1.5px solid var(--bd);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: .73rem;
+            transition: .2s
+        }
+
+        .stag:hover,
+        .stag.on {
+            background: var(--pr);
+            color: #fff;
+            border-color: var(--pr)
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--bd);
+            margin-bottom: 13px;
+            overflow-x: auto
+        }
+
+        .tab {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: .79rem;
+            color: var(--mt);
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            white-space: nowrap
+        }
+
+        .tab.on {
+            color: var(--pr);
+            border-bottom-color: var(--pr)
+        }
+
+        .tc {
+            display: none
+        }
+
+        .tc.on {
+            display: block
+        }
+
+        .fg {
+            margin-bottom: 10px
+        }
+
+        .fg label {
+            display: block;
+            font-weight: 600;
+            font-size: .79rem;
+            margin-bottom: 3px
+        }
+
+        .fg input,
+        .fg select,
+        .fg textarea {
+            width: 100%;
+            padding: 8px 11px;
+            border: 1.5px solid var(--bd);
+            border-radius: 8px;
+            font-size: .84rem;
+            outline: none;
+            transition: .2s;
+            background: #fafafa;
+            font-family: inherit
+        }
+
+        .fg input:focus,
+        .fg select:focus,
+        .fg textarea:focus {
+            border-color: var(--pr);
+            background: #fff
+        }
+
+        .fg .hint {
+            font-size: .69rem;
+            color: var(--mt);
+            margin-top: 3px
+        }
+
+        .fg .hint.warn {
+            color: var(--er)
+        }
+
+        .pc {
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            border: 2px solid var(--bd);
+            background: #fff;
+            position: relative
+        }
+
+        .pc.pop {
+            border-color: var(--pr)
+        }
+
+        .pop-b {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--pr);
+            color: #fff;
+            padding: 2px 12px;
+            border-radius: 10px;
+            font-size: .68rem;
+            font-weight: 700;
+            white-space: nowrap
+        }
+
+        .p-amt {
+            font-size: 1.7rem;
+            font-weight: 900;
+            color: var(--pr);
+            margin: 5px 0 2px
+        }
+
+        .p-per {
+            color: var(--mt);
+            font-size: .75rem;
+            margin-bottom: 9px
+        }
+
+        .p-feat {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 12px
+        }
+
+        .p-feat li {
+            padding: 3px 0;
+            font-size: .78rem;
+            display: flex;
+            gap: 5px
+        }
+
+        .p-feat li::before {
+            content: "✓";
+            color: var(--ok);
+            font-weight: 700
+        }
+
+        .p-feat li.no::before {
+            content: "✗";
+            color: var(--er)
+        }
+
+        .chat-empty {
+            text-align: center;
+            padding: 36px 20px;
+            color: var(--mt)
+        }
+
+        .chat-empty .icon {
+            font-size: 2.8rem;
+            margin-bottom: 10px
+        }
+
+        .chat-wrap {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            gap: 12px;
+            align-items: start
+        }
+
+        .chat-list {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--bd);
+            overflow: hidden
+        }
+
+        .chat-list-hd {
+            background: var(--pr);
+            color: #fff;
+            padding: 10px 12px;
+            font-weight: 700;
+            font-size: .82rem
+        }
+
+        .cli {
+            padding: 9px 12px;
+            cursor: pointer;
+            border-bottom: 1px solid var(--bd);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: .2s
+        }
+
+        .cli:hover,
+        .cli.on {
+            background: var(--lt)
+        }
+
+        .cav {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pr), var(--sc));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            flex-shrink: 0
+        }
+
+        .chat-win {
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--bd);
+            display: flex;
+            flex-direction: column;
+            height: 440px
+        }
+
+        .chat-hd {
+            background: var(--pr);
+            color: #fff;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 12px 12px 0 0
+        }
+
+        .chat-msgs {
+            flex: 1;
+            padding: 11px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 7px
+        }
+
+        .msg {
+            max-width: 70%;
+            padding: 7px 10px;
+            border-radius: 10px;
+            font-size: .81rem;
+            line-height: 1.5
+        }
+
+        .msg.r {
+            background: var(--lt);
+            align-self: flex-start;
+            border-bottom-left-radius: 3px
+        }
+
+        .msg.s {
+            background: var(--pr);
+            color: #fff;
+            align-self: flex-end;
+            border-bottom-right-radius: 3px
+        }
+
+        .msg-mt {
+            font-size: .62rem;
+            opacity: .6;
+            margin-top: 2px
+        }
+
+        .chat-note {
+            font-size: .68rem;
+            color: var(--mt);
+            padding: 4px 11px;
+            background: #fafafa;
+            border-top: 1px solid var(--bd)
+        }
+
+        .chat-bot {
+            display: flex;
+            gap: 6px;
+            padding: 8px 10px;
+            border-top: 1px solid var(--bd)
+        }
+
+        .chat-bot input {
+            flex: 1;
+            padding: 7px 10px;
+            border: 1.5px solid var(--bd);
+            border-radius: 8px;
+            outline: none;
+            font-size: .8rem;
+            font-family: inherit
+        }
+
+        .mo {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .55);
+            z-index: 400;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 30px 10px 10px;
+            overflow-y: auto
+        }
+
+        .mo.open {
+            display: flex
+        }
+
+        .mo-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+            margin: auto
+        }
+
+        .mo-box h3 {
+            font-size: .98rem;
+            font-weight: 800;
+            margin-bottom: 11px;
+            color: var(--pr)
+        }
+
+        .mo-close {
+            position: absolute;
+            top: 9px;
+            right: 12px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--mt);
+            line-height: 1
+        }
+
+        .upi-box {
+            background: #f0fdf4;
+            border: 1.5px solid #86efac;
+            border-radius: 11px;
+            padding: 12px;
+            text-align: center
+        }
+
+        .upi-box img {
+            width: 195px;
+            height: 195px;
+            border-radius: 10px;
+            border: 2px solid #86efac;
+            display: block;
+            margin: 7px auto;
+            object-fit: contain;
+            background: #fff
+        }
+
+        .upi-id {
+            font-family: monospace;
+            font-size: .86rem;
+            font-weight: 700;
+            color: #166534;
+            background: #fff;
+            padding: 4px 11px;
+            border-radius: 7px;
+            display: inline-block;
+            margin: 4px 0;
+            word-break: break-all
+        }
+
+        .prof-hd {
+            background: linear-gradient(135deg, var(--pr), #3b82f6);
+            color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 14px
+        }
+
+        .prof-av {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            margin: 0 auto 8px;
+            border: 3px solid rgba(255, 255, 255, .5)
+        }
+
+        .notif {
+            position: fixed;
+            bottom: 76px;
+            right: 12px;
+            background: #1e40af;
+            color: #fff;
+            padding: 8px 13px;
+            border-radius: 9px;
+            font-size: .82rem;
+            z-index: 999;
+            transform: translateY(130px);
+            transition: .35s;
+            max-width: 270px;
+            line-height: 1.4;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, .25)
+        }
+
+        .notif.show {
+            transform: translateY(0)
+        }
+
+        .bot-fab {
+            position: fixed;
+            bottom: 14px;
+            right: 14px;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 500;
+            padding: 0;
+            overflow: hidden;
+            transition: .2s;
+            filter: drop-shadow(0 3px 8px rgba(26, 86, 219, .4))
+        }
+
+        .bot-fab:hover {
+            transform: scale(1.08)
+        }
+
+        .bot-panel {
+            position: fixed;
+            bottom: 78px;
+            right: 14px;
+            width: clamp(270px, 88vw, 320px);
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, .18);
+            z-index: 500;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--bd);
+            max-height: 75vh
+        }
+
+        .bot-panel.open {
+            display: flex
+        }
+
+        .bot-hd {
+            background: linear-gradient(135deg, var(--pr), #3b82f6);
+            color: #fff;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 9px
+        }
+
+        .bot-nm {
+            font-weight: 700;
+            font-size: .85rem
+        }
+
+        .bot-sub {
+            font-size: .67rem;
+            opacity: .8
+        }
+
+        .bot-msgs {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            min-height: 160px
+        }
+
+        .bm {
+            padding: 7px 10px;
+            border-radius: 10px;
+            font-size: .8rem;
+            max-width: 86%;
+            line-height: 1.5
+        }
+
+        .bm.bot {
+            background: var(--lt);
+            align-self: flex-start
+        }
+
+        .bm.usr {
+            background: var(--pr);
+            color: #fff;
+            align-self: flex-end
+        }
+
+        .bot-in {
+            display: flex;
+            gap: 5px;
+            padding: 8px 9px;
+            border-top: 1px solid var(--bd)
+        }
+
+        .bot-in input {
+            flex: 1;
+            padding: 7px 10px;
+            border: 1.5px solid var(--bd);
+            border-radius: 8px;
+            outline: none;
+            font-size: .8rem;
+            font-family: inherit
+        }
+
+        .adm-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid var(--bd);
+            margin-bottom: 12px
+        }
+
+        .adm-card h4 {
+            font-size: .9rem;
+            font-weight: 700;
+            color: var(--pr);
+            margin-bottom: 10px
+        }
+
+        .u-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--bd);
+            flex-wrap: wrap
+        }
+
+        .u-av {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pr), var(--sc));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: 700;
+            font-size: .78rem;
+            flex-shrink: 0
+        }
+
+        .u-info {
+            flex: 1;
+            min-width: 100px
+        }
+
+        .u-name {
+            font-weight: 700;
+            font-size: .81rem
+        }
+
+        .u-meta {
+            font-size: .69rem;
+            color: var(--mt)
+        }
+
+        .pill {
+            font-size: .67rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 9px;
+            white-space: nowrap
+        }
+
+        .pl-free {
+            background: #f3f4f6;
+            color: #374151
+        }
+
+        .pl-pr {
+            background: var(--lt);
+            color: var(--pr)
+        }
+
+        .pl-lf {
+            background: #dcfce7;
+            color: #166534
+        }
+
+        .pl-pd {
+            background: #fef3c7;
+            color: #92400e
+        }
+
+        .pay-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--bd);
+            flex-wrap: wrap
+        }
+
+        .pay-info {
+            flex: 1;
+            min-width: 100px;
+            font-size: .79rem
+        }
+
+        .utr-tag {
+            font-family: monospace;
+            font-size: .74rem;
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            display: inline-block
+        }
+
+        .sub-b {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 8px;
+            font-size: .68rem;
+            font-weight: 700;
+            background: #dcfce7;
+            color: #166534
+        }
+
+        .sub-b.exp {
+            background: #fee2e2;
+            color: #991b1b
+        }
+
+        .sub-b.pend {
+            background: #fef3c7;
+            color: #92400e
+        }
+
+        .del-btn {
+            background: none;
+            border: 1px solid var(--er);
+            color: var(--er);
+            border-radius: 6px;
+            padding: 2px 7px;
+            font-size: .68rem;
+            cursor: pointer;
+            margin-top: 3px
+        }
+
+        .del-btn:hover {
+            background: var(--er);
+            color: #fff
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 13px;
+            height: 13px;
+            border: 2px solid #fff;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+            vertical-align: middle;
+            margin-right: 3px
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .gs-code {
+            background: #1e1b4b;
+            color: #a5f3fc;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: .69rem;
+            overflow-x: auto;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            margin: 8px 0
+        }
+
+        .seg-btn {
+            display: flex;
+            border-radius: 9px;
+            overflow: hidden;
+            border: 2px solid var(--pr);
+            width: 100%;
+            margin-bottom: 11px
+        }
+
+        .seg-btn button {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: .8rem;
+            transition: .2s;
+            background: #fff;
+            color: var(--pr)
+        }
+
+        .seg-btn button.on {
+            background: var(--pr);
+            color: #fff
+        }
+
+        .btm-cta {
+            background: linear-gradient(135deg, #1e1b4b, #1a56db);
+            color: #fff;
+            padding: 32px 16px;
+            text-align: center
+        }
+
+        footer {
+            background: #1e1b4b;
+            color: #555;
+            padding: 14px;
+            text-align: center;
+            font-size: .73rem
+        }
+
+        footer a {
+            color: #888;
+            cursor: pointer;
+            margin: 0 6px
+        }
+
+        .hide {
+            display: none !important
+        }
+
+        @media(max-width:700px) {
+            .nav-links {
+                display: none
+            }
+
+            .hmb {
+                display: flex
+            }
+
+            .chat-wrap {
+                grid-template-columns: 1fr
+            }
+
+            .chat-list {
+                display: none
+            }
+
+            .g2 {
+                grid-template-columns: 1fr
+            }
+        }
+
+        @media(max-width:480px) {
+            .g3 {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .g4 {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- INSTALL BANNER (no logo image) -->
+    <div class="install-banner hide" id="installBanner">
+        <div style="flex:1"><strong>StudyBazaar</strong> — Install as app on your device!</div>
+        <button class="btn" style="background:#fff;color:var(--pr);padding:5px 12px;font-size:.75rem"
+            id="installBtn">Install</button>
+        <button onclick="document.getElementById('installBanner').classList.add('hide')"
+            style="background:none;border:none;color:#fff;cursor:pointer;font-size:1.2rem">×</button>
+    </div>
+
+    <!-- NAV — text-only logo, no image -->
+    <nav>
+        <div class="logo-wrap" onclick="go('home')">
+            <div class="logo-main"><span class="st">Study</span><span class="bz">Bazaar</span></div>
+            <div class="logo-sub">BUY · SELL · SHARE KNOWLEDGE</div>
+        </div>
+        <div class="nav-links">
+            <span class="nl" onclick="go('home')">🏠</span>
+            <span class="nl" onclick="go('browse')">📚 Browse</span>
+            <span class="nl" onclick="go('sell')">📤 Sell</span>
+            <span class="nl" onclick="go('assignments')">✍️ Assign</span>
+            <span class="nl" onclick="go('favourites')">❤️</span>
+            <span class="nl" onclick="go('chat')">💬 Chat</span>
+            <span class="nl" onclick="go('pricing')">💳 Plans</span>
+            <span class="nl" onclick="go('profile')">👤</span>
+            <span class="nl danger" onclick="go('report')">🚨</span>
+        </div>
+        <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
+            <button class="btn btn-ol btn-sm" onclick="openMo('moLogin')">Login</button>
+            <button class="btn btn-pr btn-sm" onclick="openMo('moReg')">Register</button>
+            <button class="hmb" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <!-- MOBILE MENU — text-only header, no image, no PWA badge -->
+    <div class="mob-menu" id="mobMenu" onclick="closeMenu(event)">
+        <div class="mob-inner">
+            <div class="mob-header">
+                <div class="lm"><span>Study</span><span>Bazaar</span></div>
+                <div class="ls">BUY · SELL · SHARE KNOWLEDGE</div>
+            </div>
+            <div class="mob-links">
+                <span class="nl" onclick="go('home');toggleMenu()">🏠 Home</span>
+                <span class="nl" onclick="go('browse');toggleMenu()">📚 Browse Books</span>
+                <span class="nl" onclick="go('sell');toggleMenu()">📤 Sell / List</span>
+                <span class="nl" onclick="go('assignments');toggleMenu()">✍️ Assignments</span>
+                <span class="nl" onclick="go('favourites');toggleMenu()">❤️ Saved Items</span>
+                <span class="nl" onclick="go('chat');toggleMenu()">💬 Chat</span>
+                <span class="nl" onclick="go('pricing');toggleMenu()">💳 Plans</span>
+                <span class="nl" onclick="go('profile');toggleMenu()">👤 My Profile</span>
+                <span class="nl danger" onclick="go('report');toggleMenu()">🚨 Report Fraud</span>
+                <hr style="margin:8px 0;border:none;border-top:1px solid var(--bd)" />
+                <button class="btn btn-ol" style="width:100%;margin-bottom:6px"
+                    onclick="openMo('moLogin');toggleMenu()">Login</button>
+                <button class="btn btn-pr" style="width:100%" onclick="openMo('moReg');toggleMenu()">Register
+                    Free</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="notif" id="notif"></div>
+
+    <!-- BOT FAB (Ziya) -->
+    
+    <!-- HOME — no logo image, no PWA badge -->
+    <div id="home" class="page active">
+        <div class="hero">
+            <h1>Every Book You Need,<br /><em>At the Right Price.</em></h1>
+            <p>India's #1 student book exchange — no middlemen. Buy · Sell · Share Knowledge.</p>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+                <button class="btn btn-sc" onclick="go('sell')">📚 Sell Your Book</button>
+                <button class="btn" style="background:#fff;color:var(--pr)" onclick="go('browse')">🔍 Browse
+                    Books</button>
+            </div>
+        </div>
+        <div class="stats-bar">
+            <div class="stat">
+                <h3 id="statBooks">0</h3>
+                <p>Books Listed</p>
+            </div>
+            <div class="stat">
+                <h3 id="statStudents">0</h3>
+                <p>Students</p>
+            </div>
+            <div class="stat">
+                <h3 id="statCities">0</h3>
+                <p>Cities</p>
+            </div>
+            <div class="stat">
+                <h3 id="statSaved">0</h3>
+                <p>Members</p>
+            </div>
+        </div>
+        <div class="sec">
+            <div class="warn-b">🚫 <strong>NEVER pay advance</strong> to any seller. Pay ONLY on delivery when you
+                physically receive the item.</div>
+            <div class="g2">
+                <div class="card" style="border-left:4px solid var(--pr)">
+                    <div style="font-size:1.5rem;margin-bottom:6px">🎓</div>
+                    <h3 style="margin-bottom:5px;font-size:.93rem">Why StudyBazaar?</h3>
+                    <p style="color:var(--mt);line-height:1.7;font-size:.83rem">We eliminate middlemen and give old
+                        books a second life — directly between students across India.</p>
+                </div>
+                <div class="card" style="border-left:4px solid var(--sc)">
+                    <div style="font-size:1.5rem;margin-bottom:6px">♻️</div>
+                    <h3 style="margin-bottom:5px;font-size:.93rem">Pass Knowledge Forward</h3>
+                    <p style="color:var(--mt);line-height:1.7;font-size:.83rem">Every book sold helps another student
+                        succeed without burning their pocket. Join the movement!</p>
+                </div>
+            </div>
+            <div style="margin-top:22px;text-align:center;margin-bottom:13px">
+                <div style="font-size:1.2rem;font-weight:800">How It Works</div>
+            </div>
+            <div class="g3">
+                <div class="card" style="text-align:center">
+                    <div style="font-size:1.5rem;margin-bottom:6px">📝</div>
+                    <h4 style="margin-bottom:4px;font-size:.86rem">1. Register Free</h4>
+                    <p style="color:var(--mt);font-size:.78rem">Only name shown publicly. All info private.</p>
+                </div>
+                <div class="card" style="text-align:center">
+                    <div style="font-size:1.5rem;margin-bottom:6px">📖</div>
+                    <h4 style="margin-bottom:4px;font-size:.86rem">2. Browse or Sell</h4>
+                    <p style="color:var(--mt);font-size:.78rem">Find books by stream, or sell below 60% MRP.</p>
+                </div>
+                <div class="card" style="text-align:center">
+                    <div style="font-size:1.5rem;margin-bottom:6px">🤝</div>
+                    <h4 style="margin-bottom:4px;font-size:.86rem">3. Chat & Exchange</h4>
+                    <p style="color:var(--mt);font-size:.78rem">Direct chat, meet locally, pay only on delivery!</p>
+                </div>
+            </div>
+        </div>
+        <div class="btm-cta">
+            <h2 style="font-size:1.35rem;font-weight:800;margin-bottom:7px">Don't Waste Books — Pass Knowledge Forward
+            </h2>
+            <p style="opacity:.85;margin-bottom:15px;font-size:.87rem">Join students across India exchanging books on
+                StudyBazaar.</p>
+            <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+                <button class="btn btn-sc" onclick="go('sell')">Start Selling</button>
+                <button class="btn" style="background:transparent;border:2px solid #fff;color:#fff"
+                    onclick="openMo('moReg')">Join Free</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BROWSE — empty grids, no demo cards -->
+    <div id="browse" class="page">
+        <div class="sec">
+            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">📚 Browse Books & Notes</div>
+            <div style="color:var(--mt);margin-bottom:11px;font-size:.84rem">Free users see listings only · Premium:
+                chat with sellers</div>
+            <div class="tabs">
+                <div class="tab on" onclick="switchTab(this,'tb-books')">📗 Books</div>
+                <div class="tab" onclick="switchTab(this,'tb-notes')">📝 Notes</div>
+            </div>
+            <div class="tc on" id="tb-books">
+                <div class="stags" id="sf">
+                    <div class="stag on" onclick="fs(this,'all')">All</div>
+                    <div class="stag" onclick="fs(this,'bsc-cs')">BSc CS</div>
+                    <div class="stag" onclick="fs(this,'ba')">BA</div>
+                    <div class="stag" onclick="fs(this,'bca')">BCA</div>
+                    <div class="stag" onclick="fs(this,'bba')">BBA</div>
+                    <div class="stag" onclick="fs(this,'bcom')">BCom</div>
+                    <div class="stag" onclick="fs(this,'btech')">BTech</div>
+                    <div class="stag" onclick="fs(this,'msc')">MSc/MCA/MBA</div>
+                    <div class="stag" onclick="fs(this,'school')">Class 1–12</div>
+                    <div class="stag" onclick="fs(this,'competitive')">Competitive</div>
+                </div>
+                <div class="g3" id="bookGrid">
+                    <div class="empty-state">
+                        <div class="ei">📚</div>
+                        <h4>No books listed yet</h4>
+                        <p>Be the first to list! <span onclick="go('sell')"
+                                style="color:var(--pr);cursor:pointer;font-weight:700">Sell a Book →</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="tc" id="tb-notes">
+                <div class="g3" id="notesGrid">
+                    <div class="empty-state">
+                        <div class="ei">📝</div>
+                        <h4>No notes listed yet</h4>
+                        <p>Share your notes! <span onclick="go('sell')"
+                                style="color:var(--pr);cursor:pointer;font-weight:700">List Notes →</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SELL — condition BEFORE price, single address field -->
+    <div id="sell" class="page">
+        <div class="sec">
+            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">📤 List a Book or Notes</div>
+            <div class="g2">
+                <div>
+                    <div class="card">
+                        <h3 style="margin-bottom:12px;color:var(--pr);font-size:.95rem">📚 New Listing</h3>
+                        <div class="fg"><label>Listing Type *</label><select id="listType" onchange="onLT()">
+                                <option value="">-- Select --</option>
+                                <option value="new-book">📗 New / Unused Book</option>
+                                <option value="used-book">📘 Used Book</option>
+                                <option value="notes">📝 Notes</option>
+                            </select></div>
+                        <div id="newBWarn" class="hide">
+                            <div class="info-b">📗 Selling new/unused books requires <strong>New Book Seller Plan
+                                    (₹50/mo)</strong>. <button class="btn btn-sc btn-xs" onclick="openMo('mo50')">Get
+                                    Plan</button></div>
+                        </div>
+                        <div class="fg"><label>Level *</label><select id="levelSel" onchange="onLv()">
+                                <option value="">-- Select --</option>
+                                <option value="school">🏫 School (1–12)</option>
+                                <option value="college">🎓 College</option>
+                                <option value="competitive">🏆 Competitive</option>
+                                <option value="other">📌 Other</option>
+                            </select></div>
+                        <div id="schoolF" class="hide">
+                            <div class="fg"><label>Class *</label><select>
+                                    <option>Class 1</option>
+                                    <option>Class 2</option>
+                                    <option>Class 3</option>
+                                    <option>Class 4</option>
+                                    <option>Class 5</option>
+                                    <option>Class 6</option>
+                                    <option>Class 7</option>
+                                    <option>Class 8</option>
+                                    <option>Class 9</option>
+                                    <option>Class 10</option>
+                                    <option>Class 11</option>
+                                    <option>Class 12</option>
+                                </select></div>
+                            <div class="fg"><label>Subject *</label><input type="text" placeholder="Subject name" />
+                            </div>
+                        </div>
+                        <div id="collegeF" class="hide">
+                            <div class="fg"><label>Course *</label><select id="strSel">
+                                    <option value="">-- Select --</option>
+                                    <option>BSc CS</option>
+                                    <option>BSc Non-Medical</option>
+                                    <option>BA</option>
+                                    <option>BCA</option>
+                                    <option>BBA</option>
+                                    <option>BCom</option>
+                                    <option>BTech</option>
+                                    <option>MSc</option>
+                                    <option>MCA</option>
+                                    <option>MBA</option>
+                                    <option>PhD</option>
+                                    <option>Other</option>
+                                </select></div>
+                            <div class="fg"><label>Semester *</label><select>
+                                    <option>Sem 1</option>
+                                    <option>Sem 2</option>
+                                    <option>Sem 3</option>
+                                    <option>Sem 4</option>
+                                    <option>Sem 5</option>
+                                    <option>Sem 6</option>
+                                    <option>Year 1</option>
+                                    <option>Year 2</option>
+                                    <option>Year 3</option>
+                                </select></div>
+                            <div class="fg"><label>Subject *</label><input type="text" placeholder="Subject" /></div>
+                        </div>
+                        <div id="compF" class="hide">
+                            <div class="fg"><label>Exam *</label><input type="text" placeholder="JEE, NEET, UPSC..." />
+                            </div>
+                        </div>
+                        <div id="othLvF" class="hide">
+                            <div class="fg"><label>Describe *</label><input type="text"
+                                    placeholder="e.g. ITI, Polytechnic" /></div>
+                        </div>
+                        <div id="bookF" class="hide">
+                            <div class="fg"><label>Book Title *</label><input type="text" id="bkTitle"
+                                    placeholder="Full book name" /></div>
+                            <div class="fg"><label>Author</label><input type="text" placeholder="Author name" /></div>
+                            <!-- CONDITION BEFORE PRICE -->
+                            <div id="usedPG" class="hide">
+                                <div class="fg"><label>Condition * <span
+                                            style="font-size:.7rem;color:var(--mt);font-weight:400">(Set condition
+                                            first, then price)</span></label>
+                                    <select id="condSel">
+                                        <option>Like New</option>
+                                        <option>Very Good</option>
+                                        <option>Good</option>
+                                        <option>Acceptable</option>
+                                    </select>
+                                </div>
+                                <div class="fg"><label>Original MRP (₹) *</label><input type="number" id="origP"
+                                        oninput="calcMax()" placeholder="Price printed on book cover" /></div>
+                                <div class="fg"><label>Your Selling Price (₹) * <span id="maxP"
+                                            style="color:var(--er);font-weight:700"></span></label><input type="number"
+                                        id="sellP" placeholder="Must be below 60% of MRP" /></div>
+                            </div>
+                            <div id="newBPG" class="hide">
+                                <div class="fg"><label>Selling Price (₹) *</label><input type="number"
+                                        placeholder="Your price" /></div>
+                            </div>
+                        </div>
+                        <div id="notesF" class="hide">
+                            <div class="fg"><label>Notes Title *</label><input type="text" id="notesTitle"
+                                    placeholder="e.g. DBMS Complete Notes Sem 5" /></div>
+                            <div class="fg"><label>Pages</label><input type="number" placeholder="Page count" /></div>
+                            <div class="fg"><label>Price (₹) *</label><input type="number"
+                                    placeholder="Your asking price" /></div>
+                        </div>
+                        <!-- SINGLE ADDRESS FIELD -->
+                        <div class="fg">
+                            <label>📍 Your Address / Location *</label>
+                            <input type="text" id="listAddr"
+                                placeholder="e.g. Sector 14, Model Town, Rohtak, Haryana - 124001" />
+                        </div>
+                        <div class="fg"><label>Photo</label><input type="file" accept="image/*" /></div>
+                        <div class="fg"><label>Description</label><textarea rows="2"
+                                placeholder="Any extra details..."></textarea></div>
+                        <div id="premR" class="hide">
+                            <div class="info-b">🔒 Premium required to list. <button class="btn btn-pr btn-xs"
+                                    onclick="go('pricing')">View Plans</button></div>
+                        </div>
+                        <button class="btn btn-pr" style="width:100%" id="submitListBtn" onclick="submitListing()">📤
+                            Submit Listing</button>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 style="margin-bottom:10px;color:var(--pr);font-size:.93rem">📋 My Listings</h3>
+                    <div id="myListings">
+                        <div style="color:var(--mt);font-size:.81rem">No listings yet.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ASSIGNMENTS — empty browse grid -->
+    <div id="assignments" class="page">
+        <div class="sec">
+            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">✍️ Assignments</div>
+            <div style="color:var(--mt);margin-bottom:11px;font-size:.84rem">Post requests or offer writing services.
+                Premium required.</div>
+            <div class="tabs">
+                <div class="tab on" onclick="switchTab(this,'asgn-browse')">🔍 Browse</div>
+                <div class="tab" onclick="switchTab(this,'asgn-post')">➕ Post</div>
+            </div>
+            <div class="tc on" id="asgn-browse">
+                <div style="display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap">
+                    <button class="stag on" onclick="filterAsgn('all',this)">All</button>
+                    <button class="stag" onclick="filterAsgn('requester',this)">📋 Requests</button>
+                    <button class="stag" onclick="filterAsgn('writer',this)">✍️ Writers</button>
+                </div>
+                <div class="g3" id="asgnGrid">
+                    <div class="empty-state">
+                        <div class="ei">✍️</div>
+                        <h4>No assignments posted yet</h4>
+                        <p>Post a request or offer writing services! <span
+                                onclick="document.querySelector('#assignments .tab:last-child').click()"
+                                style="color:var(--pr);cursor:pointer;font-weight:700">Post →</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="tc" id="asgn-post">
+                <div class="card" style="max-width:560px">
+                    <h3 style="margin-bottom:11px;color:var(--pr);font-size:.95rem">➕ Post an Assignment</h3>
+                    <div class="info-b">🔒 Premium plan required. <button class="btn btn-pr btn-xs"
+                            onclick="go('pricing')">Get Premium</button></div>
+                    <div class="seg-btn" id="asgnRoleSeg">
+                        <button class="on" onclick="setAsgnRole('requester',this)">📋 Requester</button>
+                        <button onclick="setAsgnRole('writer',this)">✍️ Writer</button>
+                    </div>
+                    <div id="reqFields">
+                        <div class="fg"><label>Level *</label><select id="reqLevel" onchange="onReqLv()">
+                                <option value="">-- Select --</option>
+                                <option value="school">School</option>
+                                <option value="college">College</option>
+                                <option value="competitive">Competitive</option>
+                                <option value="other">Other</option>
+                            </select></div>
+                        <div id="reqSchoolF" class="hide">
+                            <div class="fg"><label>Class *</label><select>
+                                    <option>Class 1</option>
+                                    <option>Class 2</option>
+                                    <option>Class 3</option>
+                                    <option>Class 4</option>
+                                    <option>Class 5</option>
+                                    <option>Class 6</option>
+                                    <option>Class 7</option>
+                                    <option>Class 8</option>
+                                    <option>Class 9</option>
+                                    <option>Class 10</option>
+                                    <option>Class 11</option>
+                                    <option>Class 12</option>
+                                </select></div>
+                        </div>
+                        <div id="reqCollegeF" class="hide">
+                            <div class="fg"><label>Course *</label><select>
+                                    <option value="">-- Select --</option>
+                                    <option>BSc CS</option>
+                                    <option>BA</option>
+                                    <option>BCA</option>
+                                    <option>BBA</option>
+                                    <option>BCom</option>
+                                    <option>BTech</option>
+                                    <option>MSc</option>
+                                    <option>MCA</option>
+                                    <option>MBA</option>
+                                    <option>PhD</option>
+                                    <option>Other</option>
+                                </select></div>
+                            <div class="fg"><label>Semester *</label><select>
+                                    <option>Sem 1</option>
+                                    <option>Sem 2</option>
+                                    <option>Sem 3</option>
+                                    <option>Sem 4</option>
+                                    <option>Sem 5</option>
+                                    <option>Sem 6</option>
+                                    <option>Year 1</option>
+                                    <option>Year 2</option>
+                                    <option>Year 3</option>
+                                </select></div>
+                        </div>
+                        <div class="fg"><label>Assignment Title / Subject *</label><input type="text" id="reqTitle"
+                                placeholder="e.g. Business Law Assignment" /></div>
+                        <div class="fg"><label>Number of Pages *</label><input type="number" id="reqPages"
+                                placeholder="How many pages?" /></div>
+                        <div class="fg"><label>Price per page you can pay (₹) *</label><input type="number"
+                                id="reqPrice" placeholder="e.g. 8" />
+                            <div class="hint">💡 Fair pricing attracts more writers.</div>
+                        </div>
+                        <div class="fg"><label>Upload Reference / Question Photo *</label><input type="file"
+                                id="reqPhoto" accept="image/*,application/pdf" /></div>
+                        <div class="fg"><label>📍 Your Location *</label><input type="text" id="reqAddr"
+                                placeholder="e.g. Sector 14, Rohtak, Haryana - 124001" /></div>
+                        <div class="fg"><label>Deadline</label><input type="date" id="reqDeadline" /></div>
+                    </div>
+                    <div id="wriFields" class="hide">
+                        <div class="fg"><label>Subjects / Courses you write for *</label><input type="text" id="wriSubs"
+                                placeholder="e.g. BBA, BCom, BSc CS — all subjects" /></div>
+                        <div class="fg"><label>Writing Sample (2–3 pages) *</label><input type="file" id="wriSample"
+                                accept="image/*,application/pdf" />
+                            <div class="hint">Clear sample = more orders.</div>
+                        </div>
+                        <div class="fg"><label>Price per page you charge (₹) *</label><input type="number" id="wriPrice"
+                                placeholder="e.g. 12" />
+                            <div class="hint warn">⚠️ Keep pricing reasonable — unusually high rate means fewer clients.
+                            </div>
+                        </div>
+                        <div class="fg"><label>Languages *</label><input type="text" id="wriLangs"
+                                placeholder="Hindi, English" /></div>
+                        <div class="fg"><label>📍 Your Location *</label><input type="text" id="wriAddr"
+                                placeholder="e.g. Sector 14, Rohtak, Haryana - 124001" /></div>
+                        <div class="fg"><label>About You *</label><textarea rows="2" id="wriAbout"
+                                placeholder="Brief intro about writing experience..."></textarea></div>
+                    </div>
+                    <div id="asgnPremR" class="hide">
+                        <div class="info-b">🔒 Premium required. <button class="btn btn-pr btn-xs"
+                                onclick="go('pricing')">Get Premium</button></div>
+                    </div>
+                    <button class="btn btn-pr" style="width:100%;margin-top:4px" id="asgnSubmitBtn"
+                        onclick="submitAssignment()">✍️ Post Assignment</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAVOURITES -->
+    <div id="favourites" class="page">
+        <div class="sec">
+            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">❤️ Saved Items</div>
+            <div style="color:var(--mt);margin-bottom:13px;font-size:.84rem">Items you saved with ♡</div>
+            <div id="favGrid" class="g3">
+                <div class="empty-state">
+                    <div class="ei">❤️</div>
+                    <h4>No saved items yet</h4>
+                    <p>Tap ♡ on any listing to save it here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHAT -->
+    <div id="chat" class="page">
+        <div class="sec">
+            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">💬 Direct Chats</div>
+            <div id="chatNoPlan" class="hide">
+                <div class="info-b">🔒 <strong>Premium required to chat.</strong> <button class="btn btn-pr btn-sm"
+                        onclick="go('pricing')">View Plans</button></div>
+            </div>
+            <div id="chatMain">
+                <div class="info-b" style="font-size:.78rem">📞 Share your contact number here only — never in listings.
+                    💰 Pay only on delivery!</div>
+                <div class="chat-wrap">
+                    <div class="chat-list">
+                        <div class="chat-list-hd">💬 Conversations</div>
+                        <div id="chatListEl">
+                            <div style="padding:14px;font-size:.81rem;color:var(--mt)">No conversations yet. Click Chat
+                                on a listing to start.</div>
+                        </div>
+                    </div>
+                    <div class="chat-win">
+                        <div class="chat-hd">
+                            <div class="cav" id="cwAv">?</div><span style="font-weight:700;font-size:.88rem"
+                                id="cwNm">Select a conversation</span>
+                        </div>
+                        <div class="chat-msgs" id="chatMsgs">
+                            <div class="chat-empty">
+                                <div class="icon">💬</div>
+                                <div style="font-size:.84rem">Click Chat on any listing to start a conversation.</div>
+                            </div>
+                        </div>
+                        <div class="chat-note">📞 Share contact here only. 💰 Pay on delivery!</div>
+                        <div class="chat-bot"><input id="chatIn" placeholder="Type message..."
+                                onkeydown="if(event.key==='Enter')sendMsg()" /><button class="btn btn-pr btn-sm"
+                                onclick="sendMsg()">Send</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRICING — updated: Monthly ₹10, Annual ₹100, Lifetime ₹500, New Book Seller ₹50 -->
+    <div id="pricing" class="page">
+        <div class="sec">
+            <div style="text-align:center;margin-bottom:20px">
+                <div style="font-size:1.25rem;font-weight:800">Simple, Student-Friendly Pricing</div>
+                <div style="color:var(--mt);font-size:.84rem;margin-top:4px">Plans activate after payment UTR is
+                    verified. Expires as stated.</div>
+            </div>
+            <div class="g4">
+                <div class="pc">
+                    <div style="font-size:1.4rem">🆓</div>
+                    <h3 style="margin:5px 0 2px;font-size:.88rem">Free</h3>
+                    <div class="p-amt" style="font-size:1.2rem">₹0</div>
+                    <div class="p-per">Always free</div>
+                    <ul class="p-feat">
+                        <li>Browse all listings</li>
+                        <li>See images & location</li>
+                        <li class="no">No chat</li>
+                        <li class="no">No listing</li>
+                    </ul><button class="btn btn-ol" style="width:100%;font-size:.76rem">Current Plan</button>
+                </div>
+                <div class="pc pop">
+                    <div class="pop-b">⭐ Most Popular</div>
+                    <div style="font-size:1.4rem">📅</div>
+                    <h3 style="margin:5px 0 2px;font-size:.88rem">Annual</h3>
+                    <div class="p-amt">₹100</div>
+                    <div class="p-per">per year · 365 days</div>
+                    <ul class="p-feat">
+                        <li>List used books & notes</li>
+                        <li>Chat with sellers</li>
+                        <li>Post assignments</li>
+                        <li class="no">No new book selling</li>
+                    </ul><button class="btn btn-pr" style="width:100%;font-size:.76rem" onclick="openMo('mo50yr')">Get
+                        Annual — ₹100/yr</button>
+                </div>
+                <div class="pc">
+                    <div style="font-size:1.4rem">⚡</div>
+                    <h3 style="margin:5px 0 2px;font-size:.88rem">Monthly</h3>
+                    <div class="p-amt" style="font-size:1.2rem">₹10</div>
+                    <div class="p-per">per month · 30 days</div>
+                    <ul class="p-feat">
+                        <li>List used books & notes</li>
+                        <li>Chat with sellers</li>
+                        <li>Post assignments</li>
+                        <li class="no">No new book selling</li>
+                    </ul><button class="btn btn-pr" style="width:100%;font-size:.76rem" onclick="openMo('mo5')">Get
+                        Monthly — ₹10/mo</button>
+                </div>
+                <div class="pc">
+                    <div style="font-size:1.4rem">♾️</div>
+                    <h3 style="margin:5px 0 2px;font-size:.88rem">Lifetime</h3>
+                    <div class="p-amt" style="font-size:1.2rem;color:var(--sc)">₹500</div>
+                    <div class="p-per">one-time · never expires</div>
+                    <ul class="p-feat">
+                        <li>Everything in Annual</li>
+                        <li>Never renew</li>
+                        <li>Best for active users</li>
+                    </ul><button class="btn btn-sc" style="width:100%;font-size:.76rem" onclick="openMo('moLife')">Get
+                        Lifetime — ₹500</button>
+                </div>
+            </div>
+            <div style="margin-top:12px">
+                <div class="pc" style="display:flex;align-items:center;gap:14px;text-align:left;flex-wrap:wrap">
+                    <div style="font-size:1.5rem">📗</div>
+                    <div style="flex:1;min-width:180px">
+                        <h3 style="font-size:.9rem">New Book Seller — ₹50/month</h3>
+                        <p style="font-size:.78rem;color:var(--mt);margin:4px 0 8px">Sell complete new/unused books +
+                            verified badge. Includes all Monthly features.</p><button class="btn btn-sc btn-sm"
+                            onclick="openMo('mo50')">Get New Book Seller — ₹50</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="profile" class="page">
+        <div class="sec">
+            <div style="font-size:1.25rem;font-weight:800;margin-bottom:12px">👤 My Profile</div>
+            <div id="notLoggedIn">
+                <div class="info-b">Please <strong>login or register</strong> to view your profile. <button
+                        class="btn btn-pr btn-sm" onclick="openMo('moLogin')">Login</button> <button
+                        class="btn btn-ol btn-sm" onclick="openMo('moReg')">Register</button></div>
+            </div>
+            <div id="loggedInProfile" class="hide">
+                <div class="prof-hd">
+                    <div class="prof-av">👤</div>
+                    <div id="prfName" style="font-size:1.1rem;font-weight:800">—</div>
+                    <div id="prfCity" style="opacity:.8;font-size:.83rem;margin-top:2px">—</div>
+                    <div style="margin-top:7px"><span class="sub-b exp" id="prfBadge">Free</span></div>
+                </div>
+                <div class="g2">
+                    <div class="card">
+                        <h4 style="margin-bottom:9px;color:var(--pr);font-size:.88rem">📋 Account Details</h4>
+                        <div style="font-size:.81rem;display:flex;flex-direction:column;gap:6px">
+                            <div><strong>Name:</strong> <span id="pdName">—</span></div>
+                            <div><strong>Mobile:</strong> <span id="pdMobile">—</span></div>
+                            <div><strong>Email:</strong> <span id="pdEmail">—</span></div>
+                            <div><strong>Address:</strong> <span id="pdAddr">—</span></div>
+                            <div><strong>Institution:</strong> <span id="pdInst">—</span></div>
+                            <div><strong>Plan:</strong> <span id="pdPlan">Free</span></div>
+                            <div><strong>Status:</strong> <span id="pdPayStatus">—</span></div>
+                            <div><strong>Expires:</strong> <span id="pdExp">—</span></div>
+                        </div>
+                        <button class="btn btn-pr btn-sm" style="margin-top:10px" onclick="openMo('moEdit')">✏️ Edit
+                            Profile</button>
+                    </div>
+                    <div class="card">
+                        <h4 style="margin-bottom:9px;color:var(--sc);font-size:.88rem">🏆 Achievements</h4>
+                        <div style="font-size:.81rem;display:flex;flex-direction:column;gap:6px">
+                            <div>📚 Books Listed: <strong id="achBooks">0</strong></div>
+                            <div>✍️ Assignments Posted: <strong id="achAsgn">0</strong></div>
+                            <div>❤️ Saved Items: <strong id="achFavs">0</strong></div>
+                        </div>
+                        <button class="btn btn-ol btn-sm" style="margin-top:10px" onclick="go('pricing')">⬆️ Upgrade
+                            Plan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REPORT -->
+    <div id="report" class="page">
+        <div class="sec">
+            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">🚨 Report Fraud</div>
+            <div style="background:#fef2f2;border-radius:12px;padding:17px;border:1px solid #fca5a5;max-width:530px">
+                <h3 style="color:#991b1b;margin-bottom:11px;font-size:.95rem">⚠️ Report a User or Incident</h3>
+                <div class="fg"><label>Issue Type *</label><select id="repType">
+                        <option>Seller asked for advance payment</option>
+                        <option>Paid but never delivered</option>
+                        <option>Fake listing</option>
+                        <option>Wrong item delivered</option>
+                        <option>Harassment in chat</option>
+                        <option>Assignment not delivered</option>
+                        <option>Other</option>
+                    </select></div>
+                <div class="fg"><label>Reported User</label><input type="text" id="repUser"
+                        placeholder="Name / mobile / listing link" /></div>
+                <div class="fg"><label>Amount Involved (₹)</label><input type="number" id="repAmt"
+                        placeholder="0 if no money paid" /></div>
+                <div class="fg"><label>What happened? *</label><textarea rows="4" id="repDesc"
+                        placeholder="Full details..."></textarea></div>
+                <div class="fg"><label>Your Email</label><input type="email" id="repEmail"
+                        placeholder="For follow-up" /></div>
+                <button class="btn btn-er" style="width:100%" id="repBtn" onclick="submitReport()">🚨 Submit
+                    Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN — no owner name in title -->
+    <div id="admin" class="page">
+        <div class="sec">
+            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">🛡️ Owner Admin Panel</div>
+            <div class="tabs">
+                <div class="tab on" onclick="switchTab(this,'adm-setup')">⚙️ Setup</div>
+                <div class="tab" onclick="switchTab(this,'adm-users');renderAdmin()">👥 Users</div>
+                <div class="tab" onclick="switchTab(this,'adm-pay');renderAdmin()">💳 Payments</div>
+                <div class="tab" onclick="switchTab(this,'adm-appr');renderAdmin()">✅ Approved</div>
+                <div class="tab" onclick="switchTab(this,'adm-rep');renderAdmin()">🚨 Reports</div>
+            </div>
+            <div class="tc on" id="adm-setup">
+                <div class="card">
+                    <h4 style="color:var(--pr);margin-bottom:11px">📊 Connect Google Sheet "study_bazaar"</h4>
+                    <div style="font-size:.81rem;line-height:2">
+                        <strong>Step 1:</strong> <a href="https://sheets.google.com" target="_blank"
+                            style="color:var(--pr)">sheets.google.com</a> → Create → Rename to
+                        <strong>study_bazaar</strong><br />
+                        <strong>Step 2:</strong> Create tabs: <code
+                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Users</code> <code
+                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Payments</code> <code
+                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Listings</code> <code
+                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Assignments</code> <code
+                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Reports</code><br />
+                        <strong>Step 3:</strong> Extensions → Apps Script → paste code → Deploy → Web App → Execute as
+                        Me → Access: Anyone
+                    </div>
+                    <div class="gs-code">const SS=SpreadsheetApp.getActiveSpreadsheet();
+                        function doPost(e){
+                        try{
+                        const d=JSON.parse(e.postData.contents);
+                        const sh=SS.getSheetByName(d.sheet);
+                        if(!sh)return out({error:'Sheet not found'});
+                        if(d.action==='append'){sh.appendRow(d.row);return out({ok:true});}
+                        if(d.action==='update'){
+                        const rows=sh.getDataRange().getValues();
+                        for(let i=1;i&lt;rows.length;i++){
+                        if(String(rows[i][d.keyCol])===String(d.keyVal)){
+                        d.updates.forEach(u=>sh.getRange(i+1,u.col).setValue(u.val));
+                        return out({ok:true});
+                        }
+                        }
+                        return out({error:'Not found'});
+                        }
+                        if(d.action==='read')return out({rows:sh.getDataRange().getValues()});
+                        }catch(err){return out({error:err.toString()});}
+                        }
+                        function out(o){return
+                        ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);}
+                        function doGet(){return out({status:'study_bazaar API ✅'});}</div>
+                    <div class="fg" style="margin-top:10px"><label>Paste Web App URL</label><input type="text"
+                            id="sheetUrl" placeholder="https://script.google.com/macros/s/.../exec" /></div>
+                    <button class="btn btn-pr" onclick="saveSheetUrl()">💾 Save & Connect</button>
+                    <div id="sheetStatus" style="margin-top:7px;font-size:.8rem"></div>
+                </div>
+            </div>
+            <div class="tc" id="adm-users">
+                <div class="adm-card">
+                    <h4>👥 All Users (<span id="admUC">0</span>)</h4>
+                    <div id="admUserList">
+                        <div style="color:var(--mt);font-size:.81rem">No users yet.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tc" id="adm-pay">
+                <div class="adm-card">
+                    <h4>⏳ Pending Payments</h4>
+                    <p style="font-size:.79rem;color:var(--mt);margin-bottom:10px">Verify each UTR in your UPI app, then
+                        approve or reject.</p>
+                    <div id="admPendList">
+                        <div style="color:var(--ok);font-size:.81rem">✅ No pending payments.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tc" id="adm-appr">
+                <div class="adm-card">
+                    <h4>✅ Approved Plans</h4>
+                    <div id="admApprList">
+                        <div style="color:var(--mt);font-size:.81rem">None yet.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="tc" id="adm-rep">
+                <div class="adm-card">
+                    <h4>🚨 Reports</h4>
+                    <div id="admRepList">
+                        <div style="color:var(--mt);font-size:.81rem">No reports yet.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAYMENT MODALS — updated prices, NO owner name -->
+    <div class="mo" id="mo5">
+        <div class="mo-box">
+            <button class="mo-close" onclick="closeMo('mo5')">×</button>
+            <h3>⚡ Monthly Premium — ₹10/month</h3>
+            <div class="upi-box">
+                <img id="qrA" src="" alt="UPI QR Code"
+                    style="width:195px;height:195px;border-radius:10px;border:2px solid #86efac;display:block;margin:7px auto;object-fit:contain;background:#fff" />
+                <div class="upi-id">urwashiaitan2004-1@okicici</div>
+                <p style="font-size:.71rem;color:#166534;margin-top:3px">Amount: <strong>₹10</strong> · Add your
+                    registered mobile as note</p>
+            </div>
+            <div
+                style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px 11px;font-size:.77rem;color:#92400e;margin-top:9px">
+                ⚠️ Plan activates only after admin verifies your UTR. Enter UTR below.</div>
+            <div class="fg" style="margin-top:10px"><label>UTR / Transaction ID *</label><input type="text" id="utr5"
+                    placeholder="12-digit UTR from your UPI app" /></div>
+            <button class="btn btn-pr" style="width:100%" id="pb5"
+                onclick="submitPayment('Monthly',30,10,'utr5','mo5','pb5')">Submit for Verification</button>
+        </div>
+    </div>
+
+    <div class="mo" id="mo50yr">
+        <div class="mo-box">
+            <button class="mo-close" onclick="closeMo('mo50yr')">×</button>
+            <h3>📅 Annual Plan — ₹100/year</h3>
+            <div class="upi-box">
+                <img id="qrB" src="" alt="UPI QR"
+                    style="width:195px;height:195px;border-radius:10px;border:2px solid #86efac;display:block;margin:7px auto;object-fit:contain;background:#fff" />
+                <div class="upi-id">urwashiaitan2004-1@okicici</div>
+                <p style="font-size:.71rem;color:#166534;margin-top:3px">Amount: <strong>₹100</strong> · Add "Annual +
+                    your name" as note</p>
+            </div>
+            <div
+                style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px 11px;font-size:.77rem;color:#92400e;margin-top:9px">
+                ⚠️ Plan activates only after admin verifies your UTR.</div>
+            <div class="fg" style="margin-top:10px"><label>UTR *</label><input type="text" id="utr50yr"
+                    placeholder="12-digit UTR" /></div>
+            <button class="btn btn-pr" style="width:100%" id="pb50yr"
+                onclick="submitPayment('Annual',365,100,'utr50yr','mo50yr','pb50yr')">Submit for Verification</button>
+        </div>
+    </div>
+
+    <div class="mo" id="mo50">
+        <div class="mo-box">
+            <button class="mo-close" onclick="closeMo('mo50')">×</button>
+            <h3>📗 New Book Seller — ₹50/month</h3>
+            <div class="upi-box">
+                <img id="qrC" src="" alt="UPI QR"
+                    style="width:195px;height:195px;border-radius:10px;border:2px solid #86efac;display:block;margin:7px auto;object-fit:contain;background:#fff" />
+                <div class="upi-id">urwashiaitan2004-1@okicici</div>
+                <p style="font-size:.71rem;color:#166534;margin-top:3px">Amount: <strong>₹50</strong> · Add
+                    "NewBookSeller + name" as note</p>
+            </div>
+            <div
+                style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px 11px;font-size:.77rem;color:#92400e;margin-top:9px">
+                ⚠️ Plan activates after admin verification only.</div>
+            <div class="fg" style="margin-top:10px"><label>UTR *</label><input type="text" id="utr50"
+                    placeholder="UTR" /></div>
+            <button class="btn btn-sc" style="width:100%" id="pb50"
+                onclick="submitPayment('New Book Seller',30,50,'utr50','mo50','pb50')">Submit for Verification</button>
+        </div>
+    </div>
+
+    <div class="mo" id="moLife">
+        <div class="mo-box">
+            <button class="mo-close" onclick="closeMo('moLife')">×</button>
+            <h3>♾️ Lifetime Access — ₹500</h3>
+            <div class="upi-box">
+                <img id="qrD" src="" alt="UPI QR"
+                    style="width:195px;height:195px;border-radius:10px;border:2px solid #86efac;display:block;margin:7px auto;object-fit:contain;background:#fff" />
+                <div class="upi-id">urwashiaitan2004-1@okicici</div>
+                <p style="font-size:.71rem;color:#166534;margin-top:3px">Amount: <strong>₹500</strong> · Add "Lifetime +
+                    name" as note</p>
+            </div>
+            <div
+                style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px 11px;font-size:.77rem;color:#92400e;margin-top:9px">
+                ⚠️ Plan activates after admin verification only.</div>
+            <div class="fg" style="margin-top:10px"><label>UTR *</label><input type="text" id="utrLife"
+                    placeholder="UTR" /></div>
+            <button class="btn btn-sc" style="width:100%" id="pbLife"
+                onclick="submitPayment('Lifetime',-1,500,'utrLife','moLife','pbLife')">Submit for Verification</button>
+        </div>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="mo" id="moLogin">
+        <div class="mo-box">
+            <button class="mo-close" onclick="closeMo('moLogin')">×</button>
+            <h3>🔐 Login to StudyBazaar</h3>
+            <div class="fg"><label>Mobile Number or Email *</label><input type="text" id="liId"
+                    placeholder="Your registered mobile or email" /></div>
+            <div class="fg"><label>Password *</label><input type="password" id="liPw" placeholder="Your password" />
+            </div>
+            <div class="fg"><label>Login as</label><select id="liRole">
+                    <option value="student">🎓 Student / User</option>
+                    <option value="owner">🛡️ Admin / Owner</option>
+                </select></div>
+            <div id="liDeviceWarn" class="hide"
+                style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:9px 11px;font-size:.78rem;color:#991b1b;margin-bottom:9px">
+                ⚠️ <strong>Account active on another device.</strong> Logging in here will force log out the other
+                session.</div>
+            <button class="btn btn-pr" style="width:100%;margin-top:7px" id="loginBtn"
+                onclick="doLogin()">Login</button>
+            <p style="text-align:center;margin-top:9px;font-size:.8rem;color:var(--mt)">No account? <a
+                    onclick="closeMo('moLogin');openMo('moReg')"
+                    style="color:var(--pr);cursor:pointer;font-weight:700">Register Free →</a></p>
+        </div>
+    </div>
+
+    <!-- REGISTER — single address field -->
+    <div class="mo" id="moReg">
+        <div class="mo-box">
+            <button class="mo-close" onclick="closeMo('moReg')">×</button>
+            <h3>📝 Create Account — StudyBazaar</h3>
+            <p style="font-size:.73rem;color:var(--mt);margin-bottom:10px">Only your name is shown publicly. All other
+                info is private.</p>
+            <div class="fg"><label>Full Name *</label><input type="text" id="rName" placeholder="Your full name" />
+            </div>
+            <div class="fg"><label>Mobile * <span style="color:var(--er);font-size:.69rem">(1 account per
+                        number)</span></label><input type="tel" id="rMobile" placeholder="10-digit mobile number" />
+            </div>
+            <div class="fg"><label>Email *</label><input type="email" id="rEmail" placeholder="Your email address" />
+            </div>
+            <div class="fg"><label>Date of Birth *</label><input type="date" id="rDob" /></div>
+            <div class="fg">
+                <label>Full Address * <span style="font-size:.68rem;color:var(--mt);font-weight:400">(Street, Area,
+                        City, State – PIN)</span></label>
+                <input type="text" id="rAddr" placeholder="e.g. Sector 14, Model Town, Rohtak, Haryana – 124001" />
+            </div>
+            <div class="fg"><label>College / School *</label><input type="text" id="rInst"
+                    placeholder="Institution name" /></div>
+            <div class="fg"><label>Aadhar / Student ID * <span style="color:var(--mt);font-size:.68rem">(Private — fraud
+                        prevention)</span></label><input type="text" id="rAadhar" placeholder="Never shown publicly" />
+            </div>
+            <div class="fg"><label>Password *</label><input type="password" id="rPw"
+                    placeholder="Create a strong password" /></div>
+            <button class="btn btn-pr" style="width:100%" id="regBtn" onclick="doRegister()">Create Account</button>
+        </div>
+    </div>
+
+    <!-- EDIT PROFILE — single address field -->
+    <div class="mo" id="moEdit">
+        <div class="mo-box">
+            <button class="mo-close" onclick="closeMo('moEdit')">×</button>
+            <h3>✏️ Edit Profile</h3>
+            <div class="fg"><label>Name</label><input type="text" id="eName" /></div>
+            <div class="fg"><label>Full Address</label><input type="text" id="eAddr"
+                    placeholder="Street, Area, City, State – PIN" /></div>
+            <div class="fg"><label>Institution</label><input type="text" id="eInst" /></div>
+            <button class="btn btn-pr" style="width:100%" onclick="saveProfile()">Save Changes</button>
+        </div>
+    </div>
+
+    <footer>
+        <div style="margin-bottom:6px">
+            <a onclick="go('report')">🚨 Report</a><a onclick="go('pricing')">💳 Plans</a>
+            <a onclick="go('assignments')">✍️ Assignments</a><a onclick="go('browse')">📚 Browse</a>
+            <a onclick="go('profile')">👤 Profile</a>
+            <a onclick="ownerAccess()" style="color:#444">🛡️ Admin</a>
+        </div>
+        <div style="margin-bottom:4px;font-size:.7rem;color:#555">⚠️ Not responsible for payments between users. Always
+            pay on delivery only.</div>
+        © 2025 StudyBazaar — India's Book Exchange 🇮🇳
+    </footer>
+
+
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+    <script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	createChat({
+		webhookUrl: 'https://nothinggg.app.n8n.cloud/webhook/d4c1db79-88b1-4dd0-86f8-8f8a5f8b54db/chat'
+	});
+    
+        // ===== QR ONLY (logo removed) =====
+        function loadQR() {
+                ['qrA', 'qrB', 'qrC', 'qrD'].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) el.src = 'qr.jpeg';
+                });
+            }
+        function drawFallbackQR() {
+            const c = document.createElement('canvas'); c.width = 195; c.height = 195;
+            const ctx = c.getContext('2d'), sz = 195, cell = 6;
+            ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, sz, sz);
+            function fp(ox, oy) { ctx.fillStyle = '#111'; ctx.fillRect(ox, oy, cell * 7, cell * 7); ctx.fillStyle = '#fff'; ctx.fillRect(ox + cell, oy + cell, cell * 5, cell * 5); ctx.fillStyle = '#111'; ctx.fillRect(ox + cell * 2, oy + cell * 2, cell * 3, cell * 3); }
+            fp(7, 7); fp(sz - 7 - cell * 7, 7); fp(7, sz - 7 - cell * 7); ctx.fillStyle = '#111';
+            for (let y = 0; y < sz; y += cell)for (let x = 0; x < sz; x += cell) { const iF = (x < 7 + cell * 7 && y < 7 + cell * 7) || (x > sz - 7 - cell * 8 && y < 7 + cell * 7) || (x < 7 + cell * 7 && y > sz - 7 - cell * 8); if (!iF && Math.sin(x * .37 + y * .71 + x * y * .001) * 100 % 3 > 1) ctx.fillRect(x, y, cell - 1, cell - 1); }
+            ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sz / 2, sz / 2, 21, 0, Math.PI * 2); ctx.fill();
+            [['#4285F4', sz / 2 - 9, sz / 2 - 5], ['#EA4335', sz / 2 + 3, sz / 2 - 5], ['#FBBC05', sz / 2 - 9, sz / 2 + 5], ['#34A853', sz / 2 + 3, sz / 2 + 5]].forEach(([col, x, y]) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill(); });
+            const url = c.toDataURL();['qrA', 'qrB', 'qrC', 'qrD'].forEach(id => { const el = document.getElementById(id); if (el) el.src = url; });
+        }
+        window.addEventListener('load', loadQR);
+
+        // ===== PWA INSTALL =====
+        let deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; document.getElementById('installBanner').classList.remove('hide'); });
+        document.getElementById('installBtn').addEventListener('click', async () => { if (deferredPrompt) { deferredPrompt.prompt(); const r = await deferredPrompt.userChoice; if (r.outcome === 'accepted') notify('✅ StudyBazaar installed!'); deferredPrompt = null; document.getElementById('installBanner').classList.add('hide'); } });
+
+        // ===== STORAGE =====
+        const SK = 'sb_v7';
+        function gs() { try { return JSON.parse(localStorage.getItem(SK)) || { users: [], payments: [], listings: [], assignments: [], reports: [], favs: [], chats: {}, current: null, isOwner: false }; } catch { return { users: [], payments: [], listings: [], assignments: [], reports: [], favs: [], chats: {}, current: null, isOwner: false }; } }
+        function ss(d) { localStorage.setItem(SK, JSON.stringify(d)); }
+
+        // ===== GOOGLE SHEETS =====
+        let SHEET_URL = localStorage.getItem('sb_sheet_url') || '';
+        window.addEventListener('load', () => { const el = document.getElementById('sheetUrl'); if (el && SHEET_URL) el.value = SHEET_URL; });
+        function saveSheetUrl() { const u = document.getElementById('sheetUrl').value.trim(); if (!u) { notify('⚠️ Enter URL!'); return; } SHEET_URL = u; localStorage.setItem('sb_sheet_url', u); document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--ok)">✅ Saved! Testing...</span>'; testSheet(); }
+        async function testSheet() { try { const r = await fetch(SHEET_URL); const d = await r.json(); document.getElementById('sheetStatus').innerHTML = `<span style="color:var(--ok)">✅ Connected to study_bazaar!</span>`; } catch { document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--er)">❌ Failed. Re-deploy as Web App → Anyone.</span>'; } }
+        async function sheetAppend(sheet, row) { if (!SHEET_URL) return; try { await fetch(SHEET_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'append', sheet, row }) }); } catch { } }
+        async function sheetUpdate(sheet, keyCol, keyVal, updates) { if (!SHEET_URL) return; try { await fetch(SHEET_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'update', sheet, keyCol, keyVal, updates }) }); } catch { } }
+
+        // ===== STATS =====
+        function updateStats() {
+            const d = gs(); const cities = new Set(d.users.map(u => (u.addr || '').split(',')[2]?.trim()).filter(Boolean));
+            const fmt = n => n > 0 ? n + '+' : '0';
+            document.getElementById('statBooks').textContent = fmt(d.listings.length);
+            document.getElementById('statStudents').textContent = fmt(d.users.length);
+            document.getElementById('statCities').textContent = fmt(cities.size || d.users.length);
+            document.getElementById('statSaved').textContent = fmt(d.users.length);
+        }
+
+        // ===== PAGES =====
+        function go(s) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); const el = document.getElementById(s); if (el) el.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); if (s === 'admin') renderAdmin(); if (s === 'profile') renderProfile(); if (s === 'favourites') renderFavs(); if (s === 'home') updateStats(); if (s === 'chat') renderChat(); }
+        function toggleMenu() { const m = document.getElementById('mobMenu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
+        function closeMenu(e) { if (e.target === document.getElementById('mobMenu')) document.getElementById('mobMenu').style.display = 'none'; }
+        function openMo(id) { document.getElementById(id).classList.add('open'); }
+        function closeMo(id) { document.getElementById(id).classList.remove('open'); }
+        document.querySelectorAll('.mo').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
+        function notify(msg) { const n = document.getElementById('notif'); n.textContent = msg; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3600); }
+        function setBtn(id, loading, text) { const b = document.getElementById(id); if (!b) return; b.disabled = loading; b.innerHTML = loading ? `<span class="spinner"></span>Please wait...` : text; }
+        function genToken() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+        function ownerAccess() { document.getElementById('liRole').value = 'owner'; openMo('moLogin'); }
+
+        // ===== LOGIN =====
+        async function doLogin() {
+            const d = gs();
+            const id = document.getElementById('liId').value.trim();
+            const pw = document.getElementById('liPw').value;
+            const role = document.getElementById('liRole').value;
+            if (!id || !pw) { notify('⚠️ Enter your credentials!'); return; }
+            if (role === 'owner') {
+                if ((id === 'urwashi' || id === 'owner' || id === 'urwashiaitan2004-1@okicici') && pw === 'owner123') { d.isOwner = true; ss(d); closeMo('moLogin'); notify('🛡️ Admin login successful!'); setTimeout(() => go('admin'), 700); }
+                else notify('⚠️ Invalid admin credentials!');
+                return;
+            }
+            const user = d.users.find(u => (u.mobile === id || u.email === id) && u.pw === pw);
+            if (!user) { notify('⚠️ Invalid mobile/email or password!'); return; }
+            const localTok = localStorage.getItem('sb_tok_' + user.mobile);
+            document.getElementById('liDeviceWarn').classList.add('hide');
+            if (user.sessionToken && localTok !== user.sessionToken) {
+                document.getElementById('liDeviceWarn').classList.remove('hide');
+                const btn = document.getElementById('loginBtn');
+                if (btn.dataset.force === '1') { btn.dataset.force = ''; btn.textContent = 'Login'; }
+                else { btn.dataset.force = '1'; btn.innerHTML = '⚠️ Login Anyway (Force)'; return; }
+            }
+            const tok = genToken(); user.sessionToken = tok;
+            localStorage.setItem('sb_tok_' + user.mobile, tok);
+            const idx = d.users.findIndex(u => u.mobile === user.mobile); if (idx > -1) d.users[idx] = user;
+            d.current = user; ss(d);
+            await sheetUpdate('Users', 2, user.mobile, [{ col: 11, val: 'Login:' + new Date().toLocaleString('en-IN') }]);
+            closeMo('moLogin'); document.getElementById('liDeviceWarn').classList.add('hide');
+            document.getElementById('loginBtn').dataset.force = ''; document.getElementById('loginBtn').textContent = 'Login';
+            renderProfile(); updateStats(); notify(`Welcome back, ${user.name}! 👋`);
+        }
+
+        // ===== REGISTER — single address field =====
+        async function doRegister() {
+            const d = gs();
+            const name = document.getElementById('rName').value.trim();
+            const mobile = document.getElementById('rMobile').value.trim();
+            const email = document.getElementById('rEmail').value.trim();
+            const dob = document.getElementById('rDob').value;
+            const addr = document.getElementById('rAddr').value.trim();
+            const inst = document.getElementById('rInst').value.trim();
+            const aadhar = document.getElementById('rAadhar').value.trim();
+            const pw = document.getElementById('rPw').value;
+            if (!name || !mobile || !email || !dob || !addr || !inst || !aadhar || !pw) { notify('⚠️ All fields are required!'); return; }
+            if (!/^\d{10}$/.test(mobile)) { notify('⚠️ Enter valid 10-digit mobile!'); return; }
+            if (d.users.find(u => u.mobile === mobile)) { notify('⚠️ Mobile already registered!'); return; }
+            if (d.users.find(u => u.email === email)) { notify('⚠️ Email already registered!'); return; }
+            setBtn('regBtn', true, 'Creating...');
+            const now = new Date().toLocaleString('en-IN');
+            const tok = genToken();
+            const user = { name, mobile, email, dob, addr, institution: inst, aadhar, pw, plan: 'Free', planExpiry: null, payStatus: '', listCount: 0, asgnCount: 0, joinDate: now, sessionToken: tok };
+            d.users.push(user); d.current = user;
+            localStorage.setItem('sb_tok_' + mobile, tok);
+            ss(d);
+            await sheetAppend('Users', [now, name, mobile, email, dob, addr, inst, aadhar, 'Free', '', now]);
+            setBtn('regBtn', false, 'Create Account');
+            closeMo('moReg'); renderProfile(); updateStats(); go('profile');
+            notify(`🎉 Welcome to StudyBazaar, ${name}!`);
+        }
+
+        // ===== PAYMENT =====
+        async function submitPayment(planName, days, amount, utrId, moId, btnId) {
+            const d = gs();
+            const utr = document.getElementById(utrId).value.trim();
+            if (!utr || utr.length < 8) { notify('⚠️ Enter valid UTR!'); return; }
+            if (!d.current) { notify('⚠️ Please register or login first!'); openMo('moReg'); return; }
+            if (d.payments.find(p => p.utr === utr)) { notify('⚠️ UTR already submitted!'); return; }
+            setBtn(btnId, true, 'Submitting...');
+            const now = new Date().toLocaleString('en-IN');
+            const pay = { id: Date.now(), userName: d.current.name, userMobile: d.current.mobile, userEmail: d.current.email, plan: planName, days, amount, utr, status: 'pending', submittedAt: now };
+            d.payments.push(pay);
+            const i = d.users.findIndex(u => u.mobile === d.current.mobile);
+            if (i > -1) { d.users[i].payStatus = 'pending'; d.users[i].pendingPlan = planName; d.users[i].pendingUTR = utr; }
+            d.current.payStatus = 'pending'; d.current.pendingPlan = planName; d.current.pendingUTR = utr;
+            ss(d);
+            await sheetAppend('Payments', [now, d.current.name, d.current.mobile, d.current.email, planName, amount, utr, 'pending', now, '—']);
+            setBtn(btnId, false, 'Submit for Verification');
+            closeMo(moId); renderProfile();
+            notify(`✅ UTR ${utr} submitted. Admin will verify & activate ${planName}.`);
+        }
+
+        // ===== APPROVE/REJECT =====
+        async function approvePayment(pid) {
+            const d = gs(); const p = d.payments.find(x => x.id === pid); if (!p) return;
+            p.status = 'approved'; p.approvedAt = new Date().toLocaleString('en-IN');
+            const u = d.users.find(x => x.mobile === p.userMobile);
+            if (u) { u.plan = p.plan; u.payStatus = 'approved'; if (p.days === -1) u.planExpiry = -1; else { const e = new Date(); e.setDate(e.getDate() + p.days); u.planExpiry = e.toISOString(); } if (d.current && d.current.mobile === u.mobile) d.current = u; }
+            ss(d);
+            await sheetUpdate('Payments', 6, p.utr, [{ col: 8, val: 'approved' }, { col: 10, val: p.approvedAt }]);
+            await sheetUpdate('Users', 2, p.userMobile, [{ col: 9, val: p.plan }, { col: 10, val: 'approved' }]);
+            renderAdmin(); notify(`✅ ${p.userName}'s ${p.plan} plan approved!`);
+        }
+        async function rejectPayment(pid) {
+            const d = gs(); const p = d.payments.find(x => x.id === pid); if (!p) return;
+            p.status = 'rejected'; const u = d.users.find(x => x.mobile === p.userMobile); if (u) u.payStatus = 'rejected';
+            ss(d); await sheetUpdate('Payments', 6, p.utr, [{ col: 8, val: 'rejected' }]);
+            renderAdmin(); notify(`❌ ${p.userName}'s payment rejected.`);
+        }
+
+        // ===== ADMIN =====
+        function renderAdmin() {
+            const d = gs();
+            document.getElementById('admUC').textContent = d.users.length;
+            document.getElementById('admUserList').innerHTML = d.users.length ? d.users.map(u => `<div class="u-row"><div class="u-av">${u.name[0]}</div><div class="u-info"><div class="u-name">${u.name}</div><div class="u-meta">${u.mobile} · ${u.email}</div><div class="u-meta">${u.addr || '—'}</div><div class="u-meta">${u.institution || '—'} · DOB: ${u.dob || '—'} · Aadhar: ${u.aadhar || '—'}</div><div class="u-meta">Joined: ${u.joinDate || '—'}</div>${u.pendingUTR ? `<div class="u-meta" style="color:#f59e0b">⏳ UTR: ${u.pendingUTR} (${u.pendingPlan})</div>` : ''}</div><span class="pill ${u.payStatus === 'pending' ? 'pl-pd' : u.plan === 'Free' ? 'pl-free' : u.plan === 'Lifetime' ? 'pl-lf' : 'pl-pr'}">${u.plan}${u.payStatus === 'pending' ? ' ⏳' : ''}</span></div>`).join('') : '<div style="color:var(--mt);font-size:.81rem">No users yet.</div>';
+            const pend = d.payments.filter(p => p.status === 'pending');
+            document.getElementById('admPendList').innerHTML = pend.length ? pend.map(p => `<div class="pay-row"><div class="pay-info"><strong>${p.userName}</strong> · ${p.userMobile}<br/>Plan: <strong>${p.plan}</strong> · ₹${p.amount} · <span class="utr-tag">UTR: ${p.utr}</span><br/><span style="font-size:.7rem;color:var(--mt)">${p.submittedAt}</span></div><div style="display:flex;gap:5px;flex-wrap:wrap"><button class="btn btn-ok btn-xs" onclick="approvePayment(${p.id})">✅ Approve</button><button class="btn btn-er btn-xs" onclick="rejectPayment(${p.id})">❌ Reject</button></div></div>`).join('') : '<div style="color:var(--ok);font-size:.81rem">✅ No pending payments.</div>';
+            const appr = d.payments.filter(p => p.status === 'approved');
+            document.getElementById('admApprList').innerHTML = appr.length ? appr.map(p => `<div class="pay-row"><div class="pay-info"><strong>${p.userName}</strong> · ${p.userMobile} · <strong>${p.plan}</strong> · ₹${p.amount} · <span class="utr-tag">UTR:${p.utr}</span> <span style="color:var(--ok);font-size:.7rem">✅ ${p.approvedAt}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.81rem">None yet.</div>';
+            const reps = d.reports || [];
+            document.getElementById('admRepList').innerHTML = reps.length ? reps.map(r => `<div class="pay-row"><div class="pay-info"><strong>${r.type}</strong><br/>${r.reported || '—'} · ₹${r.amount || 0}<br/>${r.desc}<br/><span style="font-size:.7rem;color:var(--mt)">${r.at}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.81rem">No reports yet.</div>';
+        }
+
+        // ===== PROFILE =====
+        function renderProfile() {
+            const d = gs(); const u = d.current;
+            if (!u) { document.getElementById('notLoggedIn').classList.remove('hide'); document.getElementById('loggedInProfile').classList.add('hide'); return; }
+            document.getElementById('notLoggedIn').classList.add('hide'); document.getElementById('loggedInProfile').classList.remove('hide');
+            document.getElementById('prfName').textContent = u.name;
+            document.getElementById('prfCity').textContent = u.addr || (u.city || '—');
+            document.getElementById('pdName').textContent = u.name;
+            document.getElementById('pdMobile').textContent = '•••••' + u.mobile.slice(-5);
+            document.getElementById('pdEmail').textContent = u.email;
+            document.getElementById('pdAddr').textContent = u.addr || '—';
+            document.getElementById('pdInst').textContent = u.institution || '—';
+            document.getElementById('pdPlan').textContent = u.plan || 'Free';
+            document.getElementById('achBooks').textContent = u.listCount || 0;
+            document.getElementById('achAsgn').textContent = u.asgnCount || 0;
+            document.getElementById('achFavs').textContent = (d.favs || []).length;
+            document.getElementById('eName').value = u.name;
+            document.getElementById('eAddr').value = u.addr || '';
+            document.getElementById('eInst').value = u.institution || '';
+            const ps = document.getElementById('pdPayStatus'); const badge = document.getElementById('prfBadge');
+            if (u.payStatus === 'pending') { ps.innerHTML = `<span style="color:#f59e0b;font-weight:700">⏳ Pending — ${u.pendingPlan}</span>`; badge.textContent = '⏳ Pending'; badge.className = 'sub-b pend'; document.getElementById('pdExp').textContent = 'Activates after admin approval'; }
+            else if (u.plan && u.plan !== 'Free') { ps.innerHTML = '<span style="color:var(--ok);font-weight:700">✅ Active</span>'; badge.textContent = u.plan; badge.className = 'sub-b'; if (u.planExpiry === -1) document.getElementById('pdExp').textContent = 'Never (Lifetime)'; else if (u.planExpiry) { const e = new Date(u.planExpiry), left = Math.ceil((e - new Date()) / 86400000); document.getElementById('pdExp').textContent = e.toLocaleDateString('en-IN') + ` (${Math.max(0, left)}d left)`; } }
+            else { ps.textContent = 'Free plan'; badge.textContent = 'Free'; badge.className = 'sub-b exp'; document.getElementById('pdExp').textContent = '—'; }
+        }
+        function saveProfile() {
+            const d = gs(); if (!d.current) return;
+            d.current.name = document.getElementById('eName').value.trim() || d.current.name;
+            d.current.addr = document.getElementById('eAddr').value.trim() || d.current.addr;
+            d.current.institution = document.getElementById('eInst').value.trim() || d.current.institution;
+            const i = d.users.findIndex(u => u.mobile === d.current.mobile); if (i > -1) d.users[i] = d.current;
+            ss(d); closeMo('moEdit'); renderProfile(); notify('✅ Profile updated!');
+        }
+
+        // ===== FAVOURITES =====
+        function toggleFav(btn, title) { const d = gs(); if (!d.favs) d.favs = []; if (d.favs.includes(title)) { d.favs = d.favs.filter(f => f !== title); btn.textContent = '♡'; btn.classList.remove('saved'); notify('Removed from saved.'); } else { d.favs.push(title); btn.textContent = '♥'; btn.classList.add('saved'); notify('❤️ Saved to favourites!'); } ss(d); }
+        function renderFavs() { const d = gs(); const fg = document.getElementById('favGrid'); if (!d.favs || !d.favs.length) { fg.innerHTML = '<div class="empty-state"><div class="ei">❤️</div><h4>No saved items yet</h4><p>Tap ♡ on any listing to save it here.</p></div>'; return; } fg.innerHTML = d.favs.map(f => `<div class="bk-card"><div class="bk-img">❤️</div><div class="bk-body"><div class="bk-title">${f}</div><button class="del-btn" style="margin-top:6px" onclick="removeFav('${f.replace(/'/g, "\\'")}')">Remove</button></div></div>`).join(''); }
+        function removeFav(t) { const d = gs(); d.favs = d.favs.filter(f => f !== t); ss(d); renderFavs(); }
+
+        // ===== SELL FORM =====
+        function onLT() { const t = document.getElementById('listType').value; document.getElementById('newBWarn').classList.toggle('hide', t !== 'new-book'); document.getElementById('bookF').classList.toggle('hide', t === 'notes' || !t); document.getElementById('notesF').classList.toggle('hide', t !== 'notes'); document.getElementById('usedPG').classList.toggle('hide', t !== 'used-book'); document.getElementById('newBPG').classList.toggle('hide', t !== 'new-book'); }
+        function onLv() { const l = document.getElementById('levelSel').value;['schoolF', 'collegeF', 'compF', 'othLvF'].forEach(id => document.getElementById(id).classList.add('hide')); if (l) { const m = { school: 'schoolF', college: 'collegeF', competitive: 'compF', other: 'othLvF' }; document.getElementById(m[l]).classList.remove('hide'); } }
+        function calcMax() { const o = parseFloat(document.getElementById('origP').value) || 0; document.getElementById('maxP').textContent = o ? `(Max: ₹${Math.floor(o * .6)})` : '(Enter MRP first)'; }
+        async function submitListing() {
+            const d = gs();
+            if (!document.getElementById('listType').value || !document.getElementById('levelSel').value) { notify('⚠️ Select listing type and level!'); return; }
+            if (!d.current) { document.getElementById('premR').classList.remove('hide'); openMo('moReg'); return; }
+            if (!d.current.plan || d.current.plan === 'Free') { document.getElementById('premR').classList.remove('hide'); notify('🔒 Premium required!'); setTimeout(() => go('pricing'), 1100); return; }
+            const t = document.getElementById('listType').value;
+            if (t === 'used-book') { const o = parseFloat(document.getElementById('origP').value) || 0, s = parseFloat(document.getElementById('sellP').value) || 0; if (o > 0 && s >= o * .6) { notify('⚠️ Price must be below 60% of MRP! Max: ₹' + Math.floor(o * .6)); return; } }
+            const addr = document.getElementById('listAddr').value.trim();
+            if (!addr) { notify('⚠️ Please enter your address/location!'); return; }
+            setBtn('submitListBtn', true, 'Submitting...');
+            const now = new Date().toLocaleString('en-IN');
+            const title = (t === 'notes' ? document.getElementById('notesTitle').value : document.getElementById('bkTitle').value) || '—';
+            d.listings.push({ type: t, title, addr, at: now });
+            d.current.listCount = (d.current.listCount || 0) + 1;
+            const i = d.users.findIndex(u => u.mobile === d.current.mobile); if (i > -1) d.users[i].listCount = d.current.listCount;
+            ss(d); updateStats();
+            await sheetAppend('Listings', [now, d.current.name, d.current.mobile, t, title, '—', addr, 'Active']);
+            // Add card to browse grid
+            const grid = document.getElementById(t === 'notes' ? 'notesGrid' : 'bookGrid');
+            const es = grid.querySelector('.empty-state'); if (es) es.remove();
+            const dv = document.createElement('div'); dv.className = 'bk-card'; dv.dataset.stream = 'other';
+            dv.innerHTML = `<button class="fav-btn" onclick="toggleFav(this,'${title.replace(/'/g, "\\'")}')">♡</button><div class="bk-img">${t === 'notes' ? '📝' : t === 'new-book' ? '📗' : '📘'}</div><div class="bk-body"><div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px"><span class="badge b-${t === 'notes' ? 'note' : t === 'new-book' ? 'new' : 'used'}">${t === 'notes' ? 'Notes' : t === 'new-book' ? 'New' : 'Used'}</span></div><div class="bk-title">${title}</div><div class="bk-meta">${addr}</div><button class="btn btn-pr btn-xs" style="margin-top:6px;width:100%" onclick="openChatWith('${d.current.name}')">💬 Chat</button></div>`;
+            grid.appendChild(dv);
+            const ord = ['1st', '2nd', '3rd', '4th', '5th'][Math.min((d.current.listCount || 1) - 1, 4)] || d.current.listCount + 'th';
+            const ml = document.getElementById('myListings'); if (ml.textContent.includes('No listings')) ml.innerHTML = '';
+            const lv = document.createElement('div'); lv.className = 'bk-card'; lv.style.marginBottom = '8px';
+            lv.innerHTML = `<div class="bk-body"><div class="bk-title">${title} <span class="badge b-${t === 'notes' ? 'note' : t === 'new-book' ? 'new' : 'used'}">${t === 'notes' ? 'Notes' : t === 'new-book' ? 'New' : 'Used'}</span></div><div class="bk-meta">${addr} · ✅ Saved</div><span class="ach">🏆 ${ord} Listing</span><div><button class="del-btn" onclick="this.closest('.bk-card').remove();notify('Deleted.')">🗑 Delete</button></div></div>`;
+            ml.appendChild(lv); setBtn('submitListBtn', false, '📤 Submit Listing');
+            notify(`📤 Listing saved! 🏆 ${ord} listing.`);
+        }
+
+        // ===== STREAM FILTER =====
+        function fs(el, s) { document.querySelectorAll('#sf .stag').forEach(t => t.classList.remove('on')); el.classList.add('on'); document.querySelectorAll('#bookGrid .bk-card[data-stream]').forEach(c => { c.style.display = (s === 'all' || c.dataset.stream === s) ? '' : 'none'; }); }
+        function switchTab(el, id) { const p = el.closest('.sec') || document; p.querySelectorAll('.tab').forEach(t => t.classList.remove('on')); p.querySelectorAll('.tc').forEach(t => t.classList.remove('on')); el.classList.add('on'); const tc = document.getElementById(id); if (tc) tc.classList.add('on'); }
+
+        // ===== ASSIGNMENTS =====
+        let curAsgnRole = 'requester';
+        function setAsgnRole(role, btn) { curAsgnRole = role; document.querySelectorAll('#asgnRoleSeg button').forEach(b => b.classList.remove('on')); btn.classList.add('on'); document.getElementById('reqFields').classList.toggle('hide', role !== 'requester'); document.getElementById('wriFields').classList.toggle('hide', role !== 'writer'); }
+        function onReqLv() { const l = document.getElementById('reqLevel').value; document.getElementById('reqSchoolF').classList.toggle('hide', l !== 'school'); document.getElementById('reqCollegeF').classList.toggle('hide', l !== 'college'); }
+        function filterAsgn(type, btn) { document.querySelectorAll('#asgn-browse .stag').forEach(b => b.classList.remove('on')); btn.classList.add('on'); document.querySelectorAll('#asgnGrid .bk-card[data-atype]').forEach(c => { c.style.display = (type === 'all' || c.dataset.atype === type) ? '' : 'none'; }); }
+        async function submitAssignment() {
+            const d = gs();
+            if (!d.current) { document.getElementById('asgnPremR').classList.remove('hide'); openMo('moReg'); return; }
+            if (!d.current.plan || d.current.plan === 'Free') { document.getElementById('asgnPremR').classList.remove('hide'); notify('🔒 Premium required!'); setTimeout(() => go('pricing'), 1100); return; }
+            const isR = curAsgnRole === 'requester';
+            if (isR) { if (!document.getElementById('reqLevel').value || !document.getElementById('reqTitle').value.trim() || !document.getElementById('reqPages').value || !document.getElementById('reqPrice').value || !document.getElementById('reqAddr').value.trim() || !document.getElementById('reqPhoto').files[0]) { notify('⚠️ All fields are required!'); return; } }
+            else { if (!document.getElementById('wriSubs').value.trim() || !document.getElementById('wriPrice').value || !document.getElementById('wriLangs').value.trim() || !document.getElementById('wriAddr').value.trim() || !document.getElementById('wriAbout').value.trim() || !document.getElementById('wriSample').files[0]) { notify('⚠️ All fields are required!'); return; } }
+            setBtn('asgnSubmitBtn', true, 'Posting...');
+            const now = new Date().toLocaleString('en-IN');
+            d.assignments = d.assignments || []; d.assignments.push({ role: curAsgnRole, name: d.current.name, at: now });
+            d.current.asgnCount = (d.current.asgnCount || 0) + 1;
+            const i = d.users.findIndex(u => u.mobile === d.current.mobile); if (i > -1) d.users[i].asgnCount = d.current.asgnCount;
+            ss(d);
+            await sheetAppend('Assignments', [now, d.current.name, d.current.mobile, curAsgnRole, '—', '—', '—', '—', 'Active']);
+            const title = isR ? document.getElementById('reqTitle').value : document.getElementById('wriSubs').value;
+            const price = isR ? document.getElementById('reqPrice').value : document.getElementById('wriPrice').value;
+            const addr = isR ? document.getElementById('reqAddr').value : document.getElementById('wriAddr').value;
+            const grid = document.getElementById('asgnGrid');
+            const es = grid.querySelector('.empty-state'); if (es) es.remove();
+            const dv = document.createElement('div'); dv.className = 'bk-card'; dv.dataset.atype = curAsgnRole;
+            dv.innerHTML = `<button class="fav-btn" onclick="toggleFav(this,'${title.replace(/'/g, "\\'")}')">♡</button><div class="bk-img">${isR ? '📋' : '✍️'}</div><div class="bk-body"><span class="badge ${isR ? 'b-req' : 'b-wri'}">${isR ? 'REQUEST' : 'WRITER'}</span><div class="bk-title" style="margin-top:4px">${title}</div><div class="bk-meta">₹${price}/page · ${addr}</div><button class="btn btn-pr btn-xs" style="margin-top:6px;width:100%" onclick="openChatWith('${d.current.name}')">💬 Chat</button></div>`;
+            grid.appendChild(dv);
+            setBtn('asgnSubmitBtn', false, '✍️ Post Assignment');
+            notify(`✅ ${isR ? 'Request' : 'Writer profile'} posted & saved!`);
+            document.querySelector('#assignments .tab').click();
+        }
+
+        // ===== REPORT =====
+        async function submitReport() {
+            const desc = document.getElementById('repDesc').value.trim(); if (!desc) { notify('⚠️ Describe what happened!'); return; }
+            setBtn('repBtn', true, 'Submitting...');
+            const d = gs(); const now = new Date().toLocaleString('en-IN');
+            const rep = { type: document.getElementById('repType').value, reported: document.getElementById('repUser').value, amount: document.getElementById('repAmt').value, desc, email: document.getElementById('repEmail').value, at: now };
+            d.reports = d.reports || []; d.reports.push(rep); ss(d);
+            await sheetAppend('Reports', [now, rep.type, rep.reported, rep.amount, desc, rep.email]);
+            setBtn('repBtn', false, '🚨 Submit Report');
+            notify('🚨 Report submitted! Team reviews within 24h.');
+            document.getElementById('repDesc').value = '';
+        }
+
+        // ===== CHAT =====
+        let activeChatUser = null;
+        function renderChat() {
+            const d = gs();
+            if (!d.current || d.current.plan === 'Free') { document.getElementById('chatNoPlan').classList.remove('hide'); document.getElementById('chatMain').classList.add('hide'); return; }
+            document.getElementById('chatNoPlan').classList.add('hide'); document.getElementById('chatMain').classList.remove('hide');
+            const chats = d.chats || {}; const names = Object.keys(chats);
+            const listEl = document.getElementById('chatListEl');
+            if (!names.length) { listEl.innerHTML = '<div style="padding:14px;font-size:.81rem;color:var(--mt)">No conversations yet. Click Chat on a listing to start.</div>'; return; }
+            listEl.innerHTML = names.map(n => `<div class="cli${activeChatUser === n ? ' on' : ''}" onclick="openDM(this,'${n}')"><div class="cav">${n[0]}</div><div><div style="font-weight:700;font-size:.8rem">${n}</div><div style="font-size:.69rem;color:var(--mt)">${(chats[n] || []).slice(-1)[0]?.text || 'Tap to chat'}</div></div></div>`).join('');
+        }
+        function openChatWith(name) { go('chat'); activeChatUser = name; const d = gs(); if (!d.chats) d.chats = {}; if (!d.chats[name]) d.chats[name] = []; ss(d); renderChat(); renderMessages(name); }
+        function openDM(el, name) { document.querySelectorAll('.cli').forEach(i => i.classList.remove('on')); el.classList.add('on'); activeChatUser = name; renderMessages(name); }
+        function renderMessages(name) {
+            document.getElementById('cwNm').textContent = name; document.getElementById('cwAv').textContent = name[0];
+            const d = gs(); const msgs = d.chats && d.chats[name] ? d.chats[name] : [];
+            const el = document.getElementById('chatMsgs');
+            if (!msgs.length) { el.innerHTML = `<div class="chat-empty"><div class="icon">💬</div><div style="font-size:.84rem">Start your conversation with <strong>${name}</strong>.</div></div>`; return; }
+            el.innerHTML = msgs.map(m => `<div class="msg ${m.mine ? 's' : 'r'}">${m.text}<div class="msg-mt">${m.mine ? 'You' : name} · ${m.time}</div></div>`).join('');
+            el.scrollTop = el.scrollHeight;
+        }
+        function sendMsg() {
+            const inp = document.getElementById('chatIn'); const txt = inp.value.trim(); if (!txt || !activeChatUser) return;
+            const d = gs(); if (!d.chats) d.chats = {}; if (!d.chats[activeChatUser]) d.chats[activeChatUser] = [];
+            const time = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+            d.chats[activeChatUser].push({ text: txt, mine: true, time }); ss(d); inp.value = '';
+            renderMessages(activeChatUser); renderChat();
+        }
+
+        // ===== AI BOT (Ziya) =====
+        let botHistory = [];
+        function toggleBot() { document.getElementById('botPanel').classList.toggle('open'); }
+        async function sendBot() {
+            const inp = document.getElementById('botIn');
+            const q = inp.value.trim();
+            if (!q) return;
+            inp.value = ''; inp.disabled = true;
+            const msgs = document.getElementById('botMsgs');
+            const ud = document.createElement('div'); ud.className = 'bm usr'; ud.textContent = q;
+            msgs.appendChild(ud); msgs.scrollTop = msgs.scrollHeight;
+            const td = document.createElement('div'); td.className = 'bm bot';
+            td.innerHTML = '<em style="opacity:.5;font-size:.76rem">Ziya is typing...</em>';
+            msgs.appendChild(td); msgs.scrollTop = msgs.scrollHeight;
+            botHistory.push({ role: 'user', content: q });
+            if (botHistory.length > 20) botHistory = botHistory.slice(-20);
+            const sys = `You are Ziya, a warm and knowledgeable AI assistant for StudyBazaar — India's student book exchange web app. You remember the FULL conversation and answer based on context. Speak in friendly Indian-English. Be concise (2-4 sentences) unless more detail is needed.
+
+StudyBazaar key facts:
+- Correct name: StudyBazaar (double-a in Bazaar)
+- Plans: Free (browse only) | Monthly ₹10/30 days | Annual ₹100/year (MOST POPULAR) | New Book Seller ₹50/month | Lifetime ₹500 one-time
+- Payment: Pay via UPI (scan QR or use UPI ID urwashiaitan2004-1@okicici) → copy UTR from UPI app → enter UTR → wait for admin to verify → plan activates. NOT instant.
+- NEVER pay advance to any seller. Pay ONLY on delivery.
+- Books must be listed below 60% of original MRP.
+- Registration: name, mobile (1 per account), email, DOB, full address (single line: Street, Area, City, State – PIN), institution, Aadhar (private), password.
+- Single device per account (session lock — new login forces out previous device).
+- Chat: Premium users only. Real conversations only.
+- Assignments: Requesters post tasks, Writers offer services. Both need Premium. All fields mandatory.
+- Favourites: tap ♡ on any listing.
+- Home stats are real numbers from actual registrations.
+- Backend: Google Sheet "study_bazaar". Admin connects via Admin Panel → Setup tab.
+- New user notification: Google Sheet → Tools → Notification rules → Any changes → Email immediately.
+- Report fraud: 🚨 Report in navigation.
+- Streams: BSc CS, BCA, BBA, BCom, BTech, BA, MSc, MCA, MBA, PhD, School 1-12, JEE, NEET, UPSC, SSC, GATE etc.`;
+        }
+    </script>
+</body>
+
+</html>
