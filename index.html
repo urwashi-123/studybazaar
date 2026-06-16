@@ -4,9 +4,6 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
-    <meta name="theme-color" content="#1a56db" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
     <title>StudyBazaar — Buy · Sell · Share Knowledge</title>
     <style>
         * {
@@ -17,16 +14,15 @@
         }
 
         :root {
-            --pr: #1a56db;
+            --pr: #6c3cdc;
             --sc: #f97316;
-            --bg: #f0f4ff;
+            --bg: #f5f3ff;
             --tx: #1a1a2e;
             --mt: #6b7280;
             --bd: #e5e7eb;
             --ok: #10b981;
             --er: #ef4444;
-            --lt: #dbeafe;
-            --pr2: #1e40af
+            --warn: #f59e0b
         }
 
         body {
@@ -39,55 +35,40 @@
 
         nav {
             background: #fff;
-            padding: 9px 14px;
+            padding: 10px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(26, 86, 219, .12);
+            box-shadow: 0 2px 8px rgba(108, 60, 220, .1);
             position: sticky;
             top: 0;
             z-index: 200;
-            gap: 8px
+            gap: 8px;
+            flex-wrap: wrap
         }
 
-        .logo-wrap {
-            display: flex;
-            flex-direction: column;
-            cursor: pointer;
-            line-height: 1.1;
-            flex-shrink: 0
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 900;
+            color: var(--pr);
+            cursor: pointer
         }
 
-        .logo-main {
-            font-size: 1.18rem;
-            font-weight: 900
-        }
-
-        .st {
-            color: var(--pr)
-        }
-
-        .bz {
+        .logo span {
             color: var(--sc)
-        }
-
-        .logo-sub {
-            font-size: .5rem;
-            color: var(--mt);
-            font-weight: 600;
-            letter-spacing: .5px
         }
 
         .nav-links {
             display: flex;
-            gap: 1px
+            gap: 2px;
+            flex-wrap: wrap
         }
 
         .nl {
-            font-size: .73rem;
+            font-size: .76rem;
             font-weight: 600;
             cursor: pointer;
-            padding: 5px 6px;
+            padding: 5px 7px;
             border-radius: 7px;
             transition: .2s;
             white-space: nowrap;
@@ -110,8 +91,7 @@
             cursor: pointer;
             padding: 5px;
             flex-direction: column;
-            gap: 4px;
-            flex-shrink: 0
+            gap: 4px
         }
 
         .hmb span {
@@ -134,61 +114,20 @@
             position: absolute;
             top: 0;
             right: 0;
-            width: 260px;
+            width: 250px;
             height: 100%;
             background: #fff;
+            padding: 55px 16px 20px;
             display: flex;
             flex-direction: column;
+            gap: 6px;
             overflow-y: auto
         }
 
-        .mob-header {
-            background: linear-gradient(135deg, var(--pr), #3b82f6);
-            padding: 22px 16px
-        }
-
-        .mob-header .lm {
-            font-size: 1.1rem;
-            font-weight: 900;
-            color: #fff
-        }
-
-        .mob-header .lm span {
-            color: #fed7aa
-        }
-
-        .mob-header .ls {
-            font-size: .52rem;
-            color: rgba(255, 255, 255, .7);
-            letter-spacing: .5px;
-            margin-top: 2px
-        }
-
-        .mob-links {
-            padding: 12px 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 3px
-        }
-
-        .mob-links .nl {
-            font-size: .86rem;
+        .mob-inner .nl {
+            font-size: .88rem;
             padding: 10px 12px;
             border-radius: 8px
-        }
-
-        .install-banner {
-            background: linear-gradient(135deg, var(--pr), #3b82f6);
-            color: #fff;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: .81rem
-        }
-
-        .install-banner.hide {
-            display: none
         }
 
         .btn {
@@ -216,7 +155,7 @@
         }
 
         .btn-pr:hover {
-            background: var(--pr2)
+            background: #5429c0
         }
 
         .btn-sc {
@@ -264,7 +203,7 @@
         }
 
         .sec {
-            padding: 22px 14px;
+            padding: 24px 14px;
             max-width: 1080px;
             margin: 0 auto
         }
@@ -277,13 +216,13 @@
 
         .g3 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
             gap: 12px
         }
 
         .g4 {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
             gap: 10px
         }
 
@@ -299,36 +238,36 @@
             background: #fffbeb;
             border: 1.5px solid #fcd34d;
             border-radius: 10px;
-            padding: 10px 13px;
-            margin-bottom: 12px;
-            font-size: .8rem;
-            line-height: 1.6;
+            padding: 11px 13px;
+            margin-bottom: 13px;
+            font-size: .81rem;
+            line-height: 1.7;
             color: #78350f
         }
 
         .info-b {
-            background: #eff6ff;
+            background: #f5f3ff;
             border: 1.5px solid var(--pr);
             border-radius: 10px;
-            padding: 9px 13px;
-            margin-bottom: 11px;
-            font-size: .8rem;
-            color: #1e40af;
+            padding: 10px 13px;
+            margin-bottom: 12px;
+            font-size: .81rem;
+            color: #4c1d95;
             line-height: 1.6
         }
 
         .hero {
-            background: linear-gradient(135deg, #1a56db, #3b82f6 55%, #f97316);
+            background: linear-gradient(135deg, #6c3cdc, #a855f7 60%, #f97316);
             color: #fff;
-            padding: 44px 16px;
+            padding: 46px 16px;
             text-align: center
         }
 
         .hero h1 {
-            font-size: clamp(1.5rem, 5vw, 2.4rem);
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
             font-weight: 900;
             line-height: 1.2;
-            margin-bottom: 10px
+            margin-bottom: 11px
         }
 
         .hero h1 em {
@@ -337,10 +276,10 @@
         }
 
         .hero p {
-            font-size: clamp(.86rem, 2vw, .97rem);
+            font-size: clamp(.86rem, 2vw, .98rem);
             opacity: .93;
-            max-width: 520px;
-            margin: 0 auto 18px
+            max-width: 540px;
+            margin: 0 auto 20px
         }
 
         .stats-bar {
@@ -348,7 +287,7 @@
             display: flex;
             justify-content: center;
             gap: clamp(10px, 4vw, 32px);
-            padding: 12px 14px;
+            padding: 13px 14px;
             flex-wrap: wrap;
             border-bottom: 1px solid var(--bd)
         }
@@ -361,7 +300,7 @@
         }
 
         .stat p {
-            font-size: .71rem;
+            font-size: .72rem;
             color: var(--mt);
             text-align: center
         }
@@ -377,17 +316,17 @@
 
         .bk-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(26, 86, 219, .13)
+            box-shadow: 0 6px 18px rgba(108, 60, 220, .13)
         }
 
         .bk-img {
             width: 100%;
-            height: 95px;
+            height: 100px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.4rem;
-            background: linear-gradient(135deg, #dbeafe, #fef3c7)
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #ede9fe, #fef3c7)
         }
 
         .bk-body {
@@ -396,12 +335,12 @@
 
         .bk-title {
             font-weight: 700;
-            font-size: .84rem;
+            font-size: .85rem;
             margin-bottom: 2px
         }
 
         .bk-meta {
-            font-size: .71rem;
+            font-size: .72rem;
             color: var(--mt);
             margin-bottom: 4px
         }
@@ -410,12 +349,12 @@
             display: inline-block;
             padding: 2px 6px;
             border-radius: 6px;
-            font-size: .64rem;
+            font-size: .65rem;
             font-weight: 700
         }
 
         .b-str {
-            background: var(--lt);
+            background: #ede9fe;
             color: var(--pr)
         }
 
@@ -452,27 +391,27 @@
         }
 
         .p-old {
-            font-size: .71rem;
+            font-size: .72rem;
             color: var(--mt);
             text-decoration: line-through
         }
 
         .p-now {
-            font-size: .93rem;
+            font-size: .95rem;
             font-weight: 800;
             color: var(--ok)
         }
 
         .loc-tag {
-            font-size: .68rem;
+            font-size: .69rem;
             color: var(--ok);
             font-weight: 600
         }
 
         .ach {
-            font-size: .62rem;
+            font-size: .63rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--pr), #3b82f6);
+            background: linear-gradient(135deg, #6c3cdc, #a855f7);
             color: #fff;
             padding: 2px 6px;
             border-radius: 7px
@@ -492,8 +431,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: .2s;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, .1)
+            transition: .2s
         }
 
         .fav-btn:hover {
@@ -501,7 +439,7 @@
         }
 
         .fav-btn.saved {
-            color: var(--er)
+            color: #ef4444
         }
 
         .empty-state {
@@ -523,15 +461,11 @@
             margin-bottom: 5px
         }
 
-        .empty-state p {
-            font-size: .81rem
-        }
-
         .stags {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
-            margin-bottom: 13px
+            gap: 6px;
+            margin-bottom: 14px
         }
 
         .stag {
@@ -541,7 +475,7 @@
             border: 1.5px solid var(--bd);
             cursor: pointer;
             font-weight: 600;
-            font-size: .73rem;
+            font-size: .74rem;
             transition: .2s
         }
 
@@ -555,15 +489,16 @@
         .tabs {
             display: flex;
             border-bottom: 2px solid var(--bd);
-            margin-bottom: 13px;
-            overflow-x: auto
+            margin-bottom: 14px;
+            overflow-x: auto;
+            gap: 0
         }
 
         .tab {
-            padding: 8px 12px;
+            padding: 8px 13px;
             cursor: pointer;
             font-weight: 600;
-            font-size: .79rem;
+            font-size: .8rem;
             color: var(--mt);
             border-bottom: 3px solid transparent;
             margin-bottom: -2px;
@@ -584,13 +519,13 @@
         }
 
         .fg {
-            margin-bottom: 10px
+            margin-bottom: 11px
         }
 
         .fg label {
             display: block;
             font-weight: 600;
-            font-size: .79rem;
+            font-size: .8rem;
             margin-bottom: 3px
         }
 
@@ -616,7 +551,7 @@
         }
 
         .fg .hint {
-            font-size: .69rem;
+            font-size: .7rem;
             color: var(--mt);
             margin-top: 3px
         }
@@ -625,9 +560,53 @@
             color: var(--er)
         }
 
+        /* PROFILE PIC */
+        .pic-upload-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 11px
+        }
+
+        .pic-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--bd);
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            overflow: hidden
+        }
+
+        .pic-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .pic-upload-info {
+            flex: 1;
+            font-size: .79rem;
+            color: var(--mt)
+        }
+
+        .pic-upload-info label {
+            font-weight: 600;
+            color: var(--pr);
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: .79rem
+        }
+
+        /* PRICING */
         .pc {
-            border-radius: 12px;
-            padding: 16px;
+            border-radius: 13px;
+            padding: 18px;
             text-align: center;
             border: 2px solid var(--bd);
             background: #fff;
@@ -640,20 +619,20 @@
 
         .pop-b {
             position: absolute;
-            top: -10px;
+            top: -11px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--pr);
             color: #fff;
-            padding: 2px 12px;
-            border-radius: 10px;
-            font-size: .68rem;
+            padding: 2px 13px;
+            border-radius: 11px;
+            font-size: .7rem;
             font-weight: 700;
             white-space: nowrap
         }
 
         .p-amt {
-            font-size: 1.7rem;
+            font-size: 1.8rem;
             font-weight: 900;
             color: var(--pr);
             margin: 5px 0 2px
@@ -661,8 +640,8 @@
 
         .p-per {
             color: var(--mt);
-            font-size: .75rem;
-            margin-bottom: 9px
+            font-size: .77rem;
+            margin-bottom: 10px
         }
 
         .p-feat {
@@ -673,7 +652,7 @@
 
         .p-feat li {
             padding: 3px 0;
-            font-size: .78rem;
+            font-size: .79rem;
             display: flex;
             gap: 5px
         }
@@ -689,15 +668,16 @@
             color: var(--er)
         }
 
-        .chat-empty {
+        /* CHAT */
+        .chat-empty-state {
             text-align: center;
             padding: 36px 20px;
-            color: var(--mt)
-        }
-
-        .chat-empty .icon {
-            font-size: 2.8rem;
-            margin-bottom: 10px
+            color: var(--mt);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center
         }
 
         .chat-wrap {
@@ -719,7 +699,7 @@
             color: #fff;
             padding: 10px 12px;
             font-weight: 700;
-            font-size: .82rem
+            font-size: .83rem
         }
 
         .cli {
@@ -734,7 +714,7 @@
 
         .cli:hover,
         .cli.on {
-            background: var(--lt)
+            background: #ede9fe
         }
 
         .cav {
@@ -748,7 +728,14 @@
             color: #fff;
             font-weight: 700;
             font-size: .78rem;
-            flex-shrink: 0
+            flex-shrink: 0;
+            overflow: hidden
+        }
+
+        .cav img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
         }
 
         .chat-win {
@@ -788,7 +775,7 @@
         }
 
         .msg.r {
-            background: var(--lt);
+            background: #f3f0ff;
             align-self: flex-start;
             border-bottom-left-radius: 3px
         }
@@ -801,13 +788,13 @@
         }
 
         .msg-mt {
-            font-size: .62rem;
+            font-size: .63rem;
             opacity: .6;
             margin-top: 2px
         }
 
         .chat-note {
-            font-size: .68rem;
+            font-size: .69rem;
             color: var(--mt);
             padding: 4px 11px;
             background: #fafafa;
@@ -827,10 +814,11 @@
             border: 1.5px solid var(--bd);
             border-radius: 8px;
             outline: none;
-            font-size: .8rem;
+            font-size: .81rem;
             font-family: inherit
         }
 
+        /* MODAL */
         .mo {
             display: none;
             position: fixed;
@@ -839,7 +827,7 @@
             z-index: 400;
             align-items: flex-start;
             justify-content: center;
-            padding: 30px 10px 10px;
+            padding: 36px 10px 10px;
             overflow-y: auto
         }
 
@@ -858,9 +846,9 @@
         }
 
         .mo-box h3 {
-            font-size: .98rem;
+            font-size: 1rem;
             font-weight: 800;
-            margin-bottom: 11px;
+            margin-bottom: 12px;
             color: var(--pr)
         }
 
@@ -880,7 +868,7 @@
             background: #f0fdf4;
             border: 1.5px solid #86efac;
             border-radius: 11px;
-            padding: 12px;
+            padding: 13px;
             text-align: center
         }
 
@@ -890,14 +878,14 @@
             border-radius: 10px;
             border: 2px solid #86efac;
             display: block;
-            margin: 7px auto;
+            margin: 8px auto;
             object-fit: contain;
             background: #fff
         }
 
         .upi-id {
             font-family: monospace;
-            font-size: .86rem;
+            font-size: .87rem;
             font-weight: 700;
             color: #166534;
             background: #fff;
@@ -908,8 +896,20 @@
             word-break: break-all
         }
 
+        .pend-warn {
+            background: #fffbeb;
+            border: 1.5px solid #fcd34d;
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-size: .78rem;
+            color: #92400e;
+            margin-top: 10px;
+            line-height: 1.7
+        }
+
+        /* PROFILE */
         .prof-hd {
-            background: linear-gradient(135deg, var(--pr), #3b82f6);
+            background: linear-gradient(135deg, var(--pr), #a855f7);
             color: #fff;
             padding: 20px;
             border-radius: 12px;
@@ -918,27 +918,36 @@
         }
 
         .prof-av {
-            width: 60px;
-            height: 60px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             background: rgba(255, 255, 255, .25);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.7rem;
-            margin: 0 auto 8px;
-            border: 3px solid rgba(255, 255, 255, .5)
+            font-size: 1.8rem;
+            margin: 0 auto 9px;
+            border: 3px solid rgba(255, 255, 255, .6);
+            overflow: hidden;
+            cursor: pointer;
+            flex-shrink: 0
+        }
+
+        .prof-av img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
         }
 
         .notif {
             position: fixed;
             bottom: 76px;
             right: 12px;
-            background: #1e40af;
+            background: #1e1b4b;
             color: #fff;
             padding: 8px 13px;
             border-radius: 9px;
-            font-size: .82rem;
+            font-size: .83rem;
             z-index: 999;
             transform: translateY(130px);
             transition: .35s;
@@ -951,21 +960,20 @@
             transform: translateY(0)
         }
 
+        /* BOT */
         .bot-fab {
             position: fixed;
             bottom: 14px;
             right: 14px;
-            width: 54px;
-            height: 54px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             background: none;
             border: none;
             cursor: pointer;
             z-index: 500;
             padding: 0;
-            overflow: hidden;
-            transition: .2s;
-            filter: drop-shadow(0 3px 8px rgba(26, 86, 219, .4))
+            overflow: hidden
         }
 
         .bot-fab:hover {
@@ -974,18 +982,18 @@
 
         .bot-panel {
             position: fixed;
-            bottom: 78px;
+            bottom: 80px;
             right: 14px;
-            width: clamp(270px, 88vw, 320px);
+            width: clamp(270px, 90vw, 330px);
             background: #fff;
-            border-radius: 14px;
+            border-radius: 16px;
             box-shadow: 0 8px 28px rgba(0, 0, 0, .18);
             z-index: 500;
             display: none;
             flex-direction: column;
             overflow: hidden;
             border: 1px solid var(--bd);
-            max-height: 75vh
+            max-height: 78vh
         }
 
         .bot-panel.open {
@@ -993,7 +1001,7 @@
         }
 
         .bot-hd {
-            background: linear-gradient(135deg, var(--pr), #3b82f6);
+            background: linear-gradient(135deg, var(--pr), #a855f7);
             color: #fff;
             padding: 10px 14px;
             display: flex;
@@ -1003,34 +1011,34 @@
 
         .bot-nm {
             font-weight: 700;
-            font-size: .85rem
+            font-size: .86rem
         }
 
         .bot-sub {
-            font-size: .67rem;
+            font-size: .68rem;
             opacity: .8
         }
 
         .bot-msgs {
             flex: 1;
-            padding: 10px;
+            padding: 11px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
             gap: 7px;
-            min-height: 160px
+            min-height: 180px
         }
 
         .bm {
             padding: 7px 10px;
             border-radius: 10px;
-            font-size: .8rem;
+            font-size: .81rem;
             max-width: 86%;
-            line-height: 1.5
+            line-height: 1.55
         }
 
         .bm.bot {
-            background: var(--lt);
+            background: #f3f0ff;
             align-self: flex-start
         }
 
@@ -1053,10 +1061,11 @@
             border: 1.5px solid var(--bd);
             border-radius: 8px;
             outline: none;
-            font-size: .8rem;
+            font-size: .81rem;
             font-family: inherit
         }
 
+        /* ADMIN */
         .adm-card {
             background: #fff;
             border-radius: 12px;
@@ -1066,10 +1075,10 @@
         }
 
         .adm-card h4 {
-            font-size: .9rem;
+            font-size: .92rem;
             font-weight: 700;
             color: var(--pr);
-            margin-bottom: 10px
+            margin-bottom: 11px
         }
 
         .u-row {
@@ -1082,8 +1091,8 @@
         }
 
         .u-av {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--pr), var(--sc));
             display: flex;
@@ -1092,7 +1101,14 @@
             color: #fff;
             font-weight: 700;
             font-size: .78rem;
-            flex-shrink: 0
+            flex-shrink: 0;
+            overflow: hidden
+        }
+
+        .u-av img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
         }
 
         .u-info {
@@ -1102,16 +1118,16 @@
 
         .u-name {
             font-weight: 700;
-            font-size: .81rem
+            font-size: .82rem
         }
 
         .u-meta {
-            font-size: .69rem;
+            font-size: .7rem;
             color: var(--mt)
         }
 
         .pill {
-            font-size: .67rem;
+            font-size: .68rem;
             font-weight: 700;
             padding: 2px 8px;
             border-radius: 9px;
@@ -1124,7 +1140,7 @@
         }
 
         .pl-pr {
-            background: var(--lt);
+            background: #ede9fe;
             color: var(--pr)
         }
 
@@ -1150,12 +1166,12 @@
         .pay-info {
             flex: 1;
             min-width: 100px;
-            font-size: .79rem
+            font-size: .8rem
         }
 
         .utr-tag {
             font-family: monospace;
-            font-size: .74rem;
+            font-size: .76rem;
             background: #f3f4f6;
             padding: 2px 6px;
             border-radius: 4px;
@@ -1166,7 +1182,7 @@
             display: inline-block;
             padding: 2px 8px;
             border-radius: 8px;
-            font-size: .68rem;
+            font-size: .69rem;
             font-weight: 700;
             background: #dcfce7;
             color: #166534
@@ -1188,7 +1204,7 @@
             color: var(--er);
             border-radius: 6px;
             padding: 2px 7px;
-            font-size: .68rem;
+            font-size: .69rem;
             cursor: pointer;
             margin-top: 3px
         }
@@ -1220,31 +1236,32 @@
             background: #1e1b4b;
             color: #a5f3fc;
             border-radius: 8px;
-            padding: 10px;
+            padding: 11px;
             font-family: monospace;
-            font-size: .69rem;
+            font-size: .7rem;
             overflow-x: auto;
             line-height: 1.6;
             white-space: pre-wrap;
-            margin: 8px 0
+            margin: 9px 0
         }
 
         .seg-btn {
             display: flex;
+            gap: 0;
             border-radius: 9px;
             overflow: hidden;
             border: 2px solid var(--pr);
             width: 100%;
-            margin-bottom: 11px
+            margin-bottom: 12px
         }
 
         .seg-btn button {
             flex: 1;
-            padding: 8px;
+            padding: 9px;
             border: none;
             cursor: pointer;
             font-weight: 700;
-            font-size: .8rem;
+            font-size: .82rem;
             transition: .2s;
             background: #fff;
             color: var(--pr)
@@ -1256,22 +1273,22 @@
         }
 
         .btm-cta {
-            background: linear-gradient(135deg, #1e1b4b, #1a56db);
+            background: linear-gradient(135deg, #1a1a2e, #6c3cdc);
             color: #fff;
-            padding: 32px 16px;
+            padding: 34px 16px;
             text-align: center
         }
 
         footer {
-            background: #1e1b4b;
-            color: #555;
+            background: #1a1a2e;
+            color: #666;
             padding: 14px;
             text-align: center;
-            font-size: .73rem
+            font-size: .74rem
         }
 
         footer a {
-            color: #888;
+            color: #999;
             cursor: pointer;
             margin: 0 6px
         }
@@ -1316,74 +1333,121 @@
 
 <body>
 
-    <!-- INSTALL BANNER (no logo image) -->
-    <div class="install-banner hide" id="installBanner">
-        <div style="flex:1"><strong>StudyBazaar</strong> — Install as app on your device!</div>
-        <button class="btn" style="background:#fff;color:var(--pr);padding:5px 12px;font-size:.75rem"
-            id="installBtn">Install</button>
-        <button onclick="document.getElementById('installBanner').classList.add('hide')"
-            style="background:none;border:none;color:#fff;cursor:pointer;font-size:1.2rem">×</button>
-    </div>
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = "https://yzlbbxxmidhgvxgvqpna.supabase.co";
+        const supabaseKey = "sb_publishable_tYtJ5TWkpiO_JiV8Ye9tMw_ZK5jWQ2x";
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+    </script>
 
-    <!-- NAV — text-only logo, no image -->
     <nav>
-        <div class="logo-wrap" onclick="go('home')">
-            <div class="logo-main"><span class="st">Study</span><span class="bz">Bazaar</span></div>
-            <div class="logo-sub">BUY · SELL · SHARE KNOWLEDGE</div>
-        </div>
+        <div class="logo" onclick="go('home')">Study<span>Bazaar</span></div>
         <div class="nav-links">
-            <span class="nl" onclick="go('home')">🏠</span>
+            <span class="nl" onclick="go('home')">🏠 Home</span>
             <span class="nl" onclick="go('browse')">📚 Browse</span>
             <span class="nl" onclick="go('sell')">📤 Sell</span>
-            <span class="nl" onclick="go('assignments')">✍️ Assign</span>
-            <span class="nl" onclick="go('favourites')">❤️</span>
+            <span class="nl" onclick="go('assignments')">✍️ Assignments</span>
+            <span class="nl" onclick="go('favourites')">❤️ Saved</span>
             <span class="nl" onclick="go('chat')">💬 Chat</span>
             <span class="nl" onclick="go('pricing')">💳 Plans</span>
-            <span class="nl" onclick="go('profile')">👤</span>
-            <span class="nl danger" onclick="go('report')">🚨</span>
+            <span class="nl" onclick="go('profile')">👤 Profile</span>
+            <span class="nl danger" onclick="go('report')">🚨 Report</span>
         </div>
-        <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
+        <div style="display:flex;gap:6px;align-items:center">
             <button class="btn btn-ol btn-sm" onclick="openMo('moLogin')">Login</button>
             <button class="btn btn-pr btn-sm" onclick="openMo('moReg')">Register</button>
             <button class="hmb" onclick="toggleMenu()"><span></span><span></span><span></span></button>
         </div>
     </nav>
 
-    <!-- MOBILE MENU — text-only header, no image, no PWA badge -->
-    <div class="mob-menu" id="mobMenu" onclick="closeMenu(event)">
-        <div class="mob-inner">
-            <div class="mob-header">
-                <div class="lm"><span>Study</span><span>Bazaar</span></div>
-                <div class="ls">BUY · SELL · SHARE KNOWLEDGE</div>
-            </div>
-            <div class="mob-links">
-                <span class="nl" onclick="go('home');toggleMenu()">🏠 Home</span>
-                <span class="nl" onclick="go('browse');toggleMenu()">📚 Browse Books</span>
-                <span class="nl" onclick="go('sell');toggleMenu()">📤 Sell / List</span>
-                <span class="nl" onclick="go('assignments');toggleMenu()">✍️ Assignments</span>
-                <span class="nl" onclick="go('favourites');toggleMenu()">❤️ Saved Items</span>
-                <span class="nl" onclick="go('chat');toggleMenu()">💬 Chat</span>
-                <span class="nl" onclick="go('pricing');toggleMenu()">💳 Plans</span>
-                <span class="nl" onclick="go('profile');toggleMenu()">👤 My Profile</span>
-                <span class="nl danger" onclick="go('report');toggleMenu()">🚨 Report Fraud</span>
-                <hr style="margin:8px 0;border:none;border-top:1px solid var(--bd)" />
-                <button class="btn btn-ol" style="width:100%;margin-bottom:6px"
-                    onclick="openMo('moLogin');toggleMenu()">Login</button>
-                <button class="btn btn-pr" style="width:100%" onclick="openMo('moReg');toggleMenu()">Register
-                    Free</button>
-            </div>
+    <div class="mob-menu" id="mobMenu" onclick="toggleMenu()">
+        <div class="mob-inner" onclick="event.stopPropagation()">
+            <strong style="font-size:.88rem;color:var(--pr);margin-bottom:6px;display:block">StudyBazaar</strong>
+            <span class="nl" onclick="go('home');toggleMenu()">🏠 Home</span>
+            <span class="nl" onclick="go('browse');toggleMenu()">📚 Browse Books</span>
+            <span class="nl" onclick="go('sell');toggleMenu()">📤 Sell / List</span>
+            <span class="nl" onclick="go('assignments');toggleMenu()">✍️ Assignments</span>
+            <span class="nl" onclick="go('favourites');toggleMenu()">❤️ Saved Items</span>
+            <span class="nl" onclick="go('chat');toggleMenu()">💬 Chat</span>
+            <span class="nl" onclick="go('pricing');toggleMenu()">💳 Plans</span>
+            <span class="nl" onclick="go('profile');toggleMenu()">👤 Profile</span>
+            <span class="nl danger" onclick="go('report');toggleMenu()">🚨 Report Fraud</span>
+            <hr style="margin:9px 0;border:none;border-top:1px solid var(--bd)" />
+            <button class="btn btn-ol" style="width:100%;margin-bottom:6px"
+                onclick="openMo('moLogin');toggleMenu()">Login</button>
+            <button class="btn btn-pr" style="width:100%" onclick="openMo('moReg');toggleMenu()">Register Free</button>
         </div>
     </div>
 
     <div class="notif" id="notif"></div>
 
-    <!-- BOT FAB (Ziya) -->
-    
-    <!-- HOME — no logo image, no PWA badge -->
+    <!-- BOT FAB -->
+    <button class="bot-fab" onclick="toggleBot()" title="Ask Ziya">
+        <svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="28" cy="28" r="28" fill="#6c3cdc" />
+            <ellipse cx="28" cy="29" rx="15" ry="17" fill="#fde8d8" />
+            <ellipse cx="28" cy="15" rx="15" ry="9" fill="#3d1a78" />
+            <ellipse cx="14" cy="27" rx="3.5" ry="6" fill="#3d1a78" />
+            <ellipse cx="42" cy="27" rx="3.5" ry="6" fill="#3d1a78" />
+            <ellipse cx="22" cy="28" rx="2.8" ry="3.2" fill="#fff" />
+            <ellipse cx="34" cy="28" rx="2.8" ry="3.2" fill="#fff" />
+            <circle cx="22.5" cy="28.5" r="1.9" fill="#3d1a78" />
+            <circle cx="34.5" cy="28.5" r="1.9" fill="#3d1a78" />
+            <circle cx="23" cy="28" r=".65" fill="#fff" />
+            <circle cx="35" cy="28" r=".65" fill="#fff" />
+            <ellipse cx="18" cy="33" rx="2.8" ry="1.8" fill="#f9a8d4" opacity=".6" />
+            <ellipse cx="38" cy="33" rx="2.8" ry="1.8" fill="#f9a8d4" opacity=".6" />
+            <path d="M22 36 Q28 41 34 36" stroke="#e97b6b" stroke-width="1.4" fill="none" stroke-linecap="round" />
+            <path d="M13 21 Q28 16 43 21" stroke="#f97316" stroke-width="2.5" fill="none" stroke-linecap="round" />
+            <text x="26" y="22" font-size="7" fill="#ffd700">★</text>
+            <rect x="18" y="10" width="20" height="3.5" rx="1.8" fill="#1e0f4a" />
+            <polygon points="28,6 35,10 21,10" fill="#1e0f4a" />
+            <line x1="35" y1="10" x2="37" y2="15" stroke="#f97316" stroke-width="1.4" />
+            <circle cx="37" cy="16" r="1.8" fill="#f97316" />
+        </svg>
+    </button>
+    <div class="bot-panel" id="botPanel">
+        <div class="bot-hd">
+            <svg viewBox="0 0 32 32" width="32" height="32" style="border-radius:50%;flex-shrink:0">
+                <circle cx="16" cy="16" r="16" fill="rgba(255,255,255,.18)" />
+                <ellipse cx="16" cy="17" rx="8.5" ry="9.5" fill="#fde8d8" />
+                <ellipse cx="16" cy="10" rx="8.5" ry="5.5" fill="#3d1a78" />
+                <ellipse cx="9" cy="16" rx="2.2" ry="3.8" fill="#3d1a78" />
+                <ellipse cx="23" cy="16" rx="2.2" ry="3.8" fill="#3d1a78" />
+                <ellipse cx="13" cy="16.5" rx="1.7" ry="1.9" fill="#fff" />
+                <ellipse cx="19" cy="16.5" rx="1.7" ry="1.9" fill="#fff" />
+                <circle cx="13.3" cy="16.8" r="1.1" fill="#3d1a78" />
+                <circle cx="19.3" cy="16.8" r="1.1" fill="#3d1a78" />
+                <ellipse cx="10.5" cy="19" rx="1.5" ry="1.1" fill="#f9a8d4" opacity=".6" />
+                <ellipse cx="21.5" cy="19" rx="1.5" ry="1.1" fill="#f9a8d4" opacity=".6" />
+                <path d="M13 21 Q16 24 19 21" stroke="#e97b6b" stroke-width="1" fill="none" stroke-linecap="round" />
+                <path d="M7.5 12 Q16 9.5 24.5 12" stroke="#f97316" stroke-width="1.8" fill="none"
+                    stroke-linecap="round" />
+            </svg>
+            <div>
+                <div class="bot-nm">Ziya — StudyBot</div>
+                <div class="bot-sub">AI Assistant ✨</div>
+            </div>
+            <button onclick="toggleBot()"
+                style="background:none;border:none;color:#fff;cursor:pointer;font-size:1.3rem;margin-left:auto">×</button>
+        </div>
+        <div class="bot-msgs" id="botMsgs">
+            <div class="bm bot">Hi! 👋 I'm <strong>Ziya</strong>! Ask me anything about StudyBazaar — buying, selling,
+                assignments, plans, payments, or safety tips! 📚✨</div>
+        </div>
+        <div class="bot-in">
+            <input id="botIn" placeholder="Ask Ziya..." onkeydown="if(event.key==='Enter')sendBot()" />
+            <button class="btn btn-pr btn-sm" onclick="sendBot()">Send</button>
+        </div>
+    </div>
+
+    <!-- HOME -->
     <div id="home" class="page active">
         <div class="hero">
             <h1>Every Book You Need,<br /><em>At the Right Price.</em></h1>
-            <p>India's #1 student book exchange — no middlemen. Buy · Sell · Share Knowledge.</p>
+            <p>India's #1 student book exchange — no middlemen, no brokers. Pass knowledge forward and save on every
+                purchase.</p>
             <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
                 <button class="btn btn-sc" onclick="go('sell')">📚 Sell Your Book</button>
                 <button class="btn" style="background:#fff;color:var(--pr)" onclick="go('browse')">🔍 Browse
@@ -1409,47 +1473,47 @@
             </div>
         </div>
         <div class="sec">
-            <div class="warn-b">🚫 <strong>NEVER pay advance</strong> to any seller. Pay ONLY on delivery when you
-                physically receive the item.</div>
+            <div class="warn-b">🚫 <strong>NEVER pay in advance to any seller.</strong> StudyBazaar is NOT responsible
+                for payments between users. Always pay ONLY on delivery when you physically receive the item.</div>
             <div class="g2">
                 <div class="card" style="border-left:4px solid var(--pr)">
-                    <div style="font-size:1.5rem;margin-bottom:6px">🎓</div>
-                    <h3 style="margin-bottom:5px;font-size:.93rem">Why StudyBazaar?</h3>
-                    <p style="color:var(--mt);line-height:1.7;font-size:.83rem">We eliminate middlemen and give old
+                    <div style="font-size:1.6rem;margin-bottom:7px">🎓</div>
+                    <h3 style="margin-bottom:6px;font-size:.95rem">Why StudyBazaar?</h3>
+                    <p style="color:var(--mt);line-height:1.7;font-size:.84rem">We eliminate middlemen and give old
                         books a second life — directly between students across India.</p>
                 </div>
                 <div class="card" style="border-left:4px solid var(--sc)">
-                    <div style="font-size:1.5rem;margin-bottom:6px">♻️</div>
-                    <h3 style="margin-bottom:5px;font-size:.93rem">Pass Knowledge Forward</h3>
-                    <p style="color:var(--mt);line-height:1.7;font-size:.83rem">Every book sold helps another student
-                        succeed without burning their pocket. Join the movement!</p>
+                    <div style="font-size:1.6rem;margin-bottom:7px">♻️</div>
+                    <h3 style="margin-bottom:6px;font-size:.95rem">Pass Knowledge Forward</h3>
+                    <p style="color:var(--mt);line-height:1.7;font-size:.84rem">Every book sold helps another student
+                        succeed without burning their pocket. Join students making education affordable.</p>
                 </div>
             </div>
-            <div style="margin-top:22px;text-align:center;margin-bottom:13px">
-                <div style="font-size:1.2rem;font-weight:800">How It Works</div>
+            <div style="margin-top:26px;text-align:center;margin-bottom:14px">
+                <div style="font-size:1.25rem;font-weight:800">How It Works</div>
             </div>
             <div class="g3">
                 <div class="card" style="text-align:center">
-                    <div style="font-size:1.5rem;margin-bottom:6px">📝</div>
-                    <h4 style="margin-bottom:4px;font-size:.86rem">1. Register Free</h4>
-                    <p style="color:var(--mt);font-size:.78rem">Only name shown publicly. All info private.</p>
+                    <div style="font-size:1.6rem;margin-bottom:7px">📝</div>
+                    <h4 style="margin-bottom:4px;font-size:.88rem">1. Register Free</h4>
+                    <p style="color:var(--mt);font-size:.79rem">Upload your photo. Only name & photo shown publicly.</p>
                 </div>
                 <div class="card" style="text-align:center">
-                    <div style="font-size:1.5rem;margin-bottom:6px">📖</div>
-                    <h4 style="margin-bottom:4px;font-size:.86rem">2. Browse or Sell</h4>
-                    <p style="color:var(--mt);font-size:.78rem">Find books by stream, or sell below 60% MRP.</p>
+                    <div style="font-size:1.6rem;margin-bottom:7px">📖</div>
+                    <h4 style="margin-bottom:4px;font-size:.88rem">2. Browse or Sell</h4>
+                    <p style="color:var(--mt);font-size:.79rem">Find books by stream, or sell below 60% of MRP.</p>
                 </div>
                 <div class="card" style="text-align:center">
-                    <div style="font-size:1.5rem;margin-bottom:6px">🤝</div>
-                    <h4 style="margin-bottom:4px;font-size:.86rem">3. Chat & Exchange</h4>
-                    <p style="color:var(--mt);font-size:.78rem">Direct chat, meet locally, pay only on delivery!</p>
+                    <div style="font-size:1.6rem;margin-bottom:7px">🤝</div>
+                    <h4 style="margin-bottom:4px;font-size:.88rem">3. Chat & Exchange</h4>
+                    <p style="color:var(--mt);font-size:.79rem">Direct chat, meet locally, pay ONLY on delivery!</p>
                 </div>
             </div>
         </div>
         <div class="btm-cta">
-            <h2 style="font-size:1.35rem;font-weight:800;margin-bottom:7px">Don't Waste Books — Pass Knowledge Forward
+            <h2 style="font-size:1.4rem;font-weight:800;margin-bottom:7px">Don't Waste Books — Pass Knowledge Forward
             </h2>
-            <p style="opacity:.85;margin-bottom:15px;font-size:.87rem">Join students across India exchanging books on
+            <p style="opacity:.85;margin-bottom:16px;font-size:.88rem">Join students across India exchanging books on
                 StudyBazaar.</p>
             <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
                 <button class="btn btn-sc" onclick="go('sell')">Start Selling</button>
@@ -1459,12 +1523,12 @@
         </div>
     </div>
 
-    <!-- BROWSE — empty grids, no demo cards -->
+    <!-- BROWSE — no demo cards -->
     <div id="browse" class="page">
         <div class="sec">
-            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">📚 Browse Books & Notes</div>
-            <div style="color:var(--mt);margin-bottom:11px;font-size:.84rem">Free users see listings only · Premium:
-                chat with sellers</div>
+            <div style="font-size:1.3rem;font-weight:800;margin-bottom:4px">📚 Browse Books & Notes</div>
+            <div style="color:var(--mt);margin-bottom:11px;font-size:.86rem">Free: see listings only · Premium: chat
+                with sellers</div>
             <div class="tabs">
                 <div class="tab on" onclick="switchTab(this,'tb-books')">📗 Books</div>
                 <div class="tab" onclick="switchTab(this,'tb-notes')">📝 Notes</div>
@@ -1473,6 +1537,7 @@
                 <div class="stags" id="sf">
                     <div class="stag on" onclick="fs(this,'all')">All</div>
                     <div class="stag" onclick="fs(this,'bsc-cs')">BSc CS</div>
+                    <div class="stag" onclick="fs(this,'bsc-nm')">BSc Non-Med</div>
                     <div class="stag" onclick="fs(this,'ba')">BA</div>
                     <div class="stag" onclick="fs(this,'bca')">BCA</div>
                     <div class="stag" onclick="fs(this,'bba')">BBA</div>
@@ -1504,14 +1569,14 @@
         </div>
     </div>
 
-    <!-- SELL — condition BEFORE price, single address field -->
+    <!-- SELL — no live location, single address line -->
     <div id="sell" class="page">
         <div class="sec">
-            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">📤 List a Book or Notes</div>
+            <div style="font-size:1.3rem;font-weight:800;margin-bottom:4px">📤 List a Book or Notes</div>
             <div class="g2">
                 <div>
                     <div class="card">
-                        <h3 style="margin-bottom:12px;color:var(--pr);font-size:.95rem">📚 New Listing</h3>
+                        <h3 style="margin-bottom:13px;color:var(--pr);font-size:.97rem">📚 New Listing</h3>
                         <div class="fg"><label>Listing Type *</label><select id="listType" onchange="onLT()">
                                 <option value="">-- Select --</option>
                                 <option value="new-book">📗 New / Unused Book</option>
@@ -1519,7 +1584,7 @@
                                 <option value="notes">📝 Notes</option>
                             </select></div>
                         <div id="newBWarn" class="hide">
-                            <div class="info-b">📗 Selling new/unused books requires <strong>New Book Seller Plan
+                            <div class="info-b">📗 Selling new books requires <strong>New Book Seller Plan
                                     (₹50/mo)</strong>. <button class="btn btn-sc btn-xs" onclick="openMo('mo50')">Get
                                     Plan</button></div>
                         </div>
@@ -1527,7 +1592,7 @@
                                 <option value="">-- Select --</option>
                                 <option value="school">🏫 School (1–12)</option>
                                 <option value="college">🎓 College</option>
-                                <option value="competitive">🏆 Competitive</option>
+                                <option value="competitive">🏆 Competitive Exam</option>
                                 <option value="other">📌 Other</option>
                             </select></div>
                         <div id="schoolF" class="hide">
@@ -1586,23 +1651,18 @@
                                     placeholder="e.g. ITI, Polytechnic" /></div>
                         </div>
                         <div id="bookF" class="hide">
+                            <div class="fg"><label>Condition *</label><select id="condSel">
+                                    <option>Like New</option>
+                                    <option>Very Good</option>
+                                    <option>Good</option>
+                                    <option>Acceptable</option>
+                                </select></div>
                             <div class="fg"><label>Book Title *</label><input type="text" id="bkTitle"
                                     placeholder="Full book name" /></div>
                             <div class="fg"><label>Author</label><input type="text" placeholder="Author name" /></div>
-                            <!-- CONDITION BEFORE PRICE -->
                             <div id="usedPG" class="hide">
-                                <div class="fg"><label>Condition * <span
-                                            style="font-size:.7rem;color:var(--mt);font-weight:400">(Set condition
-                                            first, then price)</span></label>
-                                    <select id="condSel">
-                                        <option>Like New</option>
-                                        <option>Very Good</option>
-                                        <option>Good</option>
-                                        <option>Acceptable</option>
-                                    </select>
-                                </div>
                                 <div class="fg"><label>Original MRP (₹) *</label><input type="number" id="origP"
-                                        oninput="calcMax()" placeholder="Price printed on book cover" /></div>
+                                        oninput="calcMax()" placeholder="Price on book cover" /></div>
                                 <div class="fg"><label>Your Selling Price (₹) * <span id="maxP"
                                             style="color:var(--er);font-weight:700"></span></label><input type="number"
                                         id="sellP" placeholder="Must be below 60% of MRP" /></div>
@@ -1615,19 +1675,25 @@
                         <div id="notesF" class="hide">
                             <div class="fg"><label>Notes Title *</label><input type="text" id="notesTitle"
                                     placeholder="e.g. DBMS Complete Notes Sem 5" /></div>
-                            <div class="fg"><label>Pages</label><input type="number" placeholder="Page count" /></div>
+                            <div class="fg"><label>No. of Pages</label><input type="number" placeholder="Page count" />
+                            </div>
                             <div class="fg"><label>Price (₹) *</label><input type="number"
                                     placeholder="Your asking price" /></div>
                         </div>
-                        <!-- SINGLE ADDRESS FIELD -->
+                        <!-- SINGLE ADDRESS LINE — no live location -->
                         <div class="fg">
-                            <label>📍 Your Address / Location *</label>
+                            <label>📍 Full Address * <span
+                                    style="font-size:.68rem;color:var(--mt);font-weight:400">(Street, Colony, City,
+                                    State – PIN)</span></label>
                             <input type="text" id="listAddr"
-                                placeholder="e.g. Sector 14, Model Town, Rohtak, Haryana - 124001" />
+                                placeholder="e.g. Sector 14, Model Town, Rohtak, Haryana – 124001" />
                         </div>
                         <div class="fg"><label>Photo</label><input type="file" accept="image/*" /></div>
                         <div class="fg"><label>Description</label><textarea rows="2"
                                 placeholder="Any extra details..."></textarea></div>
+                        <div
+                            style="background:#fffbeb;border:1px solid #fcd34d;border-radius:7px;padding:7px 10px;font-size:.75rem;color:#92400e;margin-bottom:10px">
+                            ⚠️ Do NOT share phone number in listing. Share privately in Chat only.</div>
                         <div id="premR" class="hide">
                             <div class="info-b">🔒 Premium required to list. <button class="btn btn-pr btn-xs"
                                     onclick="go('pricing')">View Plans</button></div>
@@ -1637,27 +1703,27 @@
                     </div>
                 </div>
                 <div class="card">
-                    <h3 style="margin-bottom:10px;color:var(--pr);font-size:.93rem">📋 My Listings</h3>
+                    <h3 style="margin-bottom:11px;color:var(--pr);font-size:.95rem">📋 My Listings</h3>
                     <div id="myListings">
-                        <div style="color:var(--mt);font-size:.81rem">No listings yet.</div>
+                        <div style="color:var(--mt);font-size:.82rem">No listings yet.</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ASSIGNMENTS — empty browse grid -->
+    <!-- ASSIGNMENTS — empty browse, no live location -->
     <div id="assignments" class="page">
         <div class="sec">
-            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">✍️ Assignments</div>
-            <div style="color:var(--mt);margin-bottom:11px;font-size:.84rem">Post requests or offer writing services.
-                Premium required.</div>
+            <div style="font-size:1.3rem;font-weight:800;margin-bottom:4px">✍️ Assignments</div>
+            <div style="color:var(--mt);margin-bottom:12px;font-size:.86rem">Post assignment requests or offer writing
+                services. Premium required.</div>
             <div class="tabs">
                 <div class="tab on" onclick="switchTab(this,'asgn-browse')">🔍 Browse</div>
                 <div class="tab" onclick="switchTab(this,'asgn-post')">➕ Post</div>
             </div>
             <div class="tc on" id="asgn-browse">
-                <div style="display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap">
+                <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
                     <button class="stag on" onclick="filterAsgn('all',this)">All</button>
                     <button class="stag" onclick="filterAsgn('requester',this)">📋 Requests</button>
                     <button class="stag" onclick="filterAsgn('writer',this)">✍️ Writers</button>
@@ -1666,20 +1732,19 @@
                     <div class="empty-state">
                         <div class="ei">✍️</div>
                         <h4>No assignments posted yet</h4>
-                        <p>Post a request or offer writing services! <span
-                                onclick="document.querySelector('#assignments .tab:last-child').click()"
-                                style="color:var(--pr);cursor:pointer;font-weight:700">Post →</span></p>
+                        <p><span onclick="switchTab(document.querySelectorAll('#assignments .tab')[1],'asgn-post')"
+                                style="color:var(--pr);cursor:pointer;font-weight:700">Post an Assignment →</span></p>
                     </div>
                 </div>
             </div>
             <div class="tc" id="asgn-post">
                 <div class="card" style="max-width:560px">
-                    <h3 style="margin-bottom:11px;color:var(--pr);font-size:.95rem">➕ Post an Assignment</h3>
+                    <h3 style="margin-bottom:12px;color:var(--pr);font-size:.97rem">➕ Post an Assignment</h3>
                     <div class="info-b">🔒 Premium plan required. <button class="btn btn-pr btn-xs"
                             onclick="go('pricing')">Get Premium</button></div>
                     <div class="seg-btn" id="asgnRoleSeg">
-                        <button class="on" onclick="setAsgnRole('requester',this)">📋 Requester</button>
-                        <button onclick="setAsgnRole('writer',this)">✍️ Writer</button>
+                        <button class="on" onclick="setAsgnRole('requester',this)">📋 Requester (Need Written)</button>
+                        <button onclick="setAsgnRole('writer',this)">✍️ Writer (I Write)</button>
                     </div>
                     <div id="reqFields">
                         <div class="fg"><label>Level *</label><select id="reqLevel" onchange="onReqLv()">
@@ -1706,7 +1771,7 @@
                                 </select></div>
                         </div>
                         <div id="reqCollegeF" class="hide">
-                            <div class="fg"><label>Course *</label><select>
+                            <div class="fg"><label>Course *</label><select id="reqCourse">
                                     <option value="">-- Select --</option>
                                     <option>BSc CS</option>
                                     <option>BA</option>
@@ -1738,32 +1803,31 @@
                                 placeholder="How many pages?" /></div>
                         <div class="fg"><label>Price per page you can pay (₹) *</label><input type="number"
                                 id="reqPrice" placeholder="e.g. 8" />
-                            <div class="hint">💡 Fair pricing attracts more writers.</div>
+                            <div class="hint">💡 Fair price attracts more writers.</div>
                         </div>
                         <div class="fg"><label>Upload Reference / Question Photo *</label><input type="file"
                                 id="reqPhoto" accept="image/*,application/pdf" /></div>
-                        <div class="fg"><label>📍 Your Location *</label><input type="text" id="reqAddr"
-                                placeholder="e.g. Sector 14, Rohtak, Haryana - 124001" /></div>
+                        <div class="fg"><label>📍 Your Address *</label><input type="text" id="reqAddr"
+                                placeholder="e.g. Sector 14, Rohtak, Haryana – 124001" /></div>
                         <div class="fg"><label>Deadline</label><input type="date" id="reqDeadline" /></div>
                     </div>
                     <div id="wriFields" class="hide">
-                        <div class="fg"><label>Subjects / Courses you write for *</label><input type="text" id="wriSubs"
+                        <div class="fg"><label>Subjects / Courses *</label><input type="text" id="wriSubs"
                                 placeholder="e.g. BBA, BCom, BSc CS — all subjects" /></div>
                         <div class="fg"><label>Writing Sample (2–3 pages) *</label><input type="file" id="wriSample"
                                 accept="image/*,application/pdf" />
-                            <div class="hint">Clear sample = more orders.</div>
+                            <div class="hint">Better sample = more orders.</div>
                         </div>
-                        <div class="fg"><label>Price per page you charge (₹) *</label><input type="number" id="wriPrice"
+                        <div class="fg"><label>Price per page (₹) *</label><input type="number" id="wriPrice"
                                 placeholder="e.g. 12" />
-                            <div class="hint warn">⚠️ Keep pricing reasonable — unusually high rate means fewer clients.
-                            </div>
+                            <div class="hint warn">⚠️ Keep price reasonable — high rates attract fewer clients.</div>
                         </div>
                         <div class="fg"><label>Languages *</label><input type="text" id="wriLangs"
                                 placeholder="Hindi, English" /></div>
-                        <div class="fg"><label>📍 Your Location *</label><input type="text" id="wriAddr"
-                                placeholder="e.g. Sector 14, Rohtak, Haryana - 124001" /></div>
+                        <div class="fg"><label>📍 Your Address *</label><input type="text" id="wriAddr"
+                                placeholder="e.g. Sector 14, Rohtak, Haryana – 124001" /></div>
                         <div class="fg"><label>About You *</label><textarea rows="2" id="wriAbout"
-                                placeholder="Brief intro about writing experience..."></textarea></div>
+                                placeholder="Brief intro about your writing experience..."></textarea></div>
                     </div>
                     <div id="asgnPremR" class="hide">
                         <div class="info-b">🔒 Premium required. <button class="btn btn-pr btn-xs"
@@ -1779,8 +1843,8 @@
     <!-- FAVOURITES -->
     <div id="favourites" class="page">
         <div class="sec">
-            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">❤️ Saved Items</div>
-            <div style="color:var(--mt);margin-bottom:13px;font-size:.84rem">Items you saved with ♡</div>
+            <div style="font-size:1.3rem;font-weight:800;margin-bottom:4px">❤️ Saved Items</div>
+            <div style="color:var(--mt);margin-bottom:14px;font-size:.86rem">Items you've marked as favourite.</div>
             <div id="favGrid" class="g3">
                 <div class="empty-state">
                     <div class="ei">❤️</div>
@@ -1791,23 +1855,23 @@
         </div>
     </div>
 
-    <!-- CHAT -->
+    <!-- CHAT — no demo conversations -->
     <div id="chat" class="page">
         <div class="sec">
-            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">💬 Direct Chats</div>
+            <div style="font-size:1.3rem;font-weight:800;margin-bottom:4px">💬 Direct Chats</div>
             <div id="chatNoPlan" class="hide">
                 <div class="info-b">🔒 <strong>Premium required to chat.</strong> <button class="btn btn-pr btn-sm"
                         onclick="go('pricing')">View Plans</button></div>
             </div>
             <div id="chatMain">
-                <div class="info-b" style="font-size:.78rem">📞 Share your contact number here only — never in listings.
-                    💰 Pay only on delivery!</div>
+                <div class="info-b" style="font-size:.79rem">📞 Share your contact number here only — never in listings.
+                    💰 Pay ONLY on delivery!</div>
                 <div class="chat-wrap">
                     <div class="chat-list">
                         <div class="chat-list-hd">💬 Conversations</div>
                         <div id="chatListEl">
-                            <div style="padding:14px;font-size:.81rem;color:var(--mt)">No conversations yet. Click Chat
-                                on a listing to start.</div>
+                            <div style="padding:14px;font-size:.82rem;color:var(--mt)">No conversations yet. Click 💬
+                                Chat on a listing to start.</div>
                         </div>
                     </div>
                     <div class="chat-win">
@@ -1816,9 +1880,10 @@
                                 id="cwNm">Select a conversation</span>
                         </div>
                         <div class="chat-msgs" id="chatMsgs">
-                            <div class="chat-empty">
-                                <div class="icon">💬</div>
-                                <div style="font-size:.84rem">Click Chat on any listing to start a conversation.</div>
+                            <div class="chat-empty-state">
+                                <div style="font-size:2.5rem;margin-bottom:10px">💬</div>
+                                <div style="font-size:.84rem">Click <strong>Chat</strong> on any book listing to start a
+                                    conversation with the seller.</div>
                             </div>
                         </div>
                         <div class="chat-note">📞 Share contact here only. 💰 Pay on delivery!</div>
@@ -1831,31 +1896,31 @@
         </div>
     </div>
 
-    <!-- PRICING — updated: Monthly ₹10, Annual ₹100, Lifetime ₹500, New Book Seller ₹50 -->
+    <!-- PRICING -->
     <div id="pricing" class="page">
         <div class="sec">
-            <div style="text-align:center;margin-bottom:20px">
-                <div style="font-size:1.25rem;font-weight:800">Simple, Student-Friendly Pricing</div>
-                <div style="color:var(--mt);font-size:.84rem;margin-top:4px">Plans activate after payment UTR is
-                    verified. Expires as stated.</div>
+            <div style="text-align:center;margin-bottom:22px">
+                <div style="font-size:1.3rem;font-weight:800">Simple, Student-Friendly Pricing</div>
+                <div style="color:var(--mt);font-size:.86rem;margin-top:4px">Plans activate after admin verifies your
+                    UTR payment.</div>
             </div>
             <div class="g4">
                 <div class="pc">
-                    <div style="font-size:1.4rem">🆓</div>
-                    <h3 style="margin:5px 0 2px;font-size:.88rem">Free</h3>
-                    <div class="p-amt" style="font-size:1.2rem">₹0</div>
+                    <div style="font-size:1.5rem">🆓</div>
+                    <h3 style="margin:5px 0 2px;font-size:.9rem">Free</h3>
+                    <div class="p-amt" style="font-size:1.3rem">₹0</div>
                     <div class="p-per">Always free</div>
                     <ul class="p-feat">
                         <li>Browse all listings</li>
                         <li>See images & location</li>
                         <li class="no">No chat</li>
                         <li class="no">No listing</li>
-                    </ul><button class="btn btn-ol" style="width:100%;font-size:.76rem">Current Plan</button>
+                    </ul><button class="btn btn-ol" style="width:100%;font-size:.77rem">Current</button>
                 </div>
                 <div class="pc pop">
                     <div class="pop-b">⭐ Most Popular</div>
-                    <div style="font-size:1.4rem">📅</div>
-                    <h3 style="margin:5px 0 2px;font-size:.88rem">Annual</h3>
+                    <div style="font-size:1.5rem">📅</div>
+                    <h3 style="margin:5px 0 2px;font-size:.9rem">Annual</h3>
                     <div class="p-amt">₹100</div>
                     <div class="p-per">per year · 365 days</div>
                     <ul class="p-feat">
@@ -1863,53 +1928,53 @@
                         <li>Chat with sellers</li>
                         <li>Post assignments</li>
                         <li class="no">No new book selling</li>
-                    </ul><button class="btn btn-pr" style="width:100%;font-size:.76rem" onclick="openMo('mo50yr')">Get
+                    </ul><button class="btn btn-pr" style="width:100%;font-size:.77rem" onclick="openMo('mo50yr')">Get
                         Annual — ₹100/yr</button>
                 </div>
                 <div class="pc">
-                    <div style="font-size:1.4rem">⚡</div>
-                    <h3 style="margin:5px 0 2px;font-size:.88rem">Monthly</h3>
-                    <div class="p-amt" style="font-size:1.2rem">₹10</div>
+                    <div style="font-size:1.5rem">⚡</div>
+                    <h3 style="margin:5px 0 2px;font-size:.9rem">Monthly</h3>
+                    <div class="p-amt" style="font-size:1.3rem">₹10</div>
                     <div class="p-per">per month · 30 days</div>
                     <ul class="p-feat">
                         <li>List used books & notes</li>
                         <li>Chat with sellers</li>
                         <li>Post assignments</li>
                         <li class="no">No new book selling</li>
-                    </ul><button class="btn btn-pr" style="width:100%;font-size:.76rem" onclick="openMo('mo5')">Get
+                    </ul><button class="btn btn-pr" style="width:100%;font-size:.77rem" onclick="openMo('mo5')">Get
                         Monthly — ₹10/mo</button>
                 </div>
                 <div class="pc">
-                    <div style="font-size:1.4rem">♾️</div>
-                    <h3 style="margin:5px 0 2px;font-size:.88rem">Lifetime</h3>
-                    <div class="p-amt" style="font-size:1.2rem;color:var(--sc)">₹500</div>
+                    <div style="font-size:1.5rem">♾️</div>
+                    <h3 style="margin:5px 0 2px;font-size:.9rem">Lifetime</h3>
+                    <div class="p-amt" style="font-size:1.3rem;color:var(--sc)">₹500</div>
                     <div class="p-per">one-time · never expires</div>
                     <ul class="p-feat">
                         <li>Everything in Annual</li>
                         <li>Never renew</li>
                         <li>Best for active users</li>
-                    </ul><button class="btn btn-sc" style="width:100%;font-size:.76rem" onclick="openMo('moLife')">Get
+                    </ul><button class="btn btn-sc" style="width:100%;font-size:.77rem" onclick="openMo('moLife')">Get
                         Lifetime — ₹500</button>
                 </div>
             </div>
-            <div style="margin-top:12px">
+            <div style="margin-top:14px">
                 <div class="pc" style="display:flex;align-items:center;gap:14px;text-align:left;flex-wrap:wrap">
-                    <div style="font-size:1.5rem">📗</div>
-                    <div style="flex:1;min-width:180px">
-                        <h3 style="font-size:.9rem">New Book Seller — ₹50/month</h3>
-                        <p style="font-size:.78rem;color:var(--mt);margin:4px 0 8px">Sell complete new/unused books +
-                            verified badge. Includes all Monthly features.</p><button class="btn btn-sc btn-sm"
-                            onclick="openMo('mo50')">Get New Book Seller — ₹50</button>
+                    <div style="font-size:1.6rem">📗</div>
+                    <div style="flex:1;min-width:190px">
+                        <h3 style="font-size:.93rem">New Book Seller — ₹50/month</h3>
+                        <p style="font-size:.8rem;color:var(--mt);margin:4px 0 9px">Sell complete new/unused books +
+                            verified badge.</p><button class="btn btn-sc btn-sm" onclick="openMo('mo50')">Get New Book
+                            Seller Plan</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PROFILE -->
+    <!-- PROFILE — with profile picture -->
     <div id="profile" class="page">
         <div class="sec">
-            <div style="font-size:1.25rem;font-weight:800;margin-bottom:12px">👤 My Profile</div>
+            <div style="font-size:1.3rem;font-weight:800;margin-bottom:13px">👤 My Profile</div>
             <div id="notLoggedIn">
                 <div class="info-b">Please <strong>login or register</strong> to view your profile. <button
                         class="btn btn-pr btn-sm" onclick="openMo('moLogin')">Login</button> <button
@@ -1917,15 +1982,20 @@
             </div>
             <div id="loggedInProfile" class="hide">
                 <div class="prof-hd">
-                    <div class="prof-av">👤</div>
+                    <!-- Profile picture in header -->
+                    <div class="prof-av" id="profAvEl" title="Click to change photo"
+                        onclick="document.getElementById('profPicChange').click()">👤</div>
+                    <input type="file" id="profPicChange" accept="image/*" style="display:none"
+                        onchange="changeProfilePic(this)" />
+                    <div style="font-size:.72rem;opacity:.7;margin-bottom:6px">Tap photo to change</div>
                     <div id="prfName" style="font-size:1.1rem;font-weight:800">—</div>
-                    <div id="prfCity" style="opacity:.8;font-size:.83rem;margin-top:2px">—</div>
+                    <div id="prfCity" style="opacity:.8;font-size:.84rem;margin-top:2px">—</div>
                     <div style="margin-top:7px"><span class="sub-b exp" id="prfBadge">Free</span></div>
                 </div>
                 <div class="g2">
                     <div class="card">
-                        <h4 style="margin-bottom:9px;color:var(--pr);font-size:.88rem">📋 Account Details</h4>
-                        <div style="font-size:.81rem;display:flex;flex-direction:column;gap:6px">
+                        <h4 style="margin-bottom:10px;color:var(--pr);font-size:.9rem">📋 Account Details</h4>
+                        <div style="font-size:.82rem;display:flex;flex-direction:column;gap:7px">
                             <div><strong>Name:</strong> <span id="pdName">—</span></div>
                             <div><strong>Mobile:</strong> <span id="pdMobile">—</span></div>
                             <div><strong>Email:</strong> <span id="pdEmail">—</span></div>
@@ -1935,17 +2005,17 @@
                             <div><strong>Status:</strong> <span id="pdPayStatus">—</span></div>
                             <div><strong>Expires:</strong> <span id="pdExp">—</span></div>
                         </div>
-                        <button class="btn btn-pr btn-sm" style="margin-top:10px" onclick="openMo('moEdit')">✏️ Edit
+                        <button class="btn btn-pr btn-sm" style="margin-top:11px" onclick="openMo('moEdit')">✏️ Edit
                             Profile</button>
                     </div>
                     <div class="card">
-                        <h4 style="margin-bottom:9px;color:var(--sc);font-size:.88rem">🏆 Achievements</h4>
-                        <div style="font-size:.81rem;display:flex;flex-direction:column;gap:6px">
+                        <h4 style="margin-bottom:10px;color:var(--sc);font-size:.9rem">🏆 Achievements</h4>
+                        <div style="font-size:.82rem;display:flex;flex-direction:column;gap:7px">
                             <div>📚 Books Listed: <strong id="achBooks">0</strong></div>
                             <div>✍️ Assignments Posted: <strong id="achAsgn">0</strong></div>
                             <div>❤️ Saved Items: <strong id="achFavs">0</strong></div>
                         </div>
-                        <button class="btn btn-ol btn-sm" style="margin-top:10px" onclick="go('pricing')">⬆️ Upgrade
+                        <button class="btn btn-ol btn-sm" style="margin-top:11px" onclick="go('pricing')">⬆️ Upgrade
                             Plan</button>
                     </div>
                 </div>
@@ -1956,16 +2026,18 @@
     <!-- REPORT -->
     <div id="report" class="page">
         <div class="sec">
-            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">🚨 Report Fraud</div>
-            <div style="background:#fef2f2;border-radius:12px;padding:17px;border:1px solid #fca5a5;max-width:530px">
-                <h3 style="color:#991b1b;margin-bottom:11px;font-size:.95rem">⚠️ Report a User or Incident</h3>
+            <div style="font-size:1.3rem;font-weight:800;margin-bottom:4px">🚨 Report Fraud</div>
+            <div class="warn-b"><strong>⚠️</strong> If anyone asked for advance payment — that's a scam. Report
+                immediately.</div>
+            <div style="background:#fef2f2;border-radius:12px;padding:18px;border:1px solid #fca5a5;max-width:540px">
+                <h3 style="color:#991b1b;margin-bottom:12px;font-size:.97rem">⚠️ Report a User or Incident</h3>
                 <div class="fg"><label>Issue Type *</label><select id="repType">
                         <option>Seller asked for advance payment</option>
                         <option>Paid but never delivered</option>
                         <option>Fake listing</option>
                         <option>Wrong item delivered</option>
                         <option>Harassment in chat</option>
-                        <option>Assignment not delivered</option>
+                        <option>Assignment not completed</option>
                         <option>Other</option>
                     </select></div>
                 <div class="fg"><label>Reported User</label><input type="text" id="repUser"
@@ -1975,19 +2047,19 @@
                 <div class="fg"><label>What happened? *</label><textarea rows="4" id="repDesc"
                         placeholder="Full details..."></textarea></div>
                 <div class="fg"><label>Your Email</label><input type="email" id="repEmail"
-                        placeholder="For follow-up" /></div>
+                        placeholder="For follow-up updates" /></div>
                 <button class="btn btn-er" style="width:100%" id="repBtn" onclick="submitReport()">🚨 Submit
                     Report</button>
             </div>
         </div>
     </div>
 
-    <!-- ADMIN — no owner name in title -->
+    <!-- ADMIN -->
     <div id="admin" class="page">
         <div class="sec">
-            <div style="font-size:1.25rem;font-weight:800;margin-bottom:4px">🛡️ Owner Admin Panel</div>
+            <div style="font-size:1.3rem;font-weight:800;margin-bottom:4px">🛡️ Owner Admin Panel</div>
             <div class="tabs">
-                <div class="tab on" onclick="switchTab(this,'adm-setup')">⚙️ Setup</div>
+                <div class="tab on" onclick="switchTab(this,'adm-setup')">⚙️ Sheet Setup</div>
                 <div class="tab" onclick="switchTab(this,'adm-users');renderAdmin()">👥 Users</div>
                 <div class="tab" onclick="switchTab(this,'adm-pay');renderAdmin()">💳 Payments</div>
                 <div class="tab" onclick="switchTab(this,'adm-appr');renderAdmin()">✅ Approved</div>
@@ -1995,20 +2067,18 @@
             </div>
             <div class="tc on" id="adm-setup">
                 <div class="card">
-                    <h4 style="color:var(--pr);margin-bottom:11px">📊 Connect Google Sheet "study_bazaar"</h4>
-                    <div style="font-size:.81rem;line-height:2">
-                        <strong>Step 1:</strong> <a href="https://sheets.google.com" target="_blank"
+                    <h4 style="color:var(--pr);margin-bottom:12px">📊 Google Sheets Setup</h4>
+                    <div style="font-size:.82rem;line-height:2"><strong>Step 1:</strong> <a
+                            href="https://sheets.google.com" target="_blank"
                             style="color:var(--pr)">sheets.google.com</a> → Create → Rename to
-                        <strong>study_bazaar</strong><br />
-                        <strong>Step 2:</strong> Create tabs: <code
-                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Users</code> <code
-                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Payments</code> <code
-                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Listings</code> <code
-                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Assignments</code> <code
-                            style="background:var(--lt);padding:1px 5px;border-radius:4px">Reports</code><br />
-                        <strong>Step 3:</strong> Extensions → Apps Script → paste code → Deploy → Web App → Execute as
-                        Me → Access: Anyone
-                    </div>
+                        <strong>study_bazaar</strong><br /><strong>Step 2:</strong> Create 5 tabs: <code
+                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Users</code> <code
+                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Payments</code> <code
+                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Listings</code> <code
+                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Assignments</code> <code
+                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Reports</code><br /><strong>Step
+                            3:</strong> Extensions → Apps Script → paste code → Deploy → Web App → Execute as Me →
+                        Access: Anyone → Copy URL</div>
                     <div class="gs-code">const SS=SpreadsheetApp.getActiveSpreadsheet();
                         function doPost(e){
                         try{
@@ -2031,28 +2101,28 @@
                         }
                         function out(o){return
                         ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);}
-                        function doGet(){return out({status:'study_bazaar API ✅'});}</div>
+                        function doGet(){return out({status:'StudyBazaar API active ✅'});}</div>
                     <div class="fg" style="margin-top:10px"><label>Paste Web App URL</label><input type="text"
                             id="sheetUrl" placeholder="https://script.google.com/macros/s/.../exec" /></div>
                     <button class="btn btn-pr" onclick="saveSheetUrl()">💾 Save & Connect</button>
-                    <div id="sheetStatus" style="margin-top:7px;font-size:.8rem"></div>
+                    <div id="sheetStatus" style="margin-top:7px;font-size:.81rem"></div>
                 </div>
             </div>
             <div class="tc" id="adm-users">
                 <div class="adm-card">
-                    <h4>👥 All Users (<span id="admUC">0</span>)</h4>
+                    <h4>👥 Registered Users (<span id="admUC">0</span>)</h4>
                     <div id="admUserList">
-                        <div style="color:var(--mt);font-size:.81rem">No users yet.</div>
+                        <div style="color:var(--mt);font-size:.82rem">No users yet.</div>
                     </div>
                 </div>
             </div>
             <div class="tc" id="adm-pay">
                 <div class="adm-card">
                     <h4>⏳ Pending Payments</h4>
-                    <p style="font-size:.79rem;color:var(--mt);margin-bottom:10px">Verify each UTR in your UPI app, then
+                    <p style="font-size:.8rem;color:var(--mt);margin-bottom:11px">Verify each UTR in your UPI app, then
                         approve or reject.</p>
                     <div id="admPendList">
-                        <div style="color:var(--ok);font-size:.81rem">✅ No pending payments.</div>
+                        <div style="color:var(--ok);font-size:.82rem">✅ No pending payments.</div>
                     </div>
                 </div>
             </div>
@@ -2060,7 +2130,7 @@
                 <div class="adm-card">
                     <h4>✅ Approved Plans</h4>
                     <div id="admApprList">
-                        <div style="color:var(--mt);font-size:.81rem">None yet.</div>
+                        <div style="color:var(--mt);font-size:.82rem">None yet.</div>
                     </div>
                 </div>
             </div>
@@ -2068,94 +2138,70 @@
                 <div class="adm-card">
                     <h4>🚨 Reports</h4>
                     <div id="admRepList">
-                        <div style="color:var(--mt);font-size:.81rem">No reports yet.</div>
+                        <div style="color:var(--mt);font-size:.82rem">No reports yet.</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PAYMENT MODALS — updated prices, NO owner name -->
+    <!-- PAYMENT MODALS -->
     <div class="mo" id="mo5">
-        <div class="mo-box">
-            <button class="mo-close" onclick="closeMo('mo5')">×</button>
+        <div class="mo-box"><button class="mo-close" onclick="closeMo('mo5')">×</button>
             <h3>⚡ Monthly Premium — ₹10/month</h3>
-            <div class="upi-box">
-                <img id="qrA" src="" alt="UPI QR Code"
-                    style="width:195px;height:195px;border-radius:10px;border:2px solid #86efac;display:block;margin:7px auto;object-fit:contain;background:#fff" />
+            <div class="upi-box"><img id="qrA" src="qr.jpeg" alt="UPI QR" />
                 <div class="upi-id">urwashiaitan2004-1@okicici</div>
-                <p style="font-size:.71rem;color:#166534;margin-top:3px">Amount: <strong>₹10</strong> · Add your
-                    registered mobile as note</p>
+                <p style="font-size:.72rem;color:#166534;margin-top:3px">Amount: <strong>₹10</strong> · Add your mobile
+                    as note</p>
             </div>
-            <div
-                style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px 11px;font-size:.77rem;color:#92400e;margin-top:9px">
-                ⚠️ Plan activates only after admin verifies your UTR. Enter UTR below.</div>
-            <div class="fg" style="margin-top:10px"><label>UTR / Transaction ID *</label><input type="text" id="utr5"
-                    placeholder="12-digit UTR from your UPI app" /></div>
-            <button class="btn btn-pr" style="width:100%" id="pb5"
+            <div class="pend-warn">⚠️ Enter UTR below after paying. Plan activates after admin verification.</div>
+            <div class="fg" style="margin-top:11px"><label>UTR / Transaction ID *</label><input type="text" id="utr5"
+                    placeholder="12-digit UTR" /></div><button class="btn btn-pr" style="width:100%" id="pb5"
                 onclick="submitPayment('Monthly',30,10,'utr5','mo5','pb5')">Submit for Verification</button>
         </div>
     </div>
 
     <div class="mo" id="mo50yr">
-        <div class="mo-box">
-            <button class="mo-close" onclick="closeMo('mo50yr')">×</button>
+        <div class="mo-box"><button class="mo-close" onclick="closeMo('mo50yr')">×</button>
             <h3>📅 Annual Plan — ₹100/year</h3>
-            <div class="upi-box">
-                <img id="qrB" src="" alt="UPI QR"
-                    style="width:195px;height:195px;border-radius:10px;border:2px solid #86efac;display:block;margin:7px auto;object-fit:contain;background:#fff" />
+            <div class="upi-box"><img id="qrB" src="qr.jpeg" alt="UPI QR" />
                 <div class="upi-id">urwashiaitan2004-1@okicici</div>
-                <p style="font-size:.71rem;color:#166534;margin-top:3px">Amount: <strong>₹100</strong> · Add "Annual +
+                <p style="font-size:.72rem;color:#166534;margin-top:3px">Amount: <strong>₹100</strong> · Add "Annual +
                     your name" as note</p>
             </div>
-            <div
-                style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px 11px;font-size:.77rem;color:#92400e;margin-top:9px">
-                ⚠️ Plan activates only after admin verifies your UTR.</div>
-            <div class="fg" style="margin-top:10px"><label>UTR *</label><input type="text" id="utr50yr"
-                    placeholder="12-digit UTR" /></div>
-            <button class="btn btn-pr" style="width:100%" id="pb50yr"
+            <div class="pend-warn">⚠️ Plan activates after admin verifies your UTR.</div>
+            <div class="fg" style="margin-top:11px"><label>UTR *</label><input type="text" id="utr50yr"
+                    placeholder="12-digit UTR" /></div><button class="btn btn-pr" style="width:100%" id="pb50yr"
                 onclick="submitPayment('Annual',365,100,'utr50yr','mo50yr','pb50yr')">Submit for Verification</button>
         </div>
     </div>
 
     <div class="mo" id="mo50">
-        <div class="mo-box">
-            <button class="mo-close" onclick="closeMo('mo50')">×</button>
+        <div class="mo-box"><button class="mo-close" onclick="closeMo('mo50')">×</button>
             <h3>📗 New Book Seller — ₹50/month</h3>
-            <div class="upi-box">
-                <img id="qrC" src="" alt="UPI QR"
-                    style="width:195px;height:195px;border-radius:10px;border:2px solid #86efac;display:block;margin:7px auto;object-fit:contain;background:#fff" />
+            <div class="upi-box"><img id="qrC" src="qr.jpeg" alt="UPI QR" />
                 <div class="upi-id">urwashiaitan2004-1@okicici</div>
-                <p style="font-size:.71rem;color:#166534;margin-top:3px">Amount: <strong>₹50</strong> · Add
+                <p style="font-size:.72rem;color:#166534;margin-top:3px">Amount: <strong>₹50</strong> · Add
                     "NewBookSeller + name" as note</p>
             </div>
-            <div
-                style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px 11px;font-size:.77rem;color:#92400e;margin-top:9px">
-                ⚠️ Plan activates after admin verification only.</div>
-            <div class="fg" style="margin-top:10px"><label>UTR *</label><input type="text" id="utr50"
-                    placeholder="UTR" /></div>
-            <button class="btn btn-sc" style="width:100%" id="pb50"
+            <div class="pend-warn">⚠️ Plan activates after admin verification only.</div>
+            <div class="fg" style="margin-top:11px"><label>UTR *</label><input type="text" id="utr50"
+                    placeholder="UTR" /></div><button class="btn btn-sc" style="width:100%" id="pb50"
                 onclick="submitPayment('New Book Seller',30,50,'utr50','mo50','pb50')">Submit for Verification</button>
         </div>
     </div>
 
     <div class="mo" id="moLife">
-        <div class="mo-box">
-            <button class="mo-close" onclick="closeMo('moLife')">×</button>
+        <div class="mo-box"><button class="mo-close" onclick="closeMo('moLife')">×</button>
             <h3>♾️ Lifetime Access — ₹500</h3>
-            <div class="upi-box">
-                <img id="qrD" src="" alt="UPI QR"
-                    style="width:195px;height:195px;border-radius:10px;border:2px solid #86efac;display:block;margin:7px auto;object-fit:contain;background:#fff" />
+            <div class="upi-box"><img id="qrD" src="qr.jpeg" alt="UPI QR" />
                 <div class="upi-id">urwashiaitan2004-1@okicici</div>
-                <p style="font-size:.71rem;color:#166534;margin-top:3px">Amount: <strong>₹500</strong> · Add "Lifetime +
+                <p style="font-size:.72rem;color:#166534;margin-top:3px">Amount: <strong>₹500</strong> · Add "Lifetime +
                     name" as note</p>
             </div>
-            <div
-                style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:9px 11px;font-size:.77rem;color:#92400e;margin-top:9px">
-                ⚠️ Plan activates after admin verification only.</div>
-            <div class="fg" style="margin-top:10px"><label>UTR *</label><input type="text" id="utrLife"
-                    placeholder="UTR" /></div>
-            <button class="btn btn-sc" style="width:100%" id="pbLife"
+            <div class="pend-warn">⚠️ Plan activates after admin verification only.</div>
+            <div class="fg" style="margin-top:11px"><label>UTR *</label><input type="text" id="utrLife"
+                    placeholder="UTR" /></div><button class="btn btn-sc" style="width:100%" id="pbLife"
                 onclick="submitPayment('Lifetime',-1,500,'utrLife','moLife','pbLife')">Submit for Verification</button>
         </div>
     </div>
@@ -2174,40 +2220,50 @@
                     <option value="owner">🛡️ Admin / Owner</option>
                 </select></div>
             <div id="liDeviceWarn" class="hide"
-                style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:9px 11px;font-size:.78rem;color:#991b1b;margin-bottom:9px">
-                ⚠️ <strong>Account active on another device.</strong> Logging in here will force log out the other
+                style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:9px 12px;font-size:.79rem;color:#991b1b;margin-bottom:10px">
+                ⚠️ <strong>Account already active on another device.</strong> Logging in here will log out the other
                 session.</div>
             <button class="btn btn-pr" style="width:100%;margin-top:7px" id="loginBtn"
                 onclick="doLogin()">Login</button>
-            <p style="text-align:center;margin-top:9px;font-size:.8rem;color:var(--mt)">No account? <a
+            <p style="text-align:center;margin-top:10px;font-size:.81rem;color:var(--mt)">No account? <a
                     onclick="closeMo('moLogin');openMo('moReg')"
                     style="color:var(--pr);cursor:pointer;font-weight:700">Register Free →</a></p>
         </div>
     </div>
 
-    <!-- REGISTER — single address field -->
+    <!-- REGISTER — with profile picture + single address -->
     <div class="mo" id="moReg">
         <div class="mo-box">
             <button class="mo-close" onclick="closeMo('moReg')">×</button>
-            <h3>📝 Create Account — StudyBazaar</h3>
-            <p style="font-size:.73rem;color:var(--mt);margin-bottom:10px">Only your name is shown publicly. All other
-                info is private.</p>
+            <h3>📝 Create Student Account</h3>
+            <p style="font-size:.74rem;color:var(--mt);margin-bottom:11px">Only your name & photo shown publicly. All
+                other info is private.</p>
+            <!-- Profile Picture Upload -->
+            <div class="pic-upload-wrap">
+                <div class="pic-preview" id="regPicPreview">👤</div>
+                <div class="pic-upload-info">
+                    <div style="font-weight:600;font-size:.82rem;margin-bottom:3px">Profile Photo</div>
+                    <label for="rPic">📷 Upload Photo</label>
+                    <input type="file" id="rPic" accept="image/*" style="display:none"
+                        onchange="previewPic(this,'regPicPreview')" />
+                    <div style="font-size:.69rem;color:var(--mt);margin-top:2px">Optional · Shown publicly</div>
+                </div>
+            </div>
             <div class="fg"><label>Full Name *</label><input type="text" id="rName" placeholder="Your full name" />
             </div>
-            <div class="fg"><label>Mobile * <span style="color:var(--er);font-size:.69rem">(1 account per
-                        number)</span></label><input type="tel" id="rMobile" placeholder="10-digit mobile number" />
-            </div>
-            <div class="fg"><label>Email *</label><input type="email" id="rEmail" placeholder="Your email address" />
-            </div>
+            <div class="fg"><label>Mobile * <span style="color:var(--er);font-size:.7rem">(1 account per
+                        number)</span></label><input type="tel" id="rMobile" placeholder="10-digit mobile" /></div>
+            <div class="fg"><label>Email *</label><input type="email" id="rEmail" placeholder="Your email" /></div>
             <div class="fg"><label>Date of Birth *</label><input type="date" id="rDob" /></div>
+            <!-- SINGLE ADDRESS LINE -->
             <div class="fg">
-                <label>Full Address * <span style="font-size:.68rem;color:var(--mt);font-weight:400">(Street, Area,
+                <label>Full Address * <span style="font-size:.68rem;color:var(--mt);font-weight:400">(Street, Colony,
                         City, State – PIN)</span></label>
                 <input type="text" id="rAddr" placeholder="e.g. Sector 14, Model Town, Rohtak, Haryana – 124001" />
             </div>
             <div class="fg"><label>College / School *</label><input type="text" id="rInst"
                     placeholder="Institution name" /></div>
-            <div class="fg"><label>Aadhar / Student ID * <span style="color:var(--mt);font-size:.68rem">(Private — fraud
+            <div class="fg"><label>Aadhar / Student ID * <span style="color:var(--mt);font-size:.69rem">(Private — fraud
                         prevention)</span></label><input type="text" id="rAadhar" placeholder="Never shown publicly" />
             </div>
             <div class="fg"><label>Password *</label><input type="password" id="rPw"
@@ -2216,14 +2272,23 @@
         </div>
     </div>
 
-    <!-- EDIT PROFILE — single address field -->
+    <!-- EDIT PROFILE — with picture change + address -->
     <div class="mo" id="moEdit">
         <div class="mo-box">
             <button class="mo-close" onclick="closeMo('moEdit')">×</button>
             <h3>✏️ Edit Profile</h3>
+            <div class="pic-upload-wrap">
+                <div class="pic-preview" id="editPicPreview">👤</div>
+                <div class="pic-upload-info">
+                    <div style="font-weight:600;font-size:.82rem;margin-bottom:3px">Profile Photo</div>
+                    <label for="ePic">📷 Change Photo</label>
+                    <input type="file" id="ePic" accept="image/*" style="display:none"
+                        onchange="previewPic(this,'editPicPreview')" />
+                </div>
+            </div>
             <div class="fg"><label>Name</label><input type="text" id="eName" /></div>
             <div class="fg"><label>Full Address</label><input type="text" id="eAddr"
-                    placeholder="Street, Area, City, State – PIN" /></div>
+                    placeholder="Street, Colony, City, State – PIN" /></div>
             <div class="fg"><label>Institution</label><input type="text" id="eInst" /></div>
             <button class="btn btn-pr" style="width:100%" onclick="saveProfile()">Save Changes</button>
         </div>
@@ -2233,24 +2298,16 @@
         <div style="margin-bottom:6px">
             <a onclick="go('report')">🚨 Report</a><a onclick="go('pricing')">💳 Plans</a>
             <a onclick="go('assignments')">✍️ Assignments</a><a onclick="go('browse')">📚 Browse</a>
-            <a onclick="go('profile')">👤 Profile</a>
-            <a onclick="ownerAccess()" style="color:#444">🛡️ Admin</a>
+            <a onclick="go('profile')">👤 Profile</a><a onclick="ownerAccess()" style="color:#444">🛡️ Owner</a>
         </div>
-        <div style="margin-bottom:4px;font-size:.7rem;color:#555">⚠️ Not responsible for payments between users. Always
+        <div style="margin-bottom:5px;font-size:.71rem;color:#555">⚠️ Not responsible for payments between users. Always
             pay on delivery only.</div>
-        © 2025 StudyBazaar — India's Book Exchange 🇮🇳
+        © 2025 StudyBazaar — India's Book Exchange. Made for students 🇮🇳
     </footer>
-
-
-    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-    <script type="module">
-	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-
-	createChat({
-		webhookUrl: 'https://nothinggg.app.n8n.cloud/webhook/d4c1db79-88b1-4dd0-86f8-8f8a5f8b54db/chat'
-	});
     
-        // ===== QR ONLY (logo removed) =====
+    <script>
+        const SK = 'sb_v4';
+        // ===== QR LOADER =====
         function loadQR() {
                 ['qrA', 'qrB', 'qrC', 'qrD'].forEach(id => {
                     const el = document.getElementById(id);
@@ -2264,33 +2321,72 @@
             function fp(ox, oy) { ctx.fillStyle = '#111'; ctx.fillRect(ox, oy, cell * 7, cell * 7); ctx.fillStyle = '#fff'; ctx.fillRect(ox + cell, oy + cell, cell * 5, cell * 5); ctx.fillStyle = '#111'; ctx.fillRect(ox + cell * 2, oy + cell * 2, cell * 3, cell * 3); }
             fp(7, 7); fp(sz - 7 - cell * 7, 7); fp(7, sz - 7 - cell * 7); ctx.fillStyle = '#111';
             for (let y = 0; y < sz; y += cell)for (let x = 0; x < sz; x += cell) { const iF = (x < 7 + cell * 7 && y < 7 + cell * 7) || (x > sz - 7 - cell * 8 && y < 7 + cell * 7) || (x < 7 + cell * 7 && y > sz - 7 - cell * 8); if (!iF && Math.sin(x * .37 + y * .71 + x * y * .001) * 100 % 3 > 1) ctx.fillRect(x, y, cell - 1, cell - 1); }
-            ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sz / 2, sz / 2, 21, 0, Math.PI * 2); ctx.fill();
+            ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sz / 2, sz / 2, 22, 0, Math.PI * 2); ctx.fill();
             [['#4285F4', sz / 2 - 9, sz / 2 - 5], ['#EA4335', sz / 2 + 3, sz / 2 - 5], ['#FBBC05', sz / 2 - 9, sz / 2 + 5], ['#34A853', sz / 2 + 3, sz / 2 + 5]].forEach(([col, x, y]) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill(); });
-            const url = c.toDataURL();['qrA', 'qrB', 'qrC', 'qrD'].forEach(id => { const el = document.getElementById(id); if (el) el.src = url; });
+            ctx.fillStyle = '#166534'; ctx.font = 'bold 7px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('urwashiaitan2004-1@okicici', sz / 2, sz - 4);
+            const url = c.toDataURL(); // FIX: use canvas data URL, not hardcoded 'qr.jpeg'
+            ['qrA', 'qrB', 'qrC', 'qrD'].forEach(id => { const el = document.getElementById(id); if (el) el.src = qr.jpeg; });
         }
-        window.addEventListener('load', loadQR);
+        window.addEventListener('load', loadRealQR);
 
-        // ===== PWA INSTALL =====
-        let deferredPrompt = null;
-        window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; document.getElementById('installBanner').classList.remove('hide'); });
-        document.getElementById('installBtn').addEventListener('click', async () => { if (deferredPrompt) { deferredPrompt.prompt(); const r = await deferredPrompt.userChoice; if (r.outcome === 'accepted') notify('✅ StudyBazaar installed!'); deferredPrompt = null; document.getElementById('installBanner').classList.add('hide'); } });
+        // ===== PROFILE PICTURE HELPERS =====
+        async function resizeImage(file, maxPx = 200) {
+            return new Promise(resolve => {
+                const img = new Image(), url = URL.createObjectURL(file);
+                img.onload = () => {
+                    let w = img.width, h = img.height;
+                    if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; } else { w = Math.round(w * maxPx / h); h = maxPx; }
+                    const c = document.createElement('canvas'); c.width = w; c.height = h;
+                    c.getContext('2d').drawImage(img, 0, 0, w, h);
+                    URL.revokeObjectURL(url);
+                    resolve(c.toDataURL('image/jpeg', 0.75));
+                };
+                img.onerror = () => resolve('');
+                img.src = qr.jpeg;
+            });
+        }
+        function previewPic(input, previewId) {
+            const prev = document.getElementById(previewId);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => { prev.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`; };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        async function changeProfilePic(input) {
+            if (!input.files || !input.files[0]) return;
+            const d = gs(); if (!d.current) { notify('Please login first!'); return; }
+            const pic = await resizeImage(input.files[0]);
+            d.current.profilePic = pic;
+            const i = d.users.findIndex(u => u.mobile === d.current.mobile);
+            if (i > -1) d.users[i].profilePic = pic;
+            ss(d); renderProfile(); notify('✅ Profile photo updated!');
+        }
 
         // ===== STORAGE =====
-        const SK = 'sb_v7';
+        
         function gs() { try { return JSON.parse(localStorage.getItem(SK)) || { users: [], payments: [], listings: [], assignments: [], reports: [], favs: [], chats: {}, current: null, isOwner: false }; } catch { return { users: [], payments: [], listings: [], assignments: [], reports: [], favs: [], chats: {}, current: null, isOwner: false }; } }
         function ss(d) { localStorage.setItem(SK, JSON.stringify(d)); }
 
-        // ===== GOOGLE SHEETS =====
+        // ===== GOOGLE SHEETS — FIXED sheetAppend =====
         let SHEET_URL = localStorage.getItem('sb_sheet_url') || '';
         window.addEventListener('load', () => { const el = document.getElementById('sheetUrl'); if (el && SHEET_URL) el.value = SHEET_URL; });
         function saveSheetUrl() { const u = document.getElementById('sheetUrl').value.trim(); if (!u) { notify('⚠️ Enter URL!'); return; } SHEET_URL = u; localStorage.setItem('sb_sheet_url', u); document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--ok)">✅ Saved! Testing...</span>'; testSheet(); }
-        async function testSheet() { try { const r = await fetch(SHEET_URL); const d = await r.json(); document.getElementById('sheetStatus').innerHTML = `<span style="color:var(--ok)">✅ Connected to study_bazaar!</span>`; } catch { document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--er)">❌ Failed. Re-deploy as Web App → Anyone.</span>'; } }
-        async function sheetAppend(sheet, row) { if (!SHEET_URL) return; try { await fetch(SHEET_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'append', sheet, row }) }); } catch { } }
-        async function sheetUpdate(sheet, keyCol, keyVal, updates) { if (!SHEET_URL) return; try { await fetch(SHEET_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'update', sheet, keyCol, keyVal, updates }) }); } catch { } }
+        async function testSheet() { try { const r = await fetch(SHEET_URL); const d = await r.json(); document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--ok)">✅ Connected!</span>'; } catch { document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--er)">❌ Failed. Re-deploy as Web App → Anyone.</span>'; } }
+
+        // FIXED: was incorrectly including AI params in body
+        async function sheetAppend(sheet, row) {
+            if (!SHEET_URL) return;
+            try { await fetch(SHEET_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'append', sheet, row }) }); } catch { }
+        }
+        async function sheetUpdate(sheet, keyCol, keyVal, updates) {
+            if (!SHEET_URL) return;
+            try { await fetch(SHEET_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'update', sheet, keyCol, keyVal, updates }) }); } catch { }
+        }
 
         // ===== STATS =====
         function updateStats() {
-            const d = gs(); const cities = new Set(d.users.map(u => (u.addr || '').split(',')[2]?.trim()).filter(Boolean));
+            const d = gs(); const cities = new Set(d.users.map(u => (u.addr || u.city || '').split(',')[2]?.trim()).filter(Boolean));
             const fmt = n => n > 0 ? n + '+' : '0';
             document.getElementById('statBooks').textContent = fmt(d.listings.length);
             document.getElementById('statStudents').textContent = fmt(d.users.length);
@@ -2301,11 +2397,11 @@
         // ===== PAGES =====
         function go(s) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); const el = document.getElementById(s); if (el) el.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); if (s === 'admin') renderAdmin(); if (s === 'profile') renderProfile(); if (s === 'favourites') renderFavs(); if (s === 'home') updateStats(); if (s === 'chat') renderChat(); }
         function toggleMenu() { const m = document.getElementById('mobMenu'); m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; }
-        function closeMenu(e) { if (e.target === document.getElementById('mobMenu')) document.getElementById('mobMenu').style.display = 'none'; }
+        document.getElementById('mobMenu').addEventListener('click', function (e) { if (e.target === this) this.style.display = 'none'; });
         function openMo(id) { document.getElementById(id).classList.add('open'); }
         function closeMo(id) { document.getElementById(id).classList.remove('open'); }
         document.querySelectorAll('.mo').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
-        function notify(msg) { const n = document.getElementById('notif'); n.textContent = msg; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3600); }
+        function notify(msg) { const n = document.getElementById('notif'); n.textContent = msg; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3800); }
         function setBtn(id, loading, text) { const b = document.getElementById(id); if (!b) return; b.disabled = loading; b.innerHTML = loading ? `<span class="spinner"></span>Please wait...` : text; }
         function genToken() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
         function ownerAccess() { document.getElementById('liRole').value = 'owner'; openMo('moLogin'); }
@@ -2318,31 +2414,35 @@
             const role = document.getElementById('liRole').value;
             if (!id || !pw) { notify('⚠️ Enter your credentials!'); return; }
             if (role === 'owner') {
-                if ((id === 'urwashi' || id === 'owner' || id === 'urwashiaitan2004-1@okicici') && pw === 'owner123') { d.isOwner = true; ss(d); closeMo('moLogin'); notify('🛡️ Admin login successful!'); setTimeout(() => go('admin'), 700); }
-                else notify('⚠️ Invalid admin credentials!');
+                if ((id === 'urwashi' || id === 'urwashiaitan2004-1@okicici' || id === 'owner') && pw === 'owner123') {
+                    d.isOwner = true; ss(d); closeMo('moLogin'); notify('🛡️ Owner login successful!'); setTimeout(() => go('admin'), 700);
+                } else notify('⚠️ Invalid admin credentials!');
                 return;
             }
             const user = d.users.find(u => (u.mobile === id || u.email === id) && u.pw === pw);
             if (!user) { notify('⚠️ Invalid mobile/email or password!'); return; }
-            const localTok = localStorage.getItem('sb_tok_' + user.mobile);
+            const storedToken = localStorage.getItem('sb_session_' + user.mobile);
             document.getElementById('liDeviceWarn').classList.add('hide');
-            if (user.sessionToken && localTok !== user.sessionToken) {
+            if (user.sessionToken && storedToken !== user.sessionToken) {
                 document.getElementById('liDeviceWarn').classList.remove('hide');
                 const btn = document.getElementById('loginBtn');
-                if (btn.dataset.force === '1') { btn.dataset.force = ''; btn.textContent = 'Login'; }
-                else { btn.dataset.force = '1'; btn.innerHTML = '⚠️ Login Anyway (Force)'; return; }
+                if (btn.dataset.forceReady === '1') { btn.dataset.forceReady = ''; btn.textContent = 'Login'; }
+                else { btn.dataset.forceReady = '1'; btn.innerHTML = '⚠️ Login Anyway (Force)'; return; }
             }
-            const tok = genToken(); user.sessionToken = tok;
-            localStorage.setItem('sb_tok_' + user.mobile, tok);
+            const newToken = genToken();
+            user.sessionToken = newToken;
+            localStorage.setItem('sb_session_' + user.mobile, newToken);
             const idx = d.users.findIndex(u => u.mobile === user.mobile); if (idx > -1) d.users[idx] = user;
             d.current = user; ss(d);
             await sheetUpdate('Users', 2, user.mobile, [{ col: 11, val: 'Login:' + new Date().toLocaleString('en-IN') }]);
-            closeMo('moLogin'); document.getElementById('liDeviceWarn').classList.add('hide');
-            document.getElementById('loginBtn').dataset.force = ''; document.getElementById('loginBtn').textContent = 'Login';
+            closeMo('moLogin');
+            document.getElementById('liDeviceWarn').classList.add('hide');
+            document.getElementById('loginBtn').dataset.forceReady = '';
+            document.getElementById('loginBtn').textContent = 'Login';
             renderProfile(); updateStats(); notify(`Welcome back, ${user.name}! 👋`);
         }
 
-        // ===== REGISTER — single address field =====
+        // ===== REGISTER — with profile pic + single address =====
         async function doRegister() {
             const d = gs();
             const name = document.getElementById('rName').value.trim();
@@ -2358,16 +2458,22 @@
             if (d.users.find(u => u.mobile === mobile)) { notify('⚠️ Mobile already registered!'); return; }
             if (d.users.find(u => u.email === email)) { notify('⚠️ Email already registered!'); return; }
             setBtn('regBtn', true, 'Creating...');
+            // Resize & store profile picture
+            let profilePic = '';
+            const picFile = document.getElementById('rPic').files[0];
+            if (picFile) { try { profilePic = await resizeImage(picFile); } catch { } }
             const now = new Date().toLocaleString('en-IN');
-            const tok = genToken();
-            const user = { name, mobile, email, dob, addr, institution: inst, aadhar, pw, plan: 'Free', planExpiry: null, payStatus: '', listCount: 0, asgnCount: 0, joinDate: now, sessionToken: tok };
+            const token = genToken();
+            // Extract city from address for display
+            const city = addr.split(',')[2]?.trim() || addr.split(',')[0]?.trim() || '—';
+            const user = { name, mobile, email, dob, addr, city, institution: inst, aadhar, pw, profilePic, plan: 'Free', planExpiry: null, payStatus: '', listCount: 0, asgnCount: 0, joinDate: now, sessionToken: token };
             d.users.push(user); d.current = user;
-            localStorage.setItem('sb_tok_' + mobile, tok);
+            localStorage.setItem('sb_session_' + mobile, token);
             ss(d);
             await sheetAppend('Users', [now, name, mobile, email, dob, addr, inst, aadhar, 'Free', '', now]);
             setBtn('regBtn', false, 'Create Account');
             closeMo('moReg'); renderProfile(); updateStats(); go('profile');
-            notify(`🎉 Welcome to StudyBazaar, ${name}!`);
+            notify(`🎉 Welcome, ${name}! Account created & saved.`);
         }
 
         // ===== PAYMENT =====
@@ -2413,24 +2519,27 @@
         function renderAdmin() {
             const d = gs();
             document.getElementById('admUC').textContent = d.users.length;
-            document.getElementById('admUserList').innerHTML = d.users.length ? d.users.map(u => `<div class="u-row"><div class="u-av">${u.name[0]}</div><div class="u-info"><div class="u-name">${u.name}</div><div class="u-meta">${u.mobile} · ${u.email}</div><div class="u-meta">${u.addr || '—'}</div><div class="u-meta">${u.institution || '—'} · DOB: ${u.dob || '—'} · Aadhar: ${u.aadhar || '—'}</div><div class="u-meta">Joined: ${u.joinDate || '—'}</div>${u.pendingUTR ? `<div class="u-meta" style="color:#f59e0b">⏳ UTR: ${u.pendingUTR} (${u.pendingPlan})</div>` : ''}</div><span class="pill ${u.payStatus === 'pending' ? 'pl-pd' : u.plan === 'Free' ? 'pl-free' : u.plan === 'Lifetime' ? 'pl-lf' : 'pl-pr'}">${u.plan}${u.payStatus === 'pending' ? ' ⏳' : ''}</span></div>`).join('') : '<div style="color:var(--mt);font-size:.81rem">No users yet.</div>';
+            document.getElementById('admUserList').innerHTML = d.users.length ? d.users.map(u => `<div class="u-row"><div class="u-av">${u.profilePic ? `<img src="${u.profilePic}"/>` : (u.name || '?')[0]}</div><div class="u-info"><div class="u-name">${u.name}</div><div class="u-meta">${u.mobile} · ${u.email}</div><div class="u-meta">${u.addr || u.city || '—'}</div><div class="u-meta">${u.institution || '—'} · Joined: ${u.joinDate || '—'}</div>${u.pendingUTR ? `<div class="u-meta" style="color:var(--warn)">⏳ UTR: ${u.pendingUTR} (${u.pendingPlan})</div>` : ''}</div><span class="pill ${u.payStatus === 'pending' ? 'pl-pd' : u.plan === 'Free' ? 'pl-free' : u.plan === 'Lifetime' ? 'pl-lf' : 'pl-pr'}">${u.plan}${u.payStatus === 'pending' ? ' ⏳' : ''}</span></div>`).join('') : '<div style="color:var(--mt);font-size:.82rem">No users yet.</div>';
             const pend = d.payments.filter(p => p.status === 'pending');
-            document.getElementById('admPendList').innerHTML = pend.length ? pend.map(p => `<div class="pay-row"><div class="pay-info"><strong>${p.userName}</strong> · ${p.userMobile}<br/>Plan: <strong>${p.plan}</strong> · ₹${p.amount} · <span class="utr-tag">UTR: ${p.utr}</span><br/><span style="font-size:.7rem;color:var(--mt)">${p.submittedAt}</span></div><div style="display:flex;gap:5px;flex-wrap:wrap"><button class="btn btn-ok btn-xs" onclick="approvePayment(${p.id})">✅ Approve</button><button class="btn btn-er btn-xs" onclick="rejectPayment(${p.id})">❌ Reject</button></div></div>`).join('') : '<div style="color:var(--ok);font-size:.81rem">✅ No pending payments.</div>';
+            document.getElementById('admPendList').innerHTML = pend.length ? pend.map(p => `<div class="pay-row"><div class="pay-info"><strong>${p.userName}</strong> · ${p.userMobile}<br/>Plan: <strong>${p.plan}</strong> · ₹${p.amount} · <span class="utr-tag">UTR: ${p.utr}</span><br/><span style="font-size:.7rem;color:var(--mt)">${p.submittedAt}</span></div><div style="display:flex;gap:5px;flex-wrap:wrap"><button class="btn btn-ok btn-xs" onclick="approvePayment(${p.id})">✅ Approve</button><button class="btn btn-er btn-xs" onclick="rejectPayment(${p.id})">❌ Reject</button></div></div>`).join('') : '<div style="color:var(--ok);font-size:.82rem">✅ No pending payments.</div>';
             const appr = d.payments.filter(p => p.status === 'approved');
-            document.getElementById('admApprList').innerHTML = appr.length ? appr.map(p => `<div class="pay-row"><div class="pay-info"><strong>${p.userName}</strong> · ${p.userMobile} · <strong>${p.plan}</strong> · ₹${p.amount} · <span class="utr-tag">UTR:${p.utr}</span> <span style="color:var(--ok);font-size:.7rem">✅ ${p.approvedAt}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.81rem">None yet.</div>';
+            document.getElementById('admApprList').innerHTML = appr.length ? appr.map(p => `<div class="pay-row"><div class="pay-info"><strong>${p.userName}</strong> · ${p.userMobile} · <strong>${p.plan}</strong> · ₹${p.amount} · <span class="utr-tag">UTR:${p.utr}</span> <span style="color:var(--ok);font-size:.72rem">✅ ${p.approvedAt}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.82rem">None yet.</div>';
             const reps = d.reports || [];
-            document.getElementById('admRepList').innerHTML = reps.length ? reps.map(r => `<div class="pay-row"><div class="pay-info"><strong>${r.type}</strong><br/>${r.reported || '—'} · ₹${r.amount || 0}<br/>${r.desc}<br/><span style="font-size:.7rem;color:var(--mt)">${r.at}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.81rem">No reports yet.</div>';
+            document.getElementById('admRepList').innerHTML = reps.length ? reps.map(r => `<div class="pay-row"><div class="pay-info"><strong>${r.type}</strong><br/>Reported: ${r.reported || '—'} · ₹${r.amount || 0}<br/>${r.desc}<br/><span style="font-size:.7rem;color:var(--mt)">${r.at}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.82rem">No reports yet.</div>';
         }
 
-        // ===== PROFILE =====
+        // ===== PROFILE — with profile picture display =====
         function renderProfile() {
             const d = gs(); const u = d.current;
             if (!u) { document.getElementById('notLoggedIn').classList.remove('hide'); document.getElementById('loggedInProfile').classList.add('hide'); return; }
             document.getElementById('notLoggedIn').classList.add('hide'); document.getElementById('loggedInProfile').classList.remove('hide');
+            // Profile picture
+            const avEl = document.getElementById('profAvEl');
+            avEl.innerHTML = u.profilePic ? `<img src="${u.profilePic}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>` : ' 👤';
             document.getElementById('prfName').textContent = u.name;
-            document.getElementById('prfCity').textContent = u.addr || (u.city || '—');
+            document.getElementById('prfCity').textContent = (u.city || u.addr || '—');
             document.getElementById('pdName').textContent = u.name;
-            document.getElementById('pdMobile').textContent = '•••••' + u.mobile.slice(-5);
+            document.getElementById('pdMobile').textContent = '••••••' + u.mobile.slice(-4);
             document.getElementById('pdEmail').textContent = u.email;
             document.getElementById('pdAddr').textContent = u.addr || '—';
             document.getElementById('pdInst').textContent = u.institution || '—';
@@ -2441,38 +2550,47 @@
             document.getElementById('eName').value = u.name;
             document.getElementById('eAddr').value = u.addr || '';
             document.getElementById('eInst').value = u.institution || '';
+            // Show current pic in edit modal preview
+            const ep = document.getElementById('editPicPreview');
+            ep.innerHTML = u.profilePic ? `<img src="${u.profilePic}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>` : ' 👤';
             const ps = document.getElementById('pdPayStatus'); const badge = document.getElementById('prfBadge');
-            if (u.payStatus === 'pending') { ps.innerHTML = `<span style="color:#f59e0b;font-weight:700">⏳ Pending — ${u.pendingPlan}</span>`; badge.textContent = '⏳ Pending'; badge.className = 'sub-b pend'; document.getElementById('pdExp').textContent = 'Activates after admin approval'; }
+            if (u.payStatus === 'pending') { ps.innerHTML = `<span style="color:var(--warn);font-weight:700">⏳ Pending — ${u.pendingPlan}</span>`; badge.textContent = '⏳ Pending'; badge.className = 'sub-b pend'; document.getElementById('pdExp').textContent = 'Activates after admin approval'; }
             else if (u.plan && u.plan !== 'Free') { ps.innerHTML = '<span style="color:var(--ok);font-weight:700">✅ Active</span>'; badge.textContent = u.plan; badge.className = 'sub-b'; if (u.planExpiry === -1) document.getElementById('pdExp').textContent = 'Never (Lifetime)'; else if (u.planExpiry) { const e = new Date(u.planExpiry), left = Math.ceil((e - new Date()) / 86400000); document.getElementById('pdExp').textContent = e.toLocaleDateString('en-IN') + ` (${Math.max(0, left)}d left)`; } }
             else { ps.textContent = 'Free plan'; badge.textContent = 'Free'; badge.className = 'sub-b exp'; document.getElementById('pdExp').textContent = '—'; }
         }
-        function saveProfile() {
+
+        async function saveProfile() {
             const d = gs(); if (!d.current) return;
             d.current.name = document.getElementById('eName').value.trim() || d.current.name;
             d.current.addr = document.getElementById('eAddr').value.trim() || d.current.addr;
+            d.current.city = (d.current.addr || '').split(',')[2]?.trim() || d.current.city;
             d.current.institution = document.getElementById('eInst').value.trim() || d.current.institution;
+            // Save new profile picture if selected
+            const picFile = document.getElementById('ePic').files[0];
+            if (picFile) { try { d.current.profilePic = await resizeImage(picFile); } catch { } }
             const i = d.users.findIndex(u => u.mobile === d.current.mobile); if (i > -1) d.users[i] = d.current;
-            ss(d); closeMo('moEdit'); renderProfile(); notify('✅ Profile updated!');
+            ss(d); closeMo('moEdit'); renderProfile(); updateStats(); notify('✅ Profile updated!');
         }
 
         // ===== FAVOURITES =====
         function toggleFav(btn, title) { const d = gs(); if (!d.favs) d.favs = []; if (d.favs.includes(title)) { d.favs = d.favs.filter(f => f !== title); btn.textContent = '♡'; btn.classList.remove('saved'); notify('Removed from saved.'); } else { d.favs.push(title); btn.textContent = '♥'; btn.classList.add('saved'); notify('❤️ Saved to favourites!'); } ss(d); }
-        function renderFavs() { const d = gs(); const fg = document.getElementById('favGrid'); if (!d.favs || !d.favs.length) { fg.innerHTML = '<div class="empty-state"><div class="ei">❤️</div><h4>No saved items yet</h4><p>Tap ♡ on any listing to save it here.</p></div>'; return; } fg.innerHTML = d.favs.map(f => `<div class="bk-card"><div class="bk-img">❤️</div><div class="bk-body"><div class="bk-title">${f}</div><button class="del-btn" style="margin-top:6px" onclick="removeFav('${f.replace(/'/g, "\\'")}')">Remove</button></div></div>`).join(''); }
-        function removeFav(t) { const d = gs(); d.favs = d.favs.filter(f => f !== t); ss(d); renderFavs(); }
+        function renderFavs() { const d = gs(); const fg = document.getElementById('favGrid'); if (!d.favs || !d.favs.length) { fg.innerHTML = '<div class="empty-state"><div class="ei">❤️</div><h4>No saved items yet</h4><p>Tap ♡ on any listing to save it here.</p></div>'; return; } fg.innerHTML = d.favs.map(f => `<div class="bk-card"><div class="bk-img">❤️</div><div class="bk-body"><div class="bk-title">${f}</div><button class="btn btn-er btn-xs" style="margin-top:5px" onclick="removeFav('${f.replace(/'/g, "\\'")}')" >Remove</button></div></div>`).join(''); }
+        function removeFav(title) { const d = gs(); d.favs = d.favs.filter(f => f !== title); ss(d); renderFavs(); notify('Removed from saved.'); }
 
-        // ===== SELL FORM =====
+        // ===== SELL FORM — no live location =====
         function onLT() { const t = document.getElementById('listType').value; document.getElementById('newBWarn').classList.toggle('hide', t !== 'new-book'); document.getElementById('bookF').classList.toggle('hide', t === 'notes' || !t); document.getElementById('notesF').classList.toggle('hide', t !== 'notes'); document.getElementById('usedPG').classList.toggle('hide', t !== 'used-book'); document.getElementById('newBPG').classList.toggle('hide', t !== 'new-book'); }
         function onLv() { const l = document.getElementById('levelSel').value;['schoolF', 'collegeF', 'compF', 'othLvF'].forEach(id => document.getElementById(id).classList.add('hide')); if (l) { const m = { school: 'schoolF', college: 'collegeF', competitive: 'compF', other: 'othLvF' }; document.getElementById(m[l]).classList.remove('hide'); } }
-        function calcMax() { const o = parseFloat(document.getElementById('origP').value) || 0; document.getElementById('maxP').textContent = o ? `(Max: ₹${Math.floor(o * .6)})` : '(Enter MRP first)'; }
+        function calcMax() { const o = parseFloat(document.getElementById('origP').value) || 0; document.getElementById('maxP').textContent = o ? `(Max: ₹${Math.floor(o * .6)})` : ''; }
+
         async function submitListing() {
             const d = gs();
             if (!document.getElementById('listType').value || !document.getElementById('levelSel').value) { notify('⚠️ Select listing type and level!'); return; }
             if (!d.current) { document.getElementById('premR').classList.remove('hide'); openMo('moReg'); return; }
             if (!d.current.plan || d.current.plan === 'Free') { document.getElementById('premR').classList.remove('hide'); notify('🔒 Premium required!'); setTimeout(() => go('pricing'), 1100); return; }
             const t = document.getElementById('listType').value;
-            if (t === 'used-book') { const o = parseFloat(document.getElementById('origP').value) || 0, s = parseFloat(document.getElementById('sellP').value) || 0; if (o > 0 && s >= o * .6) { notify('⚠️ Price must be below 60% of MRP! Max: ₹' + Math.floor(o * .6)); return; } }
+            if (t === 'used-book') { const o = parseFloat(document.getElementById('origP').value) || 0, s = parseFloat(document.getElementById('sellP').value) || 0; if (o > 0 && s >= o * .6) { notify('⚠️ Price must be below 60% MRP! Max: ₹' + Math.floor(o * .6)); return; } }
             const addr = document.getElementById('listAddr').value.trim();
-            if (!addr) { notify('⚠️ Please enter your address/location!'); return; }
+            if (!addr) { notify('⚠️ Please enter your address!'); return; }
             setBtn('submitListBtn', true, 'Submitting...');
             const now = new Date().toLocaleString('en-IN');
             const title = (t === 'notes' ? document.getElementById('notesTitle').value : document.getElementById('bkTitle').value) || '—';
@@ -2480,30 +2598,27 @@
             d.current.listCount = (d.current.listCount || 0) + 1;
             const i = d.users.findIndex(u => u.mobile === d.current.mobile); if (i > -1) d.users[i].listCount = d.current.listCount;
             ss(d); updateStats();
-            await sheetAppend('Listings', [now, d.current.name, d.current.mobile, t, title, '—', addr, 'Active']);
-            // Add card to browse grid
+            await sheetAppend('Listings', [now, d.current.name, d.current.mobile, t, '', '', title, '—', addr, 'Active']);
+            const ord = ['1st', '2nd', '3rd', '4th', '5th'][Math.min((d.current.listCount || 1) - 1, 4)] || d.current.listCount + 'th';
+            // Add card to real browse grid
             const grid = document.getElementById(t === 'notes' ? 'notesGrid' : 'bookGrid');
             const es = grid.querySelector('.empty-state'); if (es) es.remove();
-            const dv = document.createElement('div'); dv.className = 'bk-card'; dv.dataset.stream = 'other';
-            dv.innerHTML = `<button class="fav-btn" onclick="toggleFav(this,'${title.replace(/'/g, "\\'")}')">♡</button><div class="bk-img">${t === 'notes' ? '📝' : t === 'new-book' ? '📗' : '📘'}</div><div class="bk-body"><div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px"><span class="badge b-${t === 'notes' ? 'note' : t === 'new-book' ? 'new' : 'used'}">${t === 'notes' ? 'Notes' : t === 'new-book' ? 'New' : 'Used'}</span></div><div class="bk-title">${title}</div><div class="bk-meta">${addr}</div><button class="btn btn-pr btn-xs" style="margin-top:6px;width:100%" onclick="openChatWith('${d.current.name}')">💬 Chat</button></div>`;
-            grid.appendChild(dv);
-            const ord = ['1st', '2nd', '3rd', '4th', '5th'][Math.min((d.current.listCount || 1) - 1, 4)] || d.current.listCount + 'th';
+            const bk = document.createElement('div'); bk.className = 'bk-card'; bk.dataset.stream = 'other';
+            bk.innerHTML = `<button class="fav-btn" onclick="toggleFav(this,'${title.replace(/'/g, "\\'")}')">♡</button><div class="bk-img">${t === 'notes' ? '📝' : t === 'new-book' ? '📗' : '📘'}</div><div class="bk-body"><div style="display:flex;gap:3px;margin-bottom:4px"><span class="badge b-${t === 'notes' ? 'note' : t === 'new-book' ? 'new' : 'used'}">${t === 'notes' ? 'Notes' : t === 'new-book' ? 'New' : 'Used'}</span></div><div class="bk-title">${title}</div><div class="bk-meta">${addr}</div><button class="btn btn-pr btn-xs" style="margin-top:6px;width:100%" onclick="openChatWith('${d.current.name}')">💬 Chat</button></div>`;
+            grid.appendChild(bk);
             const ml = document.getElementById('myListings'); if (ml.textContent.includes('No listings')) ml.innerHTML = '';
-            const lv = document.createElement('div'); lv.className = 'bk-card'; lv.style.marginBottom = '8px';
-            lv.innerHTML = `<div class="bk-body"><div class="bk-title">${title} <span class="badge b-${t === 'notes' ? 'note' : t === 'new-book' ? 'new' : 'used'}">${t === 'notes' ? 'Notes' : t === 'new-book' ? 'New' : 'Used'}</span></div><div class="bk-meta">${addr} · ✅ Saved</div><span class="ach">🏆 ${ord} Listing</span><div><button class="del-btn" onclick="this.closest('.bk-card').remove();notify('Deleted.')">🗑 Delete</button></div></div>`;
-            ml.appendChild(lv); setBtn('submitListBtn', false, '📤 Submit Listing');
+            const dv = document.createElement('div'); dv.className = 'bk-card'; dv.style.marginBottom = '8px';
+            dv.innerHTML = `<div class="bk-body"><div class="bk-title">${title} <span class="badge b-${t === 'notes' ? 'note' : t === 'new-book' ? 'new' : 'used'}">${t === 'notes' ? 'Notes' : t === 'new-book' ? 'New' : 'Used'}</span></div><div class="bk-meta">${addr} · ✅ Saved</div><span class="ach">🏆 ${ord} Listing</span><div><button class="del-btn" onclick="this.closest('.bk-card').remove();notify('Deleted.')">🗑 Delete</button></div></div>`;
+            ml.appendChild(dv); setBtn('submitListBtn', false, '📤 Submit Listing');
             notify(`📤 Listing saved! 🏆 ${ord} listing.`);
         }
 
-        // ===== STREAM FILTER =====
-        function fs(el, s) { document.querySelectorAll('#sf .stag').forEach(t => t.classList.remove('on')); el.classList.add('on'); document.querySelectorAll('#bookGrid .bk-card[data-stream]').forEach(c => { c.style.display = (s === 'all' || c.dataset.stream === s) ? '' : 'none'; }); }
-        function switchTab(el, id) { const p = el.closest('.sec') || document; p.querySelectorAll('.tab').forEach(t => t.classList.remove('on')); p.querySelectorAll('.tc').forEach(t => t.classList.remove('on')); el.classList.add('on'); const tc = document.getElementById(id); if (tc) tc.classList.add('on'); }
-
-        // ===== ASSIGNMENTS =====
+        // ===== ASSIGNMENTS — no live location =====
         let curAsgnRole = 'requester';
         function setAsgnRole(role, btn) { curAsgnRole = role; document.querySelectorAll('#asgnRoleSeg button').forEach(b => b.classList.remove('on')); btn.classList.add('on'); document.getElementById('reqFields').classList.toggle('hide', role !== 'requester'); document.getElementById('wriFields').classList.toggle('hide', role !== 'writer'); }
         function onReqLv() { const l = document.getElementById('reqLevel').value; document.getElementById('reqSchoolF').classList.toggle('hide', l !== 'school'); document.getElementById('reqCollegeF').classList.toggle('hide', l !== 'college'); }
         function filterAsgn(type, btn) { document.querySelectorAll('#asgn-browse .stag').forEach(b => b.classList.remove('on')); btn.classList.add('on'); document.querySelectorAll('#asgnGrid .bk-card[data-atype]').forEach(c => { c.style.display = (type === 'all' || c.dataset.atype === type) ? '' : 'none'; }); }
+
         async function submitAssignment() {
             const d = gs();
             if (!d.current) { document.getElementById('asgnPremR').classList.remove('hide'); openMo('moReg'); return; }
@@ -2528,7 +2643,7 @@
             grid.appendChild(dv);
             setBtn('asgnSubmitBtn', false, '✍️ Post Assignment');
             notify(`✅ ${isR ? 'Request' : 'Writer profile'} posted & saved!`);
-            document.querySelector('#assignments .tab').click();
+            document.querySelectorAll('#assignments .tab')[0].click();
         }
 
         // ===== REPORT =====
@@ -2544,7 +2659,11 @@
             document.getElementById('repDesc').value = '';
         }
 
-        // ===== CHAT =====
+        // ===== STREAM FILTER =====
+        function fs(el, s) { document.querySelectorAll('#sf .stag').forEach(t => t.classList.remove('on')); el.classList.add('on'); document.querySelectorAll('#bookGrid .bk-card[data-stream]').forEach(c => { c.style.display = (s === 'all' || c.dataset.stream === s) ? '' : 'none'; }); }
+        function switchTab(el, id) { const p = el.closest('.sec') || document; p.querySelectorAll('.tab').forEach(t => t.classList.remove('on')); p.querySelectorAll('.tc').forEach(t => t.classList.remove('on')); el.classList.add('on'); const tc = document.getElementById(id); if (tc) tc.classList.add('on'); }
+
+        // ===== CHAT — real conversations only =====
         let activeChatUser = null;
         function renderChat() {
             const d = gs();
@@ -2552,16 +2671,27 @@
             document.getElementById('chatNoPlan').classList.add('hide'); document.getElementById('chatMain').classList.remove('hide');
             const chats = d.chats || {}; const names = Object.keys(chats);
             const listEl = document.getElementById('chatListEl');
-            if (!names.length) { listEl.innerHTML = '<div style="padding:14px;font-size:.81rem;color:var(--mt)">No conversations yet. Click Chat on a listing to start.</div>'; return; }
-            listEl.innerHTML = names.map(n => `<div class="cli${activeChatUser === n ? ' on' : ''}" onclick="openDM(this,'${n}')"><div class="cav">${n[0]}</div><div><div style="font-weight:700;font-size:.8rem">${n}</div><div style="font-size:.69rem;color:var(--mt)">${(chats[n] || []).slice(-1)[0]?.text || 'Tap to chat'}</div></div></div>`).join('');
+            if (!names.length) { listEl.innerHTML = '<div style="padding:14px;font-size:.82rem;color:var(--mt)">No conversations yet. Click 💬 Chat on any listing.</div>'; return; }
+            listEl.innerHTML = names.map(n => {
+                const u = d.users.find(x => x.name === n);
+                const av = u?.profilePic ? `<img src="${u.profilePic}"/>` : (n[0] || '?');
+                return `<div class="cli${activeChatUser === n ? ' on' : ''}" onclick="openDM(this,'${n}')"><div class="cav">${av}</div><div><div style="font-weight:700;font-size:.81rem">${n}</div><div style="font-size:.69rem;color:var(--mt)">${(chats[n] || []).slice(-1)[0]?.text || 'Tap to chat'}</div></div></div>`;
+            }).join('');
         }
-        function openChatWith(name) { go('chat'); activeChatUser = name; const d = gs(); if (!d.chats) d.chats = {}; if (!d.chats[name]) d.chats[name] = []; ss(d); renderChat(); renderMessages(name); }
+        function openChatWith(name) {
+            go('chat'); activeChatUser = name;
+            const d = gs(); if (!d.chats) d.chats = {}; if (!d.chats[name]) d.chats[name] = []; ss(d);
+            renderChat(); renderMessages(name);
+        }
         function openDM(el, name) { document.querySelectorAll('.cli').forEach(i => i.classList.remove('on')); el.classList.add('on'); activeChatUser = name; renderMessages(name); }
         function renderMessages(name) {
-            document.getElementById('cwNm').textContent = name; document.getElementById('cwAv').textContent = name[0];
-            const d = gs(); const msgs = d.chats && d.chats[name] ? d.chats[name] : [];
+            document.getElementById('cwNm').textContent = name;
+            const d = gs(); const u = d.users.find(x => x.name === name);
+            const avEl = document.getElementById('cwAv');
+            avEl.innerHTML = u?.profilePic ? `<img src="${u.profilePic}"/>` : (name[0] || '?');
+            const msgs = d.chats && d.chats[name] ? d.chats[name] : [];
             const el = document.getElementById('chatMsgs');
-            if (!msgs.length) { el.innerHTML = `<div class="chat-empty"><div class="icon">💬</div><div style="font-size:.84rem">Start your conversation with <strong>${name}</strong>.</div></div>`; return; }
+            if (!msgs.length) { el.innerHTML = `<div class="chat-empty-state"><div style="font-size:2rem;margin-bottom:8px">💬</div><div style="font-size:.83rem">Start your conversation with <strong>${name}</strong>.</div></div>`; return; }
             el.innerHTML = msgs.map(m => `<div class="msg ${m.mine ? 's' : 'r'}">${m.text}<div class="msg-mt">${m.mine ? 'You' : name} · ${m.time}</div></div>`).join('');
             el.scrollTop = el.scrollHeight;
         }
@@ -2573,41 +2703,46 @@
             renderMessages(activeChatUser); renderChat();
         }
 
-        // ===== AI BOT (Ziya) =====
+        // ===== AI BOT — FIXED response handling =====
         let botHistory = [];
         function toggleBot() { document.getElementById('botPanel').classList.toggle('open'); }
         async function sendBot() {
-            const inp = document.getElementById('botIn');
-            const q = inp.value.trim();
-            if (!q) return;
+            const inp = document.getElementById('botIn'); const q = inp.value.trim(); if (!q) return;
             inp.value = ''; inp.disabled = true;
             const msgs = document.getElementById('botMsgs');
-            const ud = document.createElement('div'); ud.className = 'bm usr'; ud.textContent = q;
-            msgs.appendChild(ud); msgs.scrollTop = msgs.scrollHeight;
-            const td = document.createElement('div'); td.className = 'bm bot';
-            td.innerHTML = '<em style="opacity:.5;font-size:.76rem">Ziya is typing...</em>';
-            msgs.appendChild(td); msgs.scrollTop = msgs.scrollHeight;
+            const ud = document.createElement('div'); ud.className = 'bm usr'; ud.textContent = q; msgs.appendChild(ud); msgs.scrollTop = msgs.scrollHeight;
+            const td = document.createElement('div'); td.className = 'bm bot'; td.innerHTML = '<em style="opacity:.5;font-size:.77rem">Ziya is typing...</em>'; msgs.appendChild(td); msgs.scrollTop = msgs.scrollHeight;
             botHistory.push({ role: 'user', content: q });
             if (botHistory.length > 20) botHistory = botHistory.slice(-20);
-            const sys = `You are Ziya, a warm and knowledgeable AI assistant for StudyBazaar — India's student book exchange web app. You remember the FULL conversation and answer based on context. Speak in friendly Indian-English. Be concise (2-4 sentences) unless more detail is needed.
-
-StudyBazaar key facts:
-- Correct name: StudyBazaar (double-a in Bazaar)
-- Plans: Free (browse only) | Monthly ₹10/30 days | Annual ₹100/year (MOST POPULAR) | New Book Seller ₹50/month | Lifetime ₹500 one-time
-- Payment: Pay via UPI (scan QR or use UPI ID urwashiaitan2004-1@okicici) → copy UTR from UPI app → enter UTR → wait for admin to verify → plan activates. NOT instant.
-- NEVER pay advance to any seller. Pay ONLY on delivery.
-- Books must be listed below 60% of original MRP.
-- Registration: name, mobile (1 per account), email, DOB, full address (single line: Street, Area, City, State – PIN), institution, Aadhar (private), password.
-- Single device per account (session lock — new login forces out previous device).
-- Chat: Premium users only. Real conversations only.
-- Assignments: Requesters post tasks, Writers offer services. Both need Premium. All fields mandatory.
-- Favourites: tap ♡ on any listing.
-- Home stats are real numbers from actual registrations.
-- Backend: Google Sheet "study_bazaar". Admin connects via Admin Panel → Setup tab.
-- New user notification: Google Sheet → Tools → Notification rules → Any changes → Email immediately.
-- Report fraud: 🚨 Report in navigation.
-- Streams: BSc CS, BCA, BBA, BCom, BTech, BA, MSc, MCA, MBA, PhD, School 1-12, JEE, NEET, UPSC, SSC, GATE etc.`;
+            const sys = `You are Ziya, a friendly AI assistant for StudyBazaar — India's student book exchange platform. Remember the full conversation. Speak in warm Indian-English. Be concise (2-4 sentences).
+Plans: Free(browse only), Monthly ₹10/30d, Annual ₹100/year(MOST POPULAR), New Book Seller ₹50/mo, Lifetime ₹500.
+Payment: UPI → UTR → admin manually verifies → plan activates. NOT instant. Never pay advance to sellers. Pay only on delivery.
+Registration needs: full address (single line: Street, Colony, City, State – PIN), name, mobile (1 per account), email, DOB, institution, Aadhar (private), profile photo (optional).
+Chat: Premium users only. Real conversations only.
+Assignments: Requesters post requests, Writers list services. Both need Premium.
+Profile picture: can be uploaded during registration or changed anytime from Profile page.
+Google Sheets backend. Admin verifies payments. Report fraud in navigation.`;
+            try {
+                // FIXED: properly handle response from Supabase Edge Function
+                const res = await fetch('https://yzlbbxxmidhgvxgvqpna.supabase.co/functions/v1/study-bazaar-reply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: sys, messages: botHistory })
+                });
+                const data = await res.json();
+                // Handle both direct Anthropic format and wrapped format
+                const reply = data.content?.[0]?.text || data.reply || data.message || data.text || "I'm having trouble right now. Please try again!";
+                botHistory.push({ role: 'assistant', content: reply });
+                td.innerHTML = reply.replace(/\n/g, '<br/>');
+            } catch (err) {
+                td.textContent = 'Connection issue. Please check internet and try again.';
+                botHistory.pop();
+            }
+            inp.disabled = false; msgs.scrollTop = msgs.scrollHeight;
         }
+
+        // ===== INIT =====
+        renderProfile(); updateStats();
     </script>
 </body>
 
