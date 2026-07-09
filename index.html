@@ -1328,18 +1328,114 @@
                 grid-template-columns: repeat(2, 1fr)
             }
         }
+
+        /* ===== ANIMATIONS & NEW UI ===== */
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(10px) }
+            to { opacity: 1; transform: translateY(0) }
+        }
+
+        .page.active { animation: pageIn .35s ease }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(.94) translateY(8px) }
+            to { opacity: 1; transform: scale(1) translateY(0) }
+        }
+
+        .mo-box { animation: modalIn .25s cubic-bezier(.34, 1.56, .64, 1) }
+
+        @keyframes botIn {
+            from { opacity: 0; transform: translateY(14px) scale(.97) }
+            to { opacity: 1; transform: translateY(0) scale(1) }
+        }
+
+        .bot-panel.open { animation: botIn .25s ease }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(10px) }
+            to { opacity: 1; transform: translateY(0) }
+        }
+
+        .bk-card { animation: cardIn .3s ease both }
+
+        /* skeleton loaders — shown while backend fetch is in flight */
+        .skel-block, .skel-line {
+            background: linear-gradient(90deg, #ede9fe 25%, #f5f3ff 37%, #ede9fe 63%);
+            background-size: 400% 100%;
+            animation: shimmer 1.4s ease infinite;
+            border-radius: 6px
+        }
+
+        .skel-line { height: 10px; margin: 6px 0 }
+        .bk-card.skel { pointer-events: none }
+
+        @keyframes shimmer {
+            0% { background-position: 100% 0 }
+            100% { background-position: 0 0 }
+        }
+
+        /* filter bar */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+            background: #fff;
+            border: 1px solid var(--bd);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 14px
+        }
+
+        .flt-group { display: flex; flex-direction: column; gap: 5px }
+        .flt-group label { font-size: .7rem; font-weight: 700; color: var(--mt) }
+        .flt-group.flt-grow { flex: 1; min-width: 150px }
+        .flt-price { display: flex; align-items: center; gap: 6px }
+
+        .flt-price input {
+            width: 72px;
+            padding: 6px 8px;
+            border: 1.5px solid var(--bd);
+            border-radius: 7px;
+            font-size: .8rem;
+            font-family: inherit
+        }
+
+        .flt-price span { color: var(--mt) }
+
+        #fltLocation {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1.5px solid var(--bd);
+            border-radius: 7px;
+            font-size: .8rem;
+            font-family: inherit
+        }
+
+        .flt-clear { align-self: flex-end }
+
+        .flt-price input:focus, #fltLocation:focus { outline: none; border-color: var(--pr) }
+
+        /* razorpay button + divider */
+        .btn-rzp {
+            background: linear-gradient(135deg, #0a2540, #1a3a5c);
+            color: #fff;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(10, 37, 64, .25)
+        }
+
+        .btn-rzp:hover { background: linear-gradient(135deg, #123456, #254a70) }
+
+        .or-div { display: flex; align-items: center; gap: 10px; margin: 12px 0; color: var(--mt); font-size: .72rem }
+        .or-div::before, .or-div::after { content: ''; flex: 1; height: 1px; background: var(--bd) }
+
+        @media (prefers-reduced-motion: reduce) {
+            .page.active, .mo-box, .bot-panel.open, .bk-card, .skel-block, .skel-line { animation: none }
+        }
     </style>
 </head>
 
 <body>
-
-    <!-- SUPABASE -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const supabaseUrl = "https://yzlbbxxmidhgvxgvqpna.supabase.co";
-        const supabaseKey = "sb_publishable_tYtJ5TWkpiO_JiV8Ye9tMw_ZK5jWQ2x";
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-    </script>
 
     <nav>
         <div class="logo" onclick="go('home')">Study<span>Bazaar</span></div>
@@ -1529,6 +1625,28 @@
             <div style="font-size:1.3rem;font-weight:800;margin-bottom:4px">📚 Browse Books & Notes</div>
             <div style="color:var(--mt);margin-bottom:11px;font-size:.86rem">Free: see listings only · Premium: chat
                 with sellers</div>
+            <div class="filter-bar">
+                <div class="flt-group">
+                    <label>💰 Price</label>
+                    <div class="flt-price"><input type="number" id="fltPriceMin" placeholder="Min" min="0"
+                            oninput="debounceFilter()" /><span>–</span><input type="number" id="fltPriceMax"
+                            placeholder="Max" min="0" oninput="debounceFilter()" /></div>
+                </div>
+                <div class="flt-group flt-grow">
+                    <label>📍 Location</label>
+                    <input type="text" id="fltLocation" placeholder="City / area..." oninput="debounceFilter()" />
+                </div>
+                <div class="flt-group flt-grow">
+                    <label>🏷️ Type</label>
+                    <div class="stags" id="fltType" style="margin:0">
+                        <div class="stag on" data-type="all" onclick="setTypeFilter(this)">All</div>
+                        <div class="stag" data-type="new-book" onclick="setTypeFilter(this)">🆕 New</div>
+                        <div class="stag" data-type="used-book" onclick="setTypeFilter(this)">♻️ Used</div>
+                        <div class="stag" data-type="notes" onclick="setTypeFilter(this)">📝 Notes</div>
+                    </div>
+                </div>
+                <button class="btn btn-sc btn-xs flt-clear" onclick="clearFilters()">✕ Clear</button>
+            </div>
             <div class="tabs">
                 <div class="tab on" onclick="switchTab(this,'tb-books')">📗 Books</div>
                 <div class="tab" onclick="switchTab(this,'tb-notes')">📝 Notes</div>
@@ -1668,16 +1786,16 @@
                                         id="sellP" placeholder="Must be below 60% of MRP" /></div>
                             </div>
                             <div id="newBPG" class="hide">
-                                <div class="fg"><label>Selling Price (₹) *</label><input type="number"
+                                <div class="fg"><label>Selling Price (₹) *</label><input type="number" id="newP"
                                         placeholder="Your price" /></div>
                             </div>
                         </div>
                         <div id="notesF" class="hide">
                             <div class="fg"><label>Notes Title *</label><input type="text" id="notesTitle"
                                     placeholder="e.g. DBMS Complete Notes Sem 5" /></div>
-                            <div class="fg"><label>No. of Pages</label><input type="number" placeholder="Page count" />
+                            <div class="fg"><label>No. of Pages</label><input type="number" id="notesPages" placeholder="Page count" />
                             </div>
-                            <div class="fg"><label>Price (₹) *</label><input type="number"
+                            <div class="fg"><label>Price (₹) *</label><input type="number" id="notesP"
                                     placeholder="Your asking price" /></div>
                         </div>
                         <!-- SINGLE ADDRESS LINE — no live location -->
@@ -1688,7 +1806,7 @@
                             <input type="text" id="listAddr"
                                 placeholder="e.g. Sector 14, Model Town, Rohtak, Haryana – 124001" />
                         </div>
-                        <div class="fg"><label>Photo</label><input type="file" accept="image/*" /></div>
+                        <div class="fg"><label>Photo</label><input type="file" id="listPhoto" accept="image/*" /></div>
                         <div class="fg"><label>Description</label><textarea rows="2"
                                 placeholder="Any extra details..."></textarea></div>
                         <div
@@ -2061,51 +2179,42 @@
             <div class="tabs">
                 <div class="tab on" onclick="switchTab(this,'adm-setup')">⚙️ Sheet Setup</div>
                 <div class="tab" onclick="switchTab(this,'adm-users');renderAdmin()">👥 Users</div>
-                <div class="tab" onclick="switchTab(this,'adm-pay');renderAdmin()">💳 Payments</div>
-                <div class="tab" onclick="switchTab(this,'adm-appr');renderAdmin()">✅ Approved</div>
+                <div class="tab" onclick="switchTab(this,'adm-appr');renderAdmin()">💳 Payments</div>
                 <div class="tab" onclick="switchTab(this,'adm-rep');renderAdmin()">🚨 Reports</div>
             </div>
             <div class="tc on" id="adm-setup">
                 <div class="card">
-                    <h4 style="color:var(--pr);margin-bottom:12px">📊 Google Sheets Setup</h4>
+                    <h4 style="color:var(--pr);margin-bottom:12px">📊 Google Sheets Backend Setup</h4>
                     <div style="font-size:.82rem;line-height:2"><strong>Step 1:</strong> <a
-                            href="https://sheets.google.com" target="_blank"
-                            style="color:var(--pr)">sheets.google.com</a> → Create → Rename to
-                        <strong>study_bazaar</strong><br /><strong>Step 2:</strong> Create 5 tabs: <code
-                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Users</code> <code
-                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Payments</code> <code
-                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Listings</code> <code
-                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Assignments</code> <code
-                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Reports</code><br /><strong>Step
-                            3:</strong> Extensions → Apps Script → paste code → Deploy → Web App → Execute as Me →
-                        Access: Anyone → Copy URL</div>
-                    <div class="gs-code">const SS=SpreadsheetApp.getActiveSpreadsheet();
-                        function doPost(e){
-                        try{
-                        const d=JSON.parse(e.postData.contents);
-                        const sh=SS.getSheetByName(d.sheet);
-                        if(!sh)return out({error:'Sheet not found'});
-                        if(d.action==='append'){sh.appendRow(d.row);return out({ok:true});}
-                        if(d.action==='update'){
-                        const rows=sh.getDataRange().getValues();
-                        for(let i=1;i&lt;rows.length;i++){
-                        if(String(rows[i][d.keyCol])===String(d.keyVal)){
-                        d.updates.forEach(u=>sh.getRange(i+1,u.col).setValue(u.val));
-                        return out({ok:true});
-                        }
-                        }
-                        return out({error:'Not found'});
-                        }
-                        if(d.action==='read')return out({rows:sh.getDataRange().getValues()});
-                        }catch(err){return out({error:err.toString()});}
-                        }
-                        function out(o){return
-                        ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);}
-                        function doGet(){return out({status:'StudyBazaar API active ✅'});}</div>
+                            href="https://sheets.google.com" target="_blank" style="color:var(--pr)">sheets.google.com</a>
+                        → Create a new blank spreadsheet (any name — tabs are created
+                        automatically, no manual setup needed)<br /><strong>Step 2:</strong> Extensions → Apps Script
+                        → delete the default code → paste in the full <code
+                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">Code.gs</code> file provided
+                        with this update<br /><strong>Step 3:</strong> ⚙️ Project Settings → Script Properties → Add
+                        3 properties:</div>
+                    <div class="gs-code" style="line-height:1.9">ADMIN_PASSWORD &nbsp;→ choose your own strong password
+                        (replaces the old "owner123")
+                        RAZORPAY_KEY_ID &nbsp;→ from Razorpay Dashboard → Settings → API Keys
+                        RAZORPAY_KEY_SECRET → from Razorpay Dashboard → Settings → API Keys (keep this one secret!)</div>
+                    <div style="font-size:.82rem;line-height:2"><strong>Step 4:</strong> Deploy → New deployment →
+                        Web app → Execute as: <strong>Me</strong> → Who has access: <strong>Anyone</strong> → Deploy →
+                        copy the <code style="background:#ede9fe;padding:1px 5px;border-radius:4px">/exec</code> URL
+                    </div>
                     <div class="fg" style="margin-top:10px"><label>Paste Web App URL</label><input type="text"
                             id="sheetUrl" placeholder="https://script.google.com/macros/s/.../exec" /></div>
                     <button class="btn btn-pr" onclick="saveSheetUrl()">💾 Save & Connect</button>
                     <div id="sheetStatus" style="margin-top:7px;font-size:.81rem"></div>
+                </div>
+                <div class="card" style="margin-top:14px">
+                    <h4 style="color:var(--pr);margin-bottom:12px">⚡ Razorpay Auto-Checkout</h4>
+                    <div style="font-size:.82rem;line-height:1.8">Paste your Razorpay <strong>Key ID</strong> below
+                        (starts with <code style="background:#ede9fe;padding:1px 5px;border-radius:4px">rzp_</code>).
+                        This is public and safe to store here. Your <strong>Key Secret</strong> only ever goes in
+                        Apps Script Script Properties above — never here, never in GitHub.</div>
+                    <div class="fg" style="margin-top:10px"><label>Razorpay Key ID</label><input type="text"
+                            id="rzpKey" placeholder="rzp_live_xxxxxxxxxxxx" /></div>
+                    <button class="btn btn-pr" onclick="saveRzpKey()">💾 Save Key</button>
                 </div>
             </div>
             <div class="tc" id="adm-users">
@@ -2116,19 +2225,9 @@
                     </div>
                 </div>
             </div>
-            <div class="tc" id="adm-pay">
-                <div class="adm-card">
-                    <h4>⏳ Pending Payments</h4>
-                    <p style="font-size:.8rem;color:var(--mt);margin-bottom:11px">Verify each UTR in your UPI app, then
-                        approve or reject.</p>
-                    <div id="admPendList">
-                        <div style="color:var(--ok);font-size:.82rem">✅ No pending payments.</div>
-                    </div>
-                </div>
-            </div>
             <div class="tc" id="adm-appr">
                 <div class="adm-card">
-                    <h4>✅ Approved Plans</h4>
+                    <h4>💳 Payments (all via Razorpay — auto-verified)</h4>
                     <div id="admApprList">
                         <div style="color:var(--mt);font-size:.82rem">None yet.</div>
                     </div>
@@ -2149,60 +2248,52 @@
     <div class="mo" id="mo5">
         <div class="mo-box"><button class="mo-close" onclick="closeMo('mo5')">×</button>
             <h3>⚡ Monthly Premium — ₹10/month</h3>
-            <div class="upi-box"><img id="qrA" src="qr.jpeg" alt="UPI QR" />
-                <div class="upi-id">urwashiaitan2004-1@okicici</div>
-                <p style="font-size:.72rem;color:#166534;margin-top:3px">Amount: <strong>₹10</strong> · Add your mobile
-                    as note</p>
-            </div>
-            <div class="pend-warn">⚠️ Enter UTR below after paying. Plan activates after admin verification.</div>
-            <div class="fg" style="margin-top:11px"><label>UTR / Transaction ID *</label><input type="text" id="utr5"
-                    placeholder="12-digit UTR" /></div><button class="btn btn-pr" style="width:100%" id="pb5"
-                onclick="submitPayment('Monthly',30,10,'utr5','mo5','pb5')">Submit for Verification</button>
+            <p style="font-size:.8rem;color:var(--mt);margin-bottom:10px">Pay with card, UPI, or scan the QR shown
+                inside Razorpay's checkout — your plan activates the instant payment is verified.</p>
+            <button class="btn btn-rzp" style="width:100%" onclick="payWithRazorpay('Monthly','mo5')">⚡ Pay ₹10
+                Now</button>
         </div>
     </div>
 
     <div class="mo" id="mo50yr">
         <div class="mo-box"><button class="mo-close" onclick="closeMo('mo50yr')">×</button>
             <h3>📅 Annual Plan — ₹100/year</h3>
-            <div class="upi-box"><img id="qrB" src="qr.jpeg" alt="UPI QR" />
-                <div class="upi-id">urwashiaitan2004-1@okicici</div>
-                <p style="font-size:.72rem;color:#166534;margin-top:3px">Amount: <strong>₹100</strong> · Add "Annual +
-                    your name" as note</p>
-            </div>
-            <div class="pend-warn">⚠️ Plan activates after admin verifies your UTR.</div>
-            <div class="fg" style="margin-top:11px"><label>UTR *</label><input type="text" id="utr50yr"
-                    placeholder="12-digit UTR" /></div><button class="btn btn-pr" style="width:100%" id="pb50yr"
-                onclick="submitPayment('Annual',365,100,'utr50yr','mo50yr','pb50yr')">Submit for Verification</button>
+            <p style="font-size:.8rem;color:var(--mt);margin-bottom:10px">Pay with card, UPI, or scan the QR shown
+                inside Razorpay's checkout — your plan activates the instant payment is verified.</p>
+            <button class="btn btn-rzp" style="width:100%" onclick="payWithRazorpay('Annual','mo50yr')">⚡ Pay ₹100
+                Now</button>
         </div>
     </div>
 
     <div class="mo" id="mo50">
         <div class="mo-box"><button class="mo-close" onclick="closeMo('mo50')">×</button>
             <h3>📗 New Book Seller — ₹50/month</h3>
-            <div class="upi-box"><img id="qrC" src="qr.jpeg" alt="UPI QR" />
-                <div class="upi-id">urwashiaitan2004-1@okicici</div>
-                <p style="font-size:.72rem;color:#166534;margin-top:3px">Amount: <strong>₹50</strong> · Add
-                    "NewBookSeller + name" as note</p>
-            </div>
-            <div class="pend-warn">⚠️ Plan activates after admin verification only.</div>
-            <div class="fg" style="margin-top:11px"><label>UTR *</label><input type="text" id="utr50"
-                    placeholder="UTR" /></div><button class="btn btn-sc" style="width:100%" id="pb50"
-                onclick="submitPayment('New Book Seller',30,50,'utr50','mo50','pb50')">Submit for Verification</button>
+            <p style="font-size:.8rem;color:var(--mt);margin-bottom:10px">Pay with card, UPI, or scan the QR shown
+                inside Razorpay's checkout — your plan activates the instant payment is verified.</p>
+            <button class="btn btn-rzp" style="width:100%" onclick="payWithRazorpay('New Book Seller','mo50')">⚡ Pay
+                ₹50 Now</button>
         </div>
     </div>
 
     <div class="mo" id="moLife">
         <div class="mo-box"><button class="mo-close" onclick="closeMo('moLife')">×</button>
             <h3>♾️ Lifetime Access — ₹500</h3>
-            <div class="upi-box"><img id="qrD" src="qr.jpeg" alt="UPI QR" />
-                <div class="upi-id">urwashiaitan2004-1@okicici</div>
-                <p style="font-size:.72rem;color:#166534;margin-top:3px">Amount: <strong>₹500</strong> · Add "Lifetime +
-                    name" as note</p>
-            </div>
-            <div class="pend-warn">⚠️ Plan activates after admin verification only.</div>
-            <div class="fg" style="margin-top:11px"><label>UTR *</label><input type="text" id="utrLife"
-                    placeholder="UTR" /></div><button class="btn btn-sc" style="width:100%" id="pbLife"
-                onclick="submitPayment('Lifetime',-1,500,'utrLife','moLife','pbLife')">Submit for Verification</button>
+            <p style="font-size:.8rem;color:var(--mt);margin-bottom:10px">Pay with card, UPI, or scan the QR shown
+                inside Razorpay's checkout — your plan activates the instant payment is verified.</p>
+            <button class="btn btn-rzp" style="width:100%" onclick="payWithRazorpay('Lifetime','moLife')">⚡ Pay ₹500
+                Now</button>
+        </div>
+    </div>
+
+    <!-- DELETE CONFIRM -->
+    <div class="mo" id="moDelConfirm">
+        <div class="mo-box"><button class="mo-close" onclick="closeMo('moDelConfirm')">×</button>
+            <h3>🗑 Confirm Delete</h3>
+            <p style="font-size:.83rem;color:var(--mt);margin-bottom:10px">Enter your password to confirm — only you
+                can delete your own listing.</p>
+            <div class="fg"><label>Password</label><input type="password" id="delPwIn" placeholder="Your password"
+                    onkeydown="if(event.key==='Enter')confirmDelete()" /></div>
+            <button class="btn btn-er" style="width:100%" onclick="confirmDelete()">🗑 Delete Permanently</button>
         </div>
     </div>
 
@@ -2304,94 +2395,53 @@
             pay on delivery only.</div>
         © 2025 StudyBazaar — India's Book Exchange. Made for students 🇮🇳
     </footer>
-    
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
         const SK = 'sb_v4';
-        // ===== QR LOADER =====
-        function loadQR() {
-                ['qrA', 'qrB', 'qrC', 'qrD'].forEach(id => {
-                    const el = document.getElementById(id);
-                    if (el) el.src = 'qr.jpeg';
-                });
-            }
-        function drawFallbackQR() {
-            const c = document.createElement('canvas'); c.width = 195; c.height = 195;
-            const ctx = c.getContext('2d'), sz = 195, cell = 6;
-            ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, sz, sz);
-            function fp(ox, oy) { ctx.fillStyle = '#111'; ctx.fillRect(ox, oy, cell * 7, cell * 7); ctx.fillStyle = '#fff'; ctx.fillRect(ox + cell, oy + cell, cell * 5, cell * 5); ctx.fillStyle = '#111'; ctx.fillRect(ox + cell * 2, oy + cell * 2, cell * 3, cell * 3); }
-            fp(7, 7); fp(sz - 7 - cell * 7, 7); fp(7, sz - 7 - cell * 7); ctx.fillStyle = '#111';
-            for (let y = 0; y < sz; y += cell)for (let x = 0; x < sz; x += cell) { const iF = (x < 7 + cell * 7 && y < 7 + cell * 7) || (x > sz - 7 - cell * 8 && y < 7 + cell * 7) || (x < 7 + cell * 7 && y > sz - 7 - cell * 8); if (!iF && Math.sin(x * .37 + y * .71 + x * y * .001) * 100 % 3 > 1) ctx.fillRect(x, y, cell - 1, cell - 1); }
-            ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sz / 2, sz / 2, 22, 0, Math.PI * 2); ctx.fill();
-            [['#4285F4', sz / 2 - 9, sz / 2 - 5], ['#EA4335', sz / 2 + 3, sz / 2 - 5], ['#FBBC05', sz / 2 - 9, sz / 2 + 5], ['#34A853', sz / 2 + 3, sz / 2 + 5]].forEach(([col, x, y]) => { ctx.fillStyle = col; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill(); });
-            ctx.fillStyle = '#166534'; ctx.font = 'bold 7px sans-serif'; ctx.textAlign = 'center'; ctx.fillText('urwashiaitan2004-1@okicici', sz / 2, sz - 4);
-            const url = c.toDataURL(); // FIX: use canvas data URL, not hardcoded 'qr.jpeg'
-            ['qrA', 'qrB', 'qrC', 'qrD'].forEach(id => { const el = document.getElementById(id); if (el) el.src = qr.jpeg; });
-        }
-        window.addEventListener('load', loadRealQR);
+        const CACHE_KEY = 'sb_cache_v1';
 
-        // ===== PROFILE PICTURE HELPERS =====
-        async function resizeImage(file, maxPx = 200) {
-            return new Promise(resolve => {
-                const img = new Image(), url = URL.createObjectURL(file);
-                img.onload = () => {
-                    let w = img.width, h = img.height;
-                    if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; } else { w = Math.round(w * maxPx / h); h = maxPx; }
-                    const c = document.createElement('canvas'); c.width = w; c.height = h;
-                    c.getContext('2d').drawImage(img, 0, 0, w, h);
-                    URL.revokeObjectURL(url);
-                    resolve(c.toDataURL('image/jpeg', 0.75));
-                };
-                img.onerror = () => resolve('');
-                img.src = qr.jpeg;
-            });
-        }
-        function previewPic(input, previewId) {
-            const prev = document.getElementById(previewId);
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => { prev.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`; };
-                reader.readAsDataURL(input.files[0]);
+        // ===== BACKEND CONFIG =====
+        let SHEET_URL = localStorage.getItem('sb_sheet_url') || '';
+        let RAZORPAY_KEY = localStorage.getItem('sb_rzp_key') || '';
+        window.addEventListener('load', () => {
+            const el = document.getElementById('sheetUrl'); if (el && SHEET_URL) el.value = SHEET_URL;
+            const rk = document.getElementById('rzpKey'); if (rk && RAZORPAY_KEY) rk.value = RAZORPAY_KEY;
+        });
+        function saveSheetUrl() { const u = document.getElementById('sheetUrl').value.trim(); if (!u) { notify('⚠️ Enter URL!'); return; } SHEET_URL = u; localStorage.setItem('sb_sheet_url', u); document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--ok)">✅ Saved! Testing...</span>'; testSheet(); }
+        async function testSheet() { try { const r = await fetch(SHEET_URL); const d = await r.json(); document.getElementById('sheetStatus').innerHTML = d.status ? '<span style="color:var(--ok)">✅ Connected!</span>' : '<span style="color:var(--er)">❌ Unexpected response.</span>'; } catch { document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--er)">❌ Failed. Re-deploy as Web App → Anyone.</span>'; } }
+        function saveRzpKey() { const k = document.getElementById('rzpKey').value.trim(); if (!k) { notify('⚠️ Enter Key ID!'); return; } RAZORPAY_KEY = k; localStorage.setItem('sb_rzp_key', k); notify('✅ Razorpay Key ID saved!'); }
+
+        // ===== API HELPER — talks to Apps Script, times out instead of hanging forever =====
+        async function api(action, payload, timeoutMs) {
+            if (!SHEET_URL) return { error: 'Backend not connected yet. Owner needs to finish Sheet Setup.' };
+            const ctrl = new AbortController();
+            const t = setTimeout(() => ctrl.abort(), timeoutMs || 12000);
+            try {
+                const res = await fetch(SHEET_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify(Object.assign({ action }, payload)), signal: ctrl.signal });
+                clearTimeout(t);
+                return await res.json();
+            } catch (err) {
+                clearTimeout(t);
+                return { error: err.name === 'AbortError' ? 'Server took too long to respond. Please try again.' : 'Network error — check your internet connection.' };
             }
         }
-        async function changeProfilePic(input) {
-            if (!input.files || !input.files[0]) return;
-            const d = gs(); if (!d.current) { notify('Please login first!'); return; }
-            const pic = await resizeImage(input.files[0]);
-            d.current.profilePic = pic;
-            const i = d.users.findIndex(u => u.mobile === d.current.mobile);
-            if (i > -1) d.users[i].profilePic = pic;
-            ss(d); renderProfile(); notify('✅ Profile photo updated!');
-        }
 
-        // ===== STORAGE =====
-        
+        // ===== LOCAL STATE — session/current-user + favourites + DM chat stay on-device.
+        // Listings/Assignments are hydrated from the shared backend (see loadPublicData). =====
         function gs() { try { return JSON.parse(localStorage.getItem(SK)) || { users: [], payments: [], listings: [], assignments: [], reports: [], favs: [], chats: {}, current: null, isOwner: false }; } catch { return { users: [], payments: [], listings: [], assignments: [], reports: [], favs: [], chats: {}, current: null, isOwner: false }; } }
         function ss(d) { localStorage.setItem(SK, JSON.stringify(d)); }
-
-        // ===== GOOGLE SHEETS — FIXED sheetAppend =====
-        let SHEET_URL = localStorage.getItem('sb_sheet_url') || '';
-        window.addEventListener('load', () => { const el = document.getElementById('sheetUrl'); if (el && SHEET_URL) el.value = SHEET_URL; });
-        function saveSheetUrl() { const u = document.getElementById('sheetUrl').value.trim(); if (!u) { notify('⚠️ Enter URL!'); return; } SHEET_URL = u; localStorage.setItem('sb_sheet_url', u); document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--ok)">✅ Saved! Testing...</span>'; testSheet(); }
-        async function testSheet() { try { const r = await fetch(SHEET_URL); const d = await r.json(); document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--ok)">✅ Connected!</span>'; } catch { document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--er)">❌ Failed. Re-deploy as Web App → Anyone.</span>'; } }
-
-        // FIXED: was incorrectly including AI params in body
-        async function sheetAppend(sheet, row) {
-            if (!SHEET_URL) return;
-            try { await fetch(SHEET_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'append', sheet, row }) }); } catch { }
-        }
-        async function sheetUpdate(sheet, keyCol, keyVal, updates) {
-            if (!SHEET_URL) return;
-            try { await fetch(SHEET_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: JSON.stringify({ action: 'update', sheet, keyCol, keyVal, updates }) }); } catch { }
-        }
+        let adminPwCache = ''; // kept in memory only for this tab's session — never written to localStorage
+        let currentPwCache = ''; // same — regular user's password, memory-only, needed to authorize edits/deletes
 
         // ===== STATS =====
         function updateStats() {
-            const d = gs(); const cities = new Set(d.users.map(u => (u.addr || u.city || '').split(',')[2]?.trim()).filter(Boolean));
+            const d = gs(); const cities = new Set((d.listings || []).map(l => l.city).filter(Boolean));
             const fmt = n => n > 0 ? n + '+' : '0';
-            document.getElementById('statBooks').textContent = fmt(d.listings.length);
-            document.getElementById('statStudents').textContent = fmt(d.users.length);
-            document.getElementById('statCities').textContent = fmt(cities.size || d.users.length);
-            document.getElementById('statSaved').textContent = fmt(d.users.length);
+            document.getElementById('statBooks').textContent = fmt((d.listings || []).length);
+            document.getElementById('statStudents').textContent = fmt(d.userCount || 0);
+            document.getElementById('statCities').textContent = fmt(cities.size);
+            document.getElementById('statSaved').textContent = fmt(d.userCount || 0);
         }
 
         // ===== PAGES =====
@@ -2408,43 +2458,30 @@
 
         // ===== LOGIN =====
         async function doLogin() {
-            const d = gs();
             const id = document.getElementById('liId').value.trim();
             const pw = document.getElementById('liPw').value;
             const role = document.getElementById('liRole').value;
             if (!id || !pw) { notify('⚠️ Enter your credentials!'); return; }
+            const btn = document.getElementById('loginBtn'); setBtn('loginBtn', true, 'Login');
             if (role === 'owner') {
-                if ((id === 'urwashi' || id === 'urwashiaitan2004-1@okicici' || id === 'owner') && pw === 'owner123') {
-                    d.isOwner = true; ss(d); closeMo('moLogin'); notify('🛡️ Owner login successful!'); setTimeout(() => go('admin'), 700);
-                } else notify('⚠️ Invalid admin credentials!');
+                const r = await api('verifyAdmin', { password: pw });
+                setBtn('loginBtn', false, 'Login');
+                if (r.ok) {
+                    adminPwCache = pw; const d = gs(); d.isOwner = true; ss(d);
+                    closeMo('moLogin'); notify('🛡️ Owner login successful!'); setTimeout(() => go('admin'), 500);
+                } else notify('⚠️ ' + (r.error || 'Invalid admin password!'));
                 return;
             }
-            const user = d.users.find(u => (u.mobile === id || u.email === id) && u.pw === pw);
-            if (!user) { notify('⚠️ Invalid mobile/email or password!'); return; }
-            const storedToken = localStorage.getItem('sb_session_' + user.mobile);
-            document.getElementById('liDeviceWarn').classList.add('hide');
-            if (user.sessionToken && storedToken !== user.sessionToken) {
-                document.getElementById('liDeviceWarn').classList.remove('hide');
-                const btn = document.getElementById('loginBtn');
-                if (btn.dataset.forceReady === '1') { btn.dataset.forceReady = ''; btn.textContent = 'Login'; }
-                else { btn.dataset.forceReady = '1'; btn.innerHTML = '⚠️ Login Anyway (Force)'; return; }
-            }
-            const newToken = genToken();
-            user.sessionToken = newToken;
-            localStorage.setItem('sb_session_' + user.mobile, newToken);
-            const idx = d.users.findIndex(u => u.mobile === user.mobile); if (idx > -1) d.users[idx] = user;
-            d.current = user; ss(d);
-            await sheetUpdate('Users', 2, user.mobile, [{ col: 11, val: 'Login:' + new Date().toLocaleString('en-IN') }]);
-            closeMo('moLogin');
-            document.getElementById('liDeviceWarn').classList.add('hide');
-            document.getElementById('loginBtn').dataset.forceReady = '';
-            document.getElementById('loginBtn').textContent = 'Login';
-            renderProfile(); updateStats(); notify(`Welcome back, ${user.name}! 👋`);
+            const r = await api('login', { id, password: pw });
+            setBtn('loginBtn', false, 'Login');
+            if (r.error || !r.user) { notify('⚠️ ' + (r.error || 'Invalid mobile/email or password!')); return; }
+            const d = gs(); d.current = r.user; ss(d); currentPwCache = pw;
+            closeMo('moLogin'); renderProfile(); updateStats();
+            notify(`Welcome back, ${r.user.name}! 👋`);
         }
 
-        // ===== REGISTER — with profile pic + single address =====
+        // ===== REGISTER =====
         async function doRegister() {
-            const d = gs();
             const name = document.getElementById('rName').value.trim();
             const mobile = document.getElementById('rMobile').value.trim();
             const email = document.getElementById('rEmail').value.trim();
@@ -2455,165 +2492,209 @@
             const pw = document.getElementById('rPw').value;
             if (!name || !mobile || !email || !dob || !addr || !inst || !aadhar || !pw) { notify('⚠️ All fields are required!'); return; }
             if (!/^\d{10}$/.test(mobile)) { notify('⚠️ Enter valid 10-digit mobile!'); return; }
-            if (d.users.find(u => u.mobile === mobile)) { notify('⚠️ Mobile already registered!'); return; }
-            if (d.users.find(u => u.email === email)) { notify('⚠️ Email already registered!'); return; }
             setBtn('regBtn', true, 'Creating...');
-            // Resize & store profile picture
             let profilePic = '';
             const picFile = document.getElementById('rPic').files[0];
             if (picFile) { try { profilePic = await resizeImage(picFile); } catch { } }
-            const now = new Date().toLocaleString('en-IN');
-            const token = genToken();
-            // Extract city from address for display
             const city = addr.split(',')[2]?.trim() || addr.split(',')[0]?.trim() || '—';
-            const user = { name, mobile, email, dob, addr, city, institution: inst, aadhar, pw, profilePic, plan: 'Free', planExpiry: null, payStatus: '', listCount: 0, asgnCount: 0, joinDate: now, sessionToken: token };
-            d.users.push(user); d.current = user;
-            localStorage.setItem('sb_session_' + mobile, token);
-            ss(d);
-            await sheetAppend('Users', [now, name, mobile, email, dob, addr, inst, aadhar, 'Free', '', now]);
+            const r = await api('register', { name, mobile, email, dob, address: addr, city, institution: inst, aadhar, password: pw, profilePic });
             setBtn('regBtn', false, 'Create Account');
+            if (r.error || !r.user) { notify('⚠️ ' + (r.error || 'Registration failed. Try again.')); return; }
+            const d = gs(); d.current = r.user; ss(d); currentPwCache = pw;
             closeMo('moReg'); renderProfile(); updateStats(); go('profile');
             notify(`🎉 Welcome, ${name}! Account created & saved.`);
         }
 
-        // ===== PAYMENT =====
-        async function submitPayment(planName, days, amount, utrId, moId, btnId) {
+        // ===== PUBLIC DATA — real shared Listings/Assignments, loaded from the backend =====
+        async function loadPublicData() {
+            const cache = JSON.parse(localStorage.getItem(CACHE_KEY) || '{}');
             const d = gs();
-            const utr = document.getElementById(utrId).value.trim();
-            if (!utr || utr.length < 8) { notify('⚠️ Enter valid UTR!'); return; }
-            if (!d.current) { notify('⚠️ Please register or login first!'); openMo('moReg'); return; }
-            if (d.payments.find(p => p.utr === utr)) { notify('⚠️ UTR already submitted!'); return; }
-            setBtn(btnId, true, 'Submitting...');
-            const now = new Date().toLocaleString('en-IN');
-            const pay = { id: Date.now(), userName: d.current.name, userMobile: d.current.mobile, userEmail: d.current.email, plan: planName, days, amount, utr, status: 'pending', submittedAt: now };
-            d.payments.push(pay);
-            const i = d.users.findIndex(u => u.mobile === d.current.mobile);
-            if (i > -1) { d.users[i].payStatus = 'pending'; d.users[i].pendingPlan = planName; d.users[i].pendingUTR = utr; }
-            d.current.payStatus = 'pending'; d.current.pendingPlan = planName; d.current.pendingUTR = utr;
-            ss(d);
-            await sheetAppend('Payments', [now, d.current.name, d.current.mobile, d.current.email, planName, amount, utr, 'pending', now, '—']);
-            setBtn(btnId, false, 'Submit for Verification');
-            closeMo(moId); renderProfile();
-            notify(`✅ UTR ${utr} submitted. Admin will verify & activate ${planName}.`);
+            if (cache.listings) { d.listings = cache.listings; renderListings(d.listings); }
+            if (cache.assignments) { d.assignments = cache.assignments; renderAssignments(d.assignments); }
+            ss(d); updateStats();
+            if (!SHEET_URL) return; // nothing to fetch yet — cached/default empty-state stays as is
+            showSkeleton('bookGrid'); showSkeleton('notesGrid'); showSkeleton('asgnGrid');
+            const [lr, ar, sr] = await Promise.all([api('read', { sheet: 'Listings' }), api('read', { sheet: 'Assignments' }), api('stats', {})]);
+            const d2 = gs();
+            if (lr.rows) { d2.listings = lr.rows; renderListings(lr.rows); }
+            else { renderListings(d2.listings || []); }
+            if (ar.rows) { d2.assignments = ar.rows; renderAssignments(ar.rows); }
+            else { renderAssignments(d2.assignments || []); }
+            if (sr && !sr.error) d2.userCount = sr.userCount;
+            ss(d2); updateStats();
+            localStorage.setItem(CACHE_KEY, JSON.stringify({ listings: d2.listings, assignments: d2.assignments }));
+        }
+        function showSkeleton(gridId) {
+            const grid = document.getElementById(gridId); if (!grid || grid.dataset.loaded) return;
+            grid.innerHTML = Array(3).fill('<div class="bk-card skel"><div class="bk-img skel-block"></div><div class="bk-body"><div class="skel-line" style="width:70%"></div><div class="skel-line" style="width:45%"></div></div></div>').join('');
         }
 
-        // ===== APPROVE/REJECT =====
-        async function approvePayment(pid) {
-            const d = gs(); const p = d.payments.find(x => x.id === pid); if (!p) return;
-            p.status = 'approved'; p.approvedAt = new Date().toLocaleString('en-IN');
-            const u = d.users.find(x => x.mobile === p.userMobile);
-            if (u) { u.plan = p.plan; u.payStatus = 'approved'; if (p.days === -1) u.planExpiry = -1; else { const e = new Date(); e.setDate(e.getDate() + p.days); u.planExpiry = e.toISOString(); } if (d.current && d.current.mobile === u.mobile) d.current = u; }
-            ss(d);
-            await sheetUpdate('Payments', 6, p.utr, [{ col: 8, val: 'approved' }, { col: 10, val: p.approvedAt }]);
-            await sheetUpdate('Users', 2, p.userMobile, [{ col: 9, val: p.plan }, { col: 10, val: 'approved' }]);
-            renderAdmin(); notify(`✅ ${p.userName}'s ${p.plan} plan approved!`);
+        function typeMeta(t) { return { 'notes': { icon: '📝', badge: 'b-note', label: 'Notes' }, 'new-book': { icon: '📗', badge: 'b-new', label: 'New' }, 'used-book': { icon: '📘', badge: 'b-used', label: 'Used' } }[t] || { icon: '📘', badge: 'b-used', label: t }; }
+
+        function listingCardHTML(l) {
+            const m = typeMeta(l.type); const d = gs();
+            const mine = d.current && String(d.current.mobile) === String(l.mobile);
+            const canDelete = mine || d.isOwner;
+            const priceHtml = l.price ? `<div class="p-row"><span class="p-now">₹${l.price}</span></div>` : '';
+            return `<div class="bk-card" data-stream="${l.stream || 'other'}" data-id="${l.id}" data-mobile="${l.mobile}" data-price="${l.price || 0}" data-city="${(l.city || '').toLowerCase()}" data-type="${l.type}">
+                <button class="fav-btn" onclick="toggleFav(this,'${String(l.title).replace(/'/g, "\\'")}')">♡</button>
+                <div class="bk-img">${m.icon}</div>
+                <div class="bk-body">
+                    <div style="display:flex;gap:3px;margin-bottom:4px"><span class="badge ${m.badge}">${m.label}</span></div>
+                    <div class="bk-title">${escapeHtml(l.title)}</div>
+                    ${priceHtml}
+                    <div class="bk-meta">📍 ${escapeHtml(l.city || l.address || '')}</div>
+                    <div style="display:flex;gap:5px;margin-top:6px">
+                        <button class="btn btn-pr btn-xs" style="flex:1" onclick="openChatWith('${String(l.name).replace(/'/g, "\\'")}')">💬 Chat</button>
+                        ${canDelete ? `<button class="del-btn" onclick="promptDelete('Listings','${l.id}','${l.mobile}')" title="Delete">🗑</button>` : ''}
+                    </div>
+                </div></div>`;
         }
-        async function rejectPayment(pid) {
-            const d = gs(); const p = d.payments.find(x => x.id === pid); if (!p) return;
-            p.status = 'rejected'; const u = d.users.find(x => x.mobile === p.userMobile); if (u) u.payStatus = 'rejected';
-            ss(d); await sheetUpdate('Payments', 6, p.utr, [{ col: 8, val: 'rejected' }]);
-            renderAdmin(); notify(`❌ ${p.userName}'s payment rejected.`);
+        function assignmentCardHTML(a) {
+            const isR = a.role === 'requester'; const d = gs();
+            const mine = d.current && String(d.current.mobile) === String(a.mobile);
+            const canDelete = mine || d.isOwner;
+            return `<div class="bk-card" data-atype="${a.role}" data-id="${a.id}" data-mobile="${a.mobile}" data-price="${a.price || 0}" data-city="${(a.city || '').toLowerCase()}">
+                <button class="fav-btn" onclick="toggleFav(this,'${String(a.title).replace(/'/g, "\\'")}')">♡</button>
+                <div class="bk-img">${isR ? '📋' : '✍️'}</div>
+                <div class="bk-body">
+                    <span class="badge ${isR ? 'b-req' : 'b-wri'}">${isR ? 'REQUEST' : 'WRITER'}</span>
+                    <div class="bk-title" style="margin-top:4px">${escapeHtml(a.title)}</div>
+                    <div class="bk-meta">₹${a.price || 0}/page · 📍 ${escapeHtml(a.city || a.address || '')}</div>
+                    <div style="display:flex;gap:5px;margin-top:6px">
+                        <button class="btn btn-pr btn-xs" style="flex:1" onclick="openChatWith('${String(a.name).replace(/'/g, "\\'")}')">💬 Chat</button>
+                        ${canDelete ? `<button class="del-btn" onclick="promptDelete('Assignments','${a.id}','${a.mobile}')" title="Delete">🗑</button>` : ''}
+                    </div>
+                </div></div>`;
+        }
+        function escapeHtml(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+        function renderListings(rows) {
+            rows = rows || [];
+            const books = rows.filter(l => l.type !== 'notes'), notes = rows.filter(l => l.type === 'notes');
+            const bookGrid = document.getElementById('bookGrid'), notesGrid = document.getElementById('notesGrid');
+            bookGrid.dataset.loaded = '1'; notesGrid.dataset.loaded = '1';
+            bookGrid.innerHTML = books.length ? books.map(listingCardHTML).join('') : '<div class="empty-state"><div class="ei">📚</div><h4>No books listed yet</h4><p>Be the first to list! <span onclick="go(\'sell\')" style="color:var(--pr);cursor:pointer;font-weight:700">Sell a Book →</span></p></div>';
+            notesGrid.innerHTML = notes.length ? notes.map(listingCardHTML).join('') : '<div class="empty-state"><div class="ei">📝</div><h4>No notes listed yet</h4><p>Share your notes! <span onclick="go(\'sell\')" style="color:var(--pr);cursor:pointer;font-weight:700">List Notes →</span></p></div>';
+            renderMyListings(rows); applyFilters();
+        }
+        function renderAssignments(rows) {
+            rows = rows || [];
+            const grid = document.getElementById('asgnGrid'); grid.dataset.loaded = '1';
+            grid.innerHTML = rows.length ? rows.map(assignmentCardHTML).join('') : '<div class="empty-state"><div class="ei">✍️</div><h4>No assignments posted yet</h4></div>';
+        }
+        function renderMyListings(rows) {
+            const d = gs(); const ml = document.getElementById('myListings'); if (!ml) return;
+            if (!d.current) { ml.innerHTML = '<div style="color:var(--mt);font-size:.82rem">Login to see your listings.</div>'; return; }
+            const mine = (rows || []).filter(l => String(l.mobile) === String(d.current.mobile));
+            ml.innerHTML = mine.length ? mine.map(l => {
+                const m = typeMeta(l.type);
+                return `<div class="bk-card" style="margin-bottom:8px"><div class="bk-body"><div class="bk-title">${escapeHtml(l.title)} <span class="badge ${m.badge}">${m.label}</span></div><div class="bk-meta">${escapeHtml(l.city || l.address || '')}${l.price ? ' · ₹' + l.price : ''} · ✅ Saved</div><button class="del-btn" onclick="promptDelete('Listings','${l.id}','${l.mobile}')">🗑 Delete</button></div></div>`;
+            }).join('') : '<div style="color:var(--mt);font-size:.82rem">No listings yet.</div>';
         }
 
-        // ===== ADMIN =====
-        function renderAdmin() {
+        // ===== FILTERS — price range, location, type (new/used/notes), plus existing category tags =====
+        function applyFilters() {
+            const priceMin = parseFloat(document.getElementById('fltPriceMin')?.value) || 0;
+            const priceMax = parseFloat(document.getElementById('fltPriceMax')?.value) || Infinity;
+            const loc = (document.getElementById('fltLocation')?.value || '').trim().toLowerCase();
+            const type = document.querySelector('#fltType .stag.on')?.dataset.type || 'all';
+            const activeStream = document.querySelector('#sf .stag.on')?.getAttribute('onclick')?.match(/fs\(this,'([\w-]+)'\)/)?.[1] || 'all';
+            document.querySelectorAll('#bookGrid .bk-card[data-id], #notesGrid .bk-card[data-id]').forEach(c => {
+                const price = parseFloat(c.dataset.price) || 0;
+                const city = c.dataset.city || '';
+                const t = c.dataset.type;
+                const okPrice = price >= priceMin && price <= priceMax;
+                const okLoc = !loc || city.includes(loc);
+                const okType = type === 'all' || t === type;
+                const okStream = activeStream === 'all' || c.dataset.stream === activeStream;
+                c.style.display = (okPrice && okLoc && okType && okStream) ? '' : 'none';
+            });
+        }
+        function setTypeFilter(el) { document.querySelectorAll('#fltType .stag').forEach(t => t.classList.remove('on')); el.classList.add('on'); applyFilters(); }
+        let fltDebounce;
+        function debounceFilter() { clearTimeout(fltDebounce); fltDebounce = setTimeout(applyFilters, 180); }
+        function clearFilters() {
+            const pm = document.getElementById('fltPriceMin'), px = document.getElementById('fltPriceMax'), loc = document.getElementById('fltLocation');
+            if (pm) pm.value = ''; if (px) px.value = ''; if (loc) loc.value = '';
+            document.querySelectorAll('#fltType .stag').forEach((t, i) => t.classList.toggle('on', i === 0));
+            applyFilters();
+        }
+
+        // ===== STREAM FILTER (existing category tags) =====
+        function fs(el, s) { document.querySelectorAll('#sf .stag').forEach(t => t.classList.remove('on')); el.classList.add('on'); applyFilters(); }
+        function switchTab(el, id) { const p = el.closest('.sec') || document; p.querySelectorAll('.tab').forEach(t => t.classList.remove('on')); p.querySelectorAll('.tc').forEach(t => t.classList.remove('on')); el.classList.add('on'); const tc = document.getElementById(id); if (tc) tc.classList.add('on'); }
+
+        // ===== DELETE — owner-of-item (password confirm) or site owner (admin session) =====
+        let pendingDelete = null;
+        function promptDelete(sheetName, id, mobile) {
             const d = gs();
-            document.getElementById('admUC').textContent = d.users.length;
-            document.getElementById('admUserList').innerHTML = d.users.length ? d.users.map(u => `<div class="u-row"><div class="u-av">${u.profilePic ? `<img src="${u.profilePic}"/>` : (u.name || '?')[0]}</div><div class="u-info"><div class="u-name">${u.name}</div><div class="u-meta">${u.mobile} · ${u.email}</div><div class="u-meta">${u.addr || u.city || '—'}</div><div class="u-meta">${u.institution || '—'} · Joined: ${u.joinDate || '—'}</div>${u.pendingUTR ? `<div class="u-meta" style="color:var(--warn)">⏳ UTR: ${u.pendingUTR} (${u.pendingPlan})</div>` : ''}</div><span class="pill ${u.payStatus === 'pending' ? 'pl-pd' : u.plan === 'Free' ? 'pl-free' : u.plan === 'Lifetime' ? 'pl-lf' : 'pl-pr'}">${u.plan}${u.payStatus === 'pending' ? ' ⏳' : ''}</span></div>`).join('') : '<div style="color:var(--mt);font-size:.82rem">No users yet.</div>';
-            const pend = d.payments.filter(p => p.status === 'pending');
-            document.getElementById('admPendList').innerHTML = pend.length ? pend.map(p => `<div class="pay-row"><div class="pay-info"><strong>${p.userName}</strong> · ${p.userMobile}<br/>Plan: <strong>${p.plan}</strong> · ₹${p.amount} · <span class="utr-tag">UTR: ${p.utr}</span><br/><span style="font-size:.7rem;color:var(--mt)">${p.submittedAt}</span></div><div style="display:flex;gap:5px;flex-wrap:wrap"><button class="btn btn-ok btn-xs" onclick="approvePayment(${p.id})">✅ Approve</button><button class="btn btn-er btn-xs" onclick="rejectPayment(${p.id})">❌ Reject</button></div></div>`).join('') : '<div style="color:var(--ok);font-size:.82rem">✅ No pending payments.</div>';
-            const appr = d.payments.filter(p => p.status === 'approved');
-            document.getElementById('admApprList').innerHTML = appr.length ? appr.map(p => `<div class="pay-row"><div class="pay-info"><strong>${p.userName}</strong> · ${p.userMobile} · <strong>${p.plan}</strong> · ₹${p.amount} · <span class="utr-tag">UTR:${p.utr}</span> <span style="color:var(--ok);font-size:.72rem">✅ ${p.approvedAt}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.82rem">None yet.</div>';
-            const reps = d.reports || [];
-            document.getElementById('admRepList').innerHTML = reps.length ? reps.map(r => `<div class="pay-row"><div class="pay-info"><strong>${r.type}</strong><br/>Reported: ${r.reported || '—'} · ₹${r.amount || 0}<br/>${r.desc}<br/><span style="font-size:.7rem;color:var(--mt)">${r.at}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.82rem">No reports yet.</div>';
+            if (d.isOwner) { doDelete(sheetName, id, null); return; }
+            pendingDelete = { sheet: sheetName, id, mobile };
+            document.getElementById('delPwIn').value = '';
+            openMo('moDelConfirm');
+        }
+        async function confirmDelete() {
+            if (!pendingDelete) return;
+            const pw = document.getElementById('delPwIn').value;
+            if (!pw) { notify('⚠️ Enter your password to confirm!'); return; }
+            await doDelete(pendingDelete.sheet, pendingDelete.id, pw);
+            closeMo('moDelConfirm'); pendingDelete = null;
+        }
+        async function doDelete(sheetName, id, pw) {
+            const d = gs();
+            const payload = { sheet: sheetName, id };
+            if (d.isOwner) payload.adminPw = adminPwCache;
+            else { payload.mobile = d.current?.mobile; payload.pw = pw; }
+            const r = await api('delete', payload);
+            if (r.error) { notify('⚠️ ' + r.error); return; }
+            notify('🗑 Deleted.');
+            loadPublicData();
         }
 
-        // ===== PROFILE — with profile picture display =====
-        function renderProfile() {
-            const d = gs(); const u = d.current;
-            if (!u) { document.getElementById('notLoggedIn').classList.remove('hide'); document.getElementById('loggedInProfile').classList.add('hide'); return; }
-            document.getElementById('notLoggedIn').classList.add('hide'); document.getElementById('loggedInProfile').classList.remove('hide');
-            // Profile picture
-            const avEl = document.getElementById('profAvEl');
-            avEl.innerHTML = u.profilePic ? `<img src="${u.profilePic}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>` : ' 👤';
-            document.getElementById('prfName').textContent = u.name;
-            document.getElementById('prfCity').textContent = (u.city || u.addr || '—');
-            document.getElementById('pdName').textContent = u.name;
-            document.getElementById('pdMobile').textContent = '••••••' + u.mobile.slice(-4);
-            document.getElementById('pdEmail').textContent = u.email;
-            document.getElementById('pdAddr').textContent = u.addr || '—';
-            document.getElementById('pdInst').textContent = u.institution || '—';
-            document.getElementById('pdPlan').textContent = u.plan || 'Free';
-            document.getElementById('achBooks').textContent = u.listCount || 0;
-            document.getElementById('achAsgn').textContent = u.asgnCount || 0;
-            document.getElementById('achFavs').textContent = (d.favs || []).length;
-            document.getElementById('eName').value = u.name;
-            document.getElementById('eAddr').value = u.addr || '';
-            document.getElementById('eInst').value = u.institution || '';
-            // Show current pic in edit modal preview
-            const ep = document.getElementById('editPicPreview');
-            ep.innerHTML = u.profilePic ? `<img src="${u.profilePic}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>` : ' 👤';
-            const ps = document.getElementById('pdPayStatus'); const badge = document.getElementById('prfBadge');
-            if (u.payStatus === 'pending') { ps.innerHTML = `<span style="color:var(--warn);font-weight:700">⏳ Pending — ${u.pendingPlan}</span>`; badge.textContent = '⏳ Pending'; badge.className = 'sub-b pend'; document.getElementById('pdExp').textContent = 'Activates after admin approval'; }
-            else if (u.plan && u.plan !== 'Free') { ps.innerHTML = '<span style="color:var(--ok);font-weight:700">✅ Active</span>'; badge.textContent = u.plan; badge.className = 'sub-b'; if (u.planExpiry === -1) document.getElementById('pdExp').textContent = 'Never (Lifetime)'; else if (u.planExpiry) { const e = new Date(u.planExpiry), left = Math.ceil((e - new Date()) / 86400000); document.getElementById('pdExp').textContent = e.toLocaleDateString('en-IN') + ` (${Math.max(0, left)}d left)`; } }
-            else { ps.textContent = 'Free plan'; badge.textContent = 'Free'; badge.className = 'sub-b exp'; document.getElementById('pdExp').textContent = '—'; }
+        // ===== LISTING SUBMIT =====
+        function computeStream() {
+            const lvl = document.getElementById('levelSel').value;
+            if (lvl === 'school') return 'school';
+            if (lvl === 'competitive') return 'competitive';
+            if (lvl === 'other') return 'other';
+            const course = (document.getElementById('strSel')?.value || '').toLowerCase();
+            const map = { 'bsc cs': 'bsc-cs', 'bsc non-medical': 'bsc-nm', 'ba': 'ba', 'bca': 'bca', 'bba': 'bba', 'bcom': 'bcom', 'btech': 'btech', 'msc': 'msc', 'mca': 'msc', 'mba': 'msc' };
+            return map[course] || 'other';
         }
-
-        async function saveProfile() {
-            const d = gs(); if (!d.current) return;
-            d.current.name = document.getElementById('eName').value.trim() || d.current.name;
-            d.current.addr = document.getElementById('eAddr').value.trim() || d.current.addr;
-            d.current.city = (d.current.addr || '').split(',')[2]?.trim() || d.current.city;
-            d.current.institution = document.getElementById('eInst').value.trim() || d.current.institution;
-            // Save new profile picture if selected
-            const picFile = document.getElementById('ePic').files[0];
-            if (picFile) { try { d.current.profilePic = await resizeImage(picFile); } catch { } }
-            const i = d.users.findIndex(u => u.mobile === d.current.mobile); if (i > -1) d.users[i] = d.current;
-            ss(d); closeMo('moEdit'); renderProfile(); updateStats(); notify('✅ Profile updated!');
-        }
-
-        // ===== FAVOURITES =====
-        function toggleFav(btn, title) { const d = gs(); if (!d.favs) d.favs = []; if (d.favs.includes(title)) { d.favs = d.favs.filter(f => f !== title); btn.textContent = '♡'; btn.classList.remove('saved'); notify('Removed from saved.'); } else { d.favs.push(title); btn.textContent = '♥'; btn.classList.add('saved'); notify('❤️ Saved to favourites!'); } ss(d); }
-        function renderFavs() { const d = gs(); const fg = document.getElementById('favGrid'); if (!d.favs || !d.favs.length) { fg.innerHTML = '<div class="empty-state"><div class="ei">❤️</div><h4>No saved items yet</h4><p>Tap ♡ on any listing to save it here.</p></div>'; return; } fg.innerHTML = d.favs.map(f => `<div class="bk-card"><div class="bk-img">❤️</div><div class="bk-body"><div class="bk-title">${f}</div><button class="btn btn-er btn-xs" style="margin-top:5px" onclick="removeFav('${f.replace(/'/g, "\\'")}')" >Remove</button></div></div>`).join(''); }
-        function removeFav(title) { const d = gs(); d.favs = d.favs.filter(f => f !== title); ss(d); renderFavs(); notify('Removed from saved.'); }
-
-        // ===== SELL FORM — no live location =====
-        function onLT() { const t = document.getElementById('listType').value; document.getElementById('newBWarn').classList.toggle('hide', t !== 'new-book'); document.getElementById('bookF').classList.toggle('hide', t === 'notes' || !t); document.getElementById('notesF').classList.toggle('hide', t !== 'notes'); document.getElementById('usedPG').classList.toggle('hide', t !== 'used-book'); document.getElementById('newBPG').classList.toggle('hide', t !== 'new-book'); }
-        function onLv() { const l = document.getElementById('levelSel').value;['schoolF', 'collegeF', 'compF', 'othLvF'].forEach(id => document.getElementById(id).classList.add('hide')); if (l) { const m = { school: 'schoolF', college: 'collegeF', competitive: 'compF', other: 'othLvF' }; document.getElementById(m[l]).classList.remove('hide'); } }
-        function calcMax() { const o = parseFloat(document.getElementById('origP').value) || 0; document.getElementById('maxP').textContent = o ? `(Max: ₹${Math.floor(o * .6)})` : ''; }
-
         async function submitListing() {
             const d = gs();
             if (!document.getElementById('listType').value || !document.getElementById('levelSel').value) { notify('⚠️ Select listing type and level!'); return; }
             if (!d.current) { document.getElementById('premR').classList.remove('hide'); openMo('moReg'); return; }
             if (!d.current.plan || d.current.plan === 'Free') { document.getElementById('premR').classList.remove('hide'); notify('🔒 Premium required!'); setTimeout(() => go('pricing'), 1100); return; }
             const t = document.getElementById('listType').value;
-            if (t === 'used-book') { const o = parseFloat(document.getElementById('origP').value) || 0, s = parseFloat(document.getElementById('sellP').value) || 0; if (o > 0 && s >= o * .6) { notify('⚠️ Price must be below 60% MRP! Max: ₹' + Math.floor(o * .6)); return; } }
+            let price = '';
+            if (t === 'used-book') {
+                const o = parseFloat(document.getElementById('origP').value) || 0, s = parseFloat(document.getElementById('sellP').value) || 0;
+                if (o > 0 && s >= o * .6) { notify('⚠️ Price must be below 60% MRP! Max: ₹' + Math.floor(o * .6)); return; }
+                price = s;
+            } else if (t === 'new-book') { price = parseFloat(document.getElementById('newP').value) || ''; }
+            else if (t === 'notes') { price = parseFloat(document.getElementById('notesP').value) || ''; }
             const addr = document.getElementById('listAddr').value.trim();
             if (!addr) { notify('⚠️ Please enter your address!'); return; }
             setBtn('submitListBtn', true, 'Submitting...');
-            const now = new Date().toLocaleString('en-IN');
             const title = (t === 'notes' ? document.getElementById('notesTitle').value : document.getElementById('bkTitle').value) || '—';
-            d.listings.push({ type: t, title, addr, at: now });
-            d.current.listCount = (d.current.listCount || 0) + 1;
-            const i = d.users.findIndex(u => u.mobile === d.current.mobile); if (i > -1) d.users[i].listCount = d.current.listCount;
-            ss(d); updateStats();
-            await sheetAppend('Listings', [now, d.current.name, d.current.mobile, t, '', '', title, '—', addr, 'Active']);
-            const ord = ['1st', '2nd', '3rd', '4th', '5th'][Math.min((d.current.listCount || 1) - 1, 4)] || d.current.listCount + 'th';
-            // Add card to real browse grid
-            const grid = document.getElementById(t === 'notes' ? 'notesGrid' : 'bookGrid');
-            const es = grid.querySelector('.empty-state'); if (es) es.remove();
-            const bk = document.createElement('div'); bk.className = 'bk-card'; bk.dataset.stream = 'other';
-            bk.innerHTML = `<button class="fav-btn" onclick="toggleFav(this,'${title.replace(/'/g, "\\'")}')">♡</button><div class="bk-img">${t === 'notes' ? '📝' : t === 'new-book' ? '📗' : '📘'}</div><div class="bk-body"><div style="display:flex;gap:3px;margin-bottom:4px"><span class="badge b-${t === 'notes' ? 'note' : t === 'new-book' ? 'new' : 'used'}">${t === 'notes' ? 'Notes' : t === 'new-book' ? 'New' : 'Used'}</span></div><div class="bk-title">${title}</div><div class="bk-meta">${addr}</div><button class="btn btn-pr btn-xs" style="margin-top:6px;width:100%" onclick="openChatWith('${d.current.name}')">💬 Chat</button></div>`;
-            grid.appendChild(bk);
-            const ml = document.getElementById('myListings'); if (ml.textContent.includes('No listings')) ml.innerHTML = '';
-            const dv = document.createElement('div'); dv.className = 'bk-card'; dv.style.marginBottom = '8px';
-            dv.innerHTML = `<div class="bk-body"><div class="bk-title">${title} <span class="badge b-${t === 'notes' ? 'note' : t === 'new-book' ? 'new' : 'used'}">${t === 'notes' ? 'Notes' : t === 'new-book' ? 'New' : 'Used'}</span></div><div class="bk-meta">${addr} · ✅ Saved</div><span class="ach">🏆 ${ord} Listing</span><div><button class="del-btn" onclick="this.closest('.bk-card').remove();notify('Deleted.')">🗑 Delete</button></div></div>`;
-            ml.appendChild(dv); setBtn('submitListBtn', false, '📤 Submit Listing');
+            const city = addr.split(',')[2]?.trim() || addr.split(',')[0]?.trim() || '—';
+            const stream = computeStream();
+            let photo = '';
+            const photoFile = document.getElementById('listPhoto')?.files[0];
+            if (photoFile) { try { photo = await resizeImage(photoFile, 300); } catch { } }
+            const row = { name: d.current.name, mobile: d.current.mobile, type: t, title, price, city, address: addr, photo, stream };
+            const r = await api('append', { sheet: 'Listings', row });
+            setBtn('submitListBtn', false, '📤 Submit Listing');
+            if (r.error) { notify('⚠️ ' + r.error); return; }
+            const listCount = ((d.current.listCount) || 0) + 1; d.current.listCount = listCount; ss(d);
+            const ord = ['1st', '2nd', '3rd', '4th', '5th'][Math.min(listCount - 1, 4)] || listCount + 'th';
             notify(`📤 Listing saved! 🏆 ${ord} listing.`);
+            loadPublicData();
         }
 
-        // ===== ASSIGNMENTS — no live location =====
+        // ===== ASSIGNMENTS =====
         let curAsgnRole = 'requester';
         function setAsgnRole(role, btn) { curAsgnRole = role; document.querySelectorAll('#asgnRoleSeg button').forEach(b => b.classList.remove('on')); btn.classList.add('on'); document.getElementById('reqFields').classList.toggle('hide', role !== 'requester'); document.getElementById('wriFields').classList.toggle('hide', role !== 'writer'); }
         function onReqLv() { const l = document.getElementById('reqLevel').value; document.getElementById('reqSchoolF').classList.toggle('hide', l !== 'school'); document.getElementById('reqCollegeF').classList.toggle('hide', l !== 'college'); }
@@ -2627,43 +2708,174 @@
             if (isR) { if (!document.getElementById('reqLevel').value || !document.getElementById('reqTitle').value.trim() || !document.getElementById('reqPages').value || !document.getElementById('reqPrice').value || !document.getElementById('reqAddr').value.trim() || !document.getElementById('reqPhoto').files[0]) { notify('⚠️ All fields are required!'); return; } }
             else { if (!document.getElementById('wriSubs').value.trim() || !document.getElementById('wriPrice').value || !document.getElementById('wriLangs').value.trim() || !document.getElementById('wriAddr').value.trim() || !document.getElementById('wriAbout').value.trim() || !document.getElementById('wriSample').files[0]) { notify('⚠️ All fields are required!'); return; } }
             setBtn('asgnSubmitBtn', true, 'Posting...');
-            const now = new Date().toLocaleString('en-IN');
-            d.assignments = d.assignments || []; d.assignments.push({ role: curAsgnRole, name: d.current.name, at: now });
-            d.current.asgnCount = (d.current.asgnCount || 0) + 1;
-            const i = d.users.findIndex(u => u.mobile === d.current.mobile); if (i > -1) d.users[i].asgnCount = d.current.asgnCount;
-            ss(d);
-            await sheetAppend('Assignments', [now, d.current.name, d.current.mobile, curAsgnRole, '—', '—', '—', '—', 'Active']);
             const title = isR ? document.getElementById('reqTitle').value : document.getElementById('wriSubs').value;
             const price = isR ? document.getElementById('reqPrice').value : document.getElementById('wriPrice').value;
             const addr = isR ? document.getElementById('reqAddr').value : document.getElementById('wriAddr').value;
-            const grid = document.getElementById('asgnGrid');
-            const es = grid.querySelector('.empty-state'); if (es) es.remove();
-            const dv = document.createElement('div'); dv.className = 'bk-card'; dv.dataset.atype = curAsgnRole;
-            dv.innerHTML = `<button class="fav-btn" onclick="toggleFav(this,'${title.replace(/'/g, "\\'")}')">♡</button><div class="bk-img">${isR ? '📋' : '✍️'}</div><div class="bk-body"><span class="badge ${isR ? 'b-req' : 'b-wri'}">${isR ? 'REQUEST' : 'WRITER'}</span><div class="bk-title" style="margin-top:4px">${title}</div><div class="bk-meta">₹${price}/page · ${addr}</div><button class="btn btn-pr btn-xs" style="margin-top:6px;width:100%" onclick="openChatWith('${d.current.name}')">💬 Chat</button></div>`;
-            grid.appendChild(dv);
+            const city = addr.split(',')[2]?.trim() || addr.split(',')[0]?.trim() || '—';
+            const details = isR ? '' : document.getElementById('wriAbout').value;
+            const row = { name: d.current.name, mobile: d.current.mobile, role: curAsgnRole, title, price, city, address: addr, details };
+            const r = await api('append', { sheet: 'Assignments', row });
             setBtn('asgnSubmitBtn', false, '✍️ Post Assignment');
+            if (r.error) { notify('⚠️ ' + r.error); return; }
             notify(`✅ ${isR ? 'Request' : 'Writer profile'} posted & saved!`);
             document.querySelectorAll('#assignments .tab')[0].click();
+            loadPublicData();
         }
 
         // ===== REPORT =====
         async function submitReport() {
             const desc = document.getElementById('repDesc').value.trim(); if (!desc) { notify('⚠️ Describe what happened!'); return; }
             setBtn('repBtn', true, 'Submitting...');
-            const d = gs(); const now = new Date().toLocaleString('en-IN');
-            const rep = { type: document.getElementById('repType').value, reported: document.getElementById('repUser').value, amount: document.getElementById('repAmt').value, desc, email: document.getElementById('repEmail').value, at: now };
-            d.reports = d.reports || []; d.reports.push(rep); ss(d);
-            await sheetAppend('Reports', [now, rep.type, rep.reported, rep.amount, desc, rep.email]);
+            const row = { type: document.getElementById('repType').value, reported: document.getElementById('repUser').value, amount: document.getElementById('repAmt').value, desc, email: document.getElementById('repEmail').value };
+            await api('append', { sheet: 'Reports', row });
             setBtn('repBtn', false, '🚨 Submit Report');
             notify('🚨 Report submitted! Team reviews within 24h.');
             document.getElementById('repDesc').value = '';
         }
 
-        // ===== STREAM FILTER =====
-        function fs(el, s) { document.querySelectorAll('#sf .stag').forEach(t => t.classList.remove('on')); el.classList.add('on'); document.querySelectorAll('#bookGrid .bk-card[data-stream]').forEach(c => { c.style.display = (s === 'all' || c.dataset.stream === s) ? '' : 'none'; }); }
-        function switchTab(el, id) { const p = el.closest('.sec') || document; p.querySelectorAll('.tab').forEach(t => t.classList.remove('on')); p.querySelectorAll('.tc').forEach(t => t.classList.remove('on')); el.classList.add('on'); const tc = document.getElementById(id); if (tc) tc.classList.add('on'); }
+        // ===== PAYMENT — Razorpay auto checkout. Amount is decided by the SERVER from the plan name —
+        // the client can never send/alter the amount, so every plan always charges exactly its listed price. =====
+        function payWithRazorpay(planName, moId) {
+            const d = gs();
+            if (!d.current) { notify('⚠️ Please register or login first!'); openMo('moReg'); return; }
+            if (!RAZORPAY_KEY) { notify('⚠️ Razorpay not configured yet by owner.'); return; }
+            if (typeof Razorpay === 'undefined') { notify('⚠️ Payment library failed to load. Check your internet.'); return; }
+            notify('⏳ Starting payment...');
+            api('createOrder', { plan: planName }).then(r => {
+                if (r.error || !r.orderId) { notify('⚠️ ' + (r.error || 'Could not start payment.')); return; }
+                const rzp = new Razorpay({
+                    key: RAZORPAY_KEY, amount: Math.round(r.amount * 100), currency: 'INR', order_id: r.orderId,
+                    name: 'StudyBazaar', description: planName + ' Plan',
+                    prefill: { name: d.current.name, email: d.current.email, contact: d.current.mobile },
+                    theme: { color: '#6c3cdc' },
+                    handler: async function (resp) {
+                        notify('⏳ Verifying payment...');
+                        const vr = await api('verifyPayment', {
+                            orderId: resp.razorpay_order_id, paymentId: resp.razorpay_payment_id, signature: resp.razorpay_signature,
+                            name: d.current.name, mobile: d.current.mobile, email: d.current.email, plan: planName
+                        });
+                        if (vr.error) { notify('⚠️ ' + vr.error); return; }
+                        const dd = gs(); if (dd.current) { dd.current.plan = planName; ss(dd); }
+                        closeMo(moId); notify(`🎉 Payment successful! ${planName} plan activated instantly — you can now buy/sell.`);
+                        renderProfile();
+                    },
+                    modal: { ondismiss: function () { notify('Payment cancelled.'); } }
+                });
+                rzp.open();
+            });
+        }
 
-        // ===== CHAT — real conversations only =====
+        // ===== ADMIN =====
+        async function renderAdmin() {
+            const d = gs(); if (!d.isOwner) return;
+            document.getElementById('admUserList').innerHTML = '<div class="skel-line" style="width:60%"></div>';
+            const [ur, pr, rr] = await Promise.all([
+                api('read', { sheet: 'Users', adminPw: adminPwCache }),
+                api('read', { sheet: 'Payments', adminPw: adminPwCache }),
+                api('read', { sheet: 'Reports', adminPw: adminPwCache })
+            ]);
+            const users = ur.rows || [], payments = pr.rows || [], reports = rr.rows || [];
+            d.userCount = users.length; ss(d); updateStats();
+            document.getElementById('admUC').textContent = users.length;
+            document.getElementById('admUserList').innerHTML = users.length ? users.map(u => `<div class="u-row"><div class="u-av">${u.profilePic ? `<img src="${u.profilePic}"/>` : (u.name || '?')[0]}</div><div class="u-info"><div class="u-name">${escapeHtml(u.name)}</div><div class="u-meta">${escapeHtml(u.mobile)} · ${escapeHtml(u.email)}</div><div class="u-meta">${escapeHtml(u.address || u.city || '—')}</div><div class="u-meta">${escapeHtml(u.institution || '—')} · Joined: ${escapeHtml(u.joinDate || '—')}</div></div><span class="pill ${u.payStatus === 'pending' ? 'pl-pd' : u.plan === 'Free' ? 'pl-free' : u.plan === 'Lifetime' ? 'pl-lf' : 'pl-pr'}">${escapeHtml(u.plan)}${u.payStatus === 'pending' ? ' ⏳' : ''}</span></div>`).join('') : '<div style="color:var(--mt);font-size:.82rem">No users yet.</div>';
+            const appr = payments.slice().reverse();
+            document.getElementById('admApprList').innerHTML = appr.length ? appr.map(p => `<div class="pay-row"><div class="pay-info"><strong>${escapeHtml(p.name)}</strong> · ${escapeHtml(p.mobile)} · <strong>${escapeHtml(p.plan)}</strong> · ₹${p.amount} · <span class="utr-tag">Razorpay: ${escapeHtml(p.ref)}</span> <span style="color:var(--ok);font-size:.72rem">✅ ${escapeHtml(p.approvedAt)}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.82rem">No payments yet.</div>';
+            document.getElementById('admRepList').innerHTML = reports.length ? reports.map(r => `<div class="pay-row"><div class="pay-info"><strong>${escapeHtml(r.type)}</strong><br/>Reported: ${escapeHtml(r.reported || '—')} · ₹${r.amount || 0}<br/>${escapeHtml(r.desc)}<br/><span style="font-size:.7rem;color:var(--mt)">${escapeHtml(r.timestamp)}</span></div></div>`).join('') : '<div style="color:var(--mt);font-size:.82rem">No reports yet.</div>';
+        }
+
+        // ===== PROFILE PICTURE HELPERS =====
+        async function resizeImage(file, maxPx = 200) {
+            return new Promise(resolve => {
+                const img = new Image(), url = URL.createObjectURL(file);
+                img.onload = () => {
+                    let w = img.width, h = img.height;
+                    if (w > h) { h = Math.round(h * maxPx / w); w = maxPx; } else { w = Math.round(w * maxPx / h); h = maxPx; }
+                    const c = document.createElement('canvas'); c.width = w; c.height = h;
+                    c.getContext('2d').drawImage(img, 0, 0, w, h);
+                    URL.revokeObjectURL(url);
+                    resolve(c.toDataURL('image/jpeg', 0.7));
+                };
+                img.onerror = () => resolve('');
+                img.src = url;
+            });
+        }
+        function previewPic(input, previewId) {
+            const prev = document.getElementById(previewId);
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => { prev.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>`; };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+        async function changeProfilePic(input) {
+            if (!input.files || !input.files[0]) return;
+            const d = gs(); if (!d.current) { notify('Please login first!'); return; }
+            if (!currentPwCache) { notify('⚠️ Session expired — please login again to change photo.'); openMo('moLogin'); return; }
+            notify('⏳ Uploading photo...');
+            const pic = await resizeImage(input.files[0]);
+            const r = await api('updateProfile', { mobile: d.current.mobile, pw: currentPwCache, profilePic: pic });
+            if (r.error) { notify('⚠️ ' + r.error); return; }
+            d.current.profilePic = pic; ss(d); renderProfile();
+            notify('✅ Profile photo updated!');
+        }
+
+        // ===== PROFILE =====
+        function renderProfile() {
+            const d = gs(); const u = d.current;
+            if (!u) { document.getElementById('notLoggedIn').classList.remove('hide'); document.getElementById('loggedInProfile').classList.add('hide'); return; }
+            document.getElementById('notLoggedIn').classList.add('hide'); document.getElementById('loggedInProfile').classList.remove('hide');
+            const avEl = document.getElementById('profAvEl');
+            avEl.innerHTML = u.profilePic ? `<img src="${u.profilePic}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block"/>` : ' 👤';
+            document.getElementById('prfName').textContent = u.name;
+            document.getElementById('prfCity').textContent = (u.city || u.address || '—');
+            document.getElementById('pdName').textContent = u.name;
+            document.getElementById('pdMobile').textContent = '••••••' + String(u.mobile).slice(-4);
+            document.getElementById('pdEmail').textContent = u.email;
+            document.getElementById('pdAddr').textContent = u.address || '—';
+            document.getElementById('pdInst').textContent = u.institution || '—';
+            document.getElementById('pdPlan').textContent = u.plan || 'Free';
+            document.getElementById('achBooks').textContent = (d.listings || []).filter(l => String(l.mobile) === String(u.mobile)).length;
+            document.getElementById('achAsgn').textContent = (d.assignments || []).filter(a => String(a.mobile) === String(u.mobile)).length;
+            document.getElementById('achFavs').textContent = (d.favs || []).length;
+            document.getElementById('eName').value = u.name;
+            document.getElementById('eAddr').value = u.address || '';
+            document.getElementById('eInst').value = u.institution || '';
+            const ep = document.getElementById('editPicPreview');
+            ep.innerHTML = u.profilePic ? `<img src="${u.profilePic}" style="width:100%;height:100%;object-fit:cover;border-radius:50%"/>` : ' 👤';
+            const ps = document.getElementById('pdPayStatus'); const badge = document.getElementById('prfBadge');
+            if (u.plan && u.plan !== 'Free') { ps.innerHTML = '<span style="color:var(--ok);font-weight:700">✅ Active</span>'; badge.textContent = u.plan; badge.className = 'sub-b'; if (u.planExpiry === 'lifetime') document.getElementById('pdExp').textContent = 'Never (Lifetime)'; else if (u.planExpiry) { const e = new Date(u.planExpiry), left = Math.ceil((e - new Date()) / 86400000); document.getElementById('pdExp').textContent = e.toLocaleDateString('en-IN') + ` (${Math.max(0, left)}d left)`; } }
+            else { ps.textContent = 'Free plan'; badge.textContent = 'Free'; badge.className = 'sub-b exp'; document.getElementById('pdExp').textContent = '—'; }
+            renderMyListings((d.listings || []));
+        }
+        async function saveProfile() {
+            const d = gs(); if (!d.current) return;
+            const pw = currentPwCache;
+            if (!pw) { notify('⚠️ Session expired — please login again to edit.'); openMo('moLogin'); return; }
+            const name = document.getElementById('eName').value.trim() || d.current.name;
+            const address = document.getElementById('eAddr').value.trim() || d.current.address;
+            const city = address.split(',')[2]?.trim() || address.split(',')[0]?.trim() || d.current.city;
+            const institution = document.getElementById('eInst').value.trim() || d.current.institution;
+            let profilePic = '';
+            const picFile = document.getElementById('ePic').files[0];
+            if (picFile) { try { profilePic = await resizeImage(picFile); } catch { } }
+            const r = await api('updateProfile', { mobile: d.current.mobile, pw, name, address, city, institution, profilePic });
+            if (r.error) { notify('⚠️ ' + r.error); return; }
+            d.current.name = name; d.current.address = address; d.current.city = city; d.current.institution = institution;
+            if (profilePic) d.current.profilePic = profilePic;
+            ss(d); closeMo('moEdit'); renderProfile(); updateStats(); notify('✅ Profile updated & saved!');
+        }
+
+        // ===== FAVOURITES (kept local — personal bookmarks, device-specific by design) =====
+        function toggleFav(btn, title) { const d = gs(); if (!d.favs) d.favs = []; if (d.favs.includes(title)) { d.favs = d.favs.filter(f => f !== title); btn.textContent = '♡'; btn.classList.remove('saved'); notify('Removed from saved.'); } else { d.favs.push(title); btn.textContent = '♥'; btn.classList.add('saved'); notify('❤️ Saved to favourites!'); } ss(d); }
+        function renderFavs() { const d = gs(); const fg = document.getElementById('favGrid'); if (!d.favs || !d.favs.length) { fg.innerHTML = '<div class="empty-state"><div class="ei">❤️</div><h4>No saved items yet</h4><p>Tap ♡ on any listing to save it here.</p></div>'; return; } fg.innerHTML = d.favs.map(f => `<div class="bk-card"><div class="bk-img">❤️</div><div class="bk-body"><div class="bk-title">${escapeHtml(f)}</div><button class="btn btn-er btn-xs" style="margin-top:5px" onclick="removeFav('${f.replace(/'/g, "\\'")}')" >Remove</button></div></div>`).join(''); }
+        function removeFav(title) { const d = gs(); d.favs = d.favs.filter(f => f !== title); ss(d); renderFavs(); notify('Removed from saved.'); }
+
+        // ===== LISTING FORM TOGGLES =====
+        function onLT() { const t = document.getElementById('listType').value; document.getElementById('newBWarn').classList.toggle('hide', t !== 'new-book'); document.getElementById('bookF').classList.toggle('hide', t === 'notes' || !t); document.getElementById('notesF').classList.toggle('hide', t !== 'notes'); document.getElementById('usedPG').classList.toggle('hide', t !== 'used-book'); document.getElementById('newBPG').classList.toggle('hide', t !== 'new-book'); }
+        function onLv() { const l = document.getElementById('levelSel').value;['schoolF', 'collegeF', 'compF', 'othLvF'].forEach(id => document.getElementById(id).classList.add('hide')); if (l) { const m = { school: 'schoolF', college: 'collegeF', competitive: 'compF', other: 'othLvF' }; document.getElementById(m[l]).classList.remove('hide'); } }
+        function calcMax() { const o = parseFloat(document.getElementById('origP').value) || 0; document.getElementById('maxP').textContent = o ? `(Max: ₹${Math.floor(o * .6)})` : ''; }
+
+        // ===== CHAT — real conversations, kept local (device-specific for now — see note) =====
         let activeChatUser = null;
         function renderChat() {
             const d = gs();
@@ -2673,9 +2885,8 @@
             const listEl = document.getElementById('chatListEl');
             if (!names.length) { listEl.innerHTML = '<div style="padding:14px;font-size:.82rem;color:var(--mt)">No conversations yet. Click 💬 Chat on any listing.</div>'; return; }
             listEl.innerHTML = names.map(n => {
-                const u = d.users.find(x => x.name === n);
-                const av = u?.profilePic ? `<img src="${u.profilePic}"/>` : (n[0] || '?');
-                return `<div class="cli${activeChatUser === n ? ' on' : ''}" onclick="openDM(this,'${n}')"><div class="cav">${av}</div><div><div style="font-weight:700;font-size:.81rem">${n}</div><div style="font-size:.69rem;color:var(--mt)">${(chats[n] || []).slice(-1)[0]?.text || 'Tap to chat'}</div></div></div>`;
+                const av = (n[0] || '?');
+                return `<div class="cli${activeChatUser === n ? ' on' : ''}" onclick="openDM(this,'${n}')"><div class="cav">${av}</div><div><div style="font-weight:700;font-size:.81rem">${escapeHtml(n)}</div><div style="font-size:.69rem;color:var(--mt)">${escapeHtml((chats[n] || []).slice(-1)[0]?.text || 'Tap to chat')}</div></div></div>`;
             }).join('');
         }
         function openChatWith(name) {
@@ -2686,13 +2897,12 @@
         function openDM(el, name) { document.querySelectorAll('.cli').forEach(i => i.classList.remove('on')); el.classList.add('on'); activeChatUser = name; renderMessages(name); }
         function renderMessages(name) {
             document.getElementById('cwNm').textContent = name;
-            const d = gs(); const u = d.users.find(x => x.name === name);
-            const avEl = document.getElementById('cwAv');
-            avEl.innerHTML = u?.profilePic ? `<img src="${u.profilePic}"/>` : (name[0] || '?');
+            const d = gs();
+            const avEl = document.getElementById('cwAv'); avEl.innerHTML = (name[0] || '?');
             const msgs = d.chats && d.chats[name] ? d.chats[name] : [];
             const el = document.getElementById('chatMsgs');
-            if (!msgs.length) { el.innerHTML = `<div class="chat-empty-state"><div style="font-size:2rem;margin-bottom:8px">💬</div><div style="font-size:.83rem">Start your conversation with <strong>${name}</strong>.</div></div>`; return; }
-            el.innerHTML = msgs.map(m => `<div class="msg ${m.mine ? 's' : 'r'}">${m.text}<div class="msg-mt">${m.mine ? 'You' : name} · ${m.time}</div></div>`).join('');
+            if (!msgs.length) { el.innerHTML = `<div class="chat-empty-state"><div style="font-size:2rem;margin-bottom:8px">💬</div><div style="font-size:.83rem">Start your conversation with <strong>${escapeHtml(name)}</strong>.</div></div>`; return; }
+            el.innerHTML = msgs.map(m => `<div class="msg ${m.mine ? 's' : 'r'}">${escapeHtml(m.text)}<div class="msg-mt">${m.mine ? 'You' : escapeHtml(name)} · ${m.time}</div></div>`).join('');
             el.scrollTop = el.scrollHeight;
         }
         function sendMsg() {
@@ -2703,8 +2913,33 @@
             renderMessages(activeChatUser); renderChat();
         }
 
-        // ===== AI BOT — FIXED response handling =====
-        let botHistory = [];
+        // ===== ZIYA — instant rule-based assistant (no external API, so it never hangs) =====
+        const ZIYA_INTENTS = [
+            { kw: ['hi', 'hello', 'hey', 'namaste', 'hii', 'helo'], a: "Hi there! 👋 I'm Ziya. Ask me about selling, buying, plans, payments, registration, or safety — I can help instantly!" },
+            { kw: ['sell', 'list', 'listing', 'post book', 'kaise bechu', 'becha', 'upload'], a: "To sell: go to **Sell** tab → pick New/Used Book or Notes → fill details & price → submit. You need an active Premium plan to list (Free plan is browse-only)." },
+            { kw: ['buy', 'browse', 'purchase', 'kharid', 'search book'], a: "Browsing is free for everyone! Go to **Browse**, use the filters (price, location, new/used) to find what you need, then tap 💬 Chat on any listing to talk to the seller directly." },
+            { kw: ['plan', 'price', 'pricing', 'cost', 'premium', 'subscription', 'kitna', 'kharcha'], a: "Plans: Monthly ₹10/30 days, Annual ₹100/year (best value), New Book Seller ₹50/mo, Lifetime ₹500 one-time. Free plan lets you browse only." },
+            { kw: ['pay', 'payment', 'utr', 'upi', 'razorpay', 'paisa', 'transaction'], a: "Two ways to pay: ⚡ Razorpay (instant, auto-activates your plan) or UPI QR + UTR (admin verifies manually, can take a few hours). Never pay sellers in advance — always pay on delivery!" },
+            { kw: ['regist', 'signup', 'sign up', 'account', 'kaise banau', 'create account'], a: "Registration needs: full name, 10-digit mobile, email, DOB, full address, institution name, Aadhar (kept private), and a password. Profile photo is optional." },
+            { kw: ['chat', 'message', 'dm', 'baat'], a: "Direct chat with buyers/sellers is a Premium feature. Tap 💬 Chat on any listing once you have an active plan." },
+            { kw: ['assignment', 'writer', 'homework', 'notes writing'], a: "In **Assignments** you can either post a request (need something written) or list yourself as a writer. Both need a Premium plan." },
+            { kw: ['profile pic', 'photo', 'dp', 'picture'], a: "You can add/change your profile photo during registration or anytime from the **Profile** page." },
+            { kw: ['delete', 'remove', 'hatana', 'hataye'], a: "You can delete your own listings anytime from **My Listings** in your Profile (or the 🗑 button on the card) — you'll just confirm with your password. Only you or the site owner can delete your listing." },
+            { kw: ['filter', 'sort', 'dhund', 'search'], a: "On the Browse page you'll find filters for price range, location, and New/Used/Notes — plus the subject tags at the top. Combine them to narrow results fast." },
+            { kw: ['fraud', 'scam', 'safe', 'safety', 'report', 'cheat'], a: "Safety tip: always pay only on delivery, never in advance. If something feels wrong, use the **Report** page in the footer — our team reviews within 24h." },
+            { kw: ['who are you', 'what are you', 'your name', 'about studybazaar', 'kaun ho'], a: "I'm Ziya, StudyBazaar's helper! StudyBazaar is India's student book & notes exchange — buy, sell, or find assignment help, all in one place. 📚🇮🇳" },
+            { kw: ['thank', 'thanks', 'dhanyavad', 'shukriya'], a: "You're welcome! 😊 Happy to help anytime." },
+            { kw: ['bye', 'goodbye', 'alvida'], a: "Bye! 👋 Come back anytime you need help." }
+        ];
+        function ziyaReply(q) {
+            const s = q.toLowerCase();
+            let best = null, bestScore = 0;
+            ZIYA_INTENTS.forEach(intent => {
+                const score = intent.kw.reduce((n, k) => n + (s.includes(k) ? 1 : 0), 0);
+                if (score > bestScore) { bestScore = score; best = intent; }
+            });
+            return best ? best.a : "I can help with buying, selling, plans, payments, registration, assignments, filters, or safety — try asking about one of these! 📚";
+        }
         function toggleBot() { document.getElementById('botPanel').classList.toggle('open'); }
         async function sendBot() {
             const inp = document.getElementById('botIn'); const q = inp.value.trim(); if (!q) return;
@@ -2712,37 +2947,12 @@
             const msgs = document.getElementById('botMsgs');
             const ud = document.createElement('div'); ud.className = 'bm usr'; ud.textContent = q; msgs.appendChild(ud); msgs.scrollTop = msgs.scrollHeight;
             const td = document.createElement('div'); td.className = 'bm bot'; td.innerHTML = '<em style="opacity:.5;font-size:.77rem">Ziya is typing...</em>'; msgs.appendChild(td); msgs.scrollTop = msgs.scrollHeight;
-            botHistory.push({ role: 'user', content: q });
-            if (botHistory.length > 20) botHistory = botHistory.slice(-20);
-            const sys = `You are Ziya, a friendly AI assistant for StudyBazaar — India's student book exchange platform. Remember the full conversation. Speak in warm Indian-English. Be concise (2-4 sentences).
-Plans: Free(browse only), Monthly ₹10/30d, Annual ₹100/year(MOST POPULAR), New Book Seller ₹50/mo, Lifetime ₹500.
-Payment: UPI → UTR → admin manually verifies → plan activates. NOT instant. Never pay advance to sellers. Pay only on delivery.
-Registration needs: full address (single line: Street, Colony, City, State – PIN), name, mobile (1 per account), email, DOB, institution, Aadhar (private), profile photo (optional).
-Chat: Premium users only. Real conversations only.
-Assignments: Requesters post requests, Writers list services. Both need Premium.
-Profile picture: can be uploaded during registration or changed anytime from Profile page.
-Google Sheets backend. Admin verifies payments. Report fraud in navigation.`;
-            try {
-                // FIXED: properly handle response from Supabase Edge Function
-                const res = await fetch('https://yzlbbxxmidhgvxgvqpna.supabase.co/functions/v1/study-bazaar-reply', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1000, system: sys, messages: botHistory })
-                });
-                const data = await res.json();
-                // Handle both direct Anthropic format and wrapped format
-                const reply = data.content?.[0]?.text || data.reply || data.message || data.text || "I'm having trouble right now. Please try again!";
-                botHistory.push({ role: 'assistant', content: reply });
-                td.innerHTML = reply.replace(/\n/g, '<br/>');
-            } catch (err) {
-                td.textContent = 'Connection issue. Please check internet and try again.';
-                botHistory.pop();
-            }
-            inp.disabled = false; msgs.scrollTop = msgs.scrollHeight;
+            const reply = ziyaReply(q);
+            setTimeout(() => { td.innerHTML = reply.replace(/\n/g, '<br/>'); inp.disabled = false; msgs.scrollTop = msgs.scrollHeight; inp.focus(); }, 350 + Math.random() * 250);
         }
 
         // ===== INIT =====
-        renderProfile(); updateStats();
+        renderProfile(); loadPublicData();
     </script>
 </body>
 
