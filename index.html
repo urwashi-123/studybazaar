@@ -1429,6 +1429,11 @@
         .or-div { display: flex; align-items: center; gap: 10px; margin: 12px 0; color: var(--mt); font-size: .72rem }
         .or-div::before, .or-div::after { content: ''; flex: 1; height: 1px; background: var(--bd) }
 
+        /* photo gallery dots on listing cards */
+        .img-dots { position: absolute; bottom: 6px; left: 0; right: 0; display: flex; justify-content: center; gap: 4px }
+        .idot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, .6); border: 1px solid rgba(0, 0, 0, .15); cursor: pointer }
+        .idot.on { background: var(--pr); border-color: var(--pr) }
+
         @media (prefers-reduced-motion: reduce) {
             .page.active, .mo-box, .bot-panel.open, .bk-card, .skel-block, .skel-line { animation: none }
         }
@@ -1806,7 +1811,7 @@
                             <input type="text" id="listAddr"
                                 placeholder="e.g. Sector 14, Model Town, Rohtak, Haryana – 124001" />
                         </div>
-                        <div class="fg"><label>Photo</label><input type="file" id="listPhoto" accept="image/*" /></div>
+                        <div class="fg"><label>Photos (up to 4)</label><input type="file" id="listPhoto" accept="image/*" multiple /></div>
                         <div class="fg"><label>Description</label><textarea rows="2"
                                 placeholder="Any extra details..."></textarea></div>
                         <div
@@ -2560,6 +2565,21 @@
 
         function typeMeta(t) { return { 'notes': { icon: '📝', badge: 'b-note', label: 'Notes' }, 'new-book': { icon: '📗', badge: 'b-new', label: 'New' }, 'used-book': { icon: '📘', badge: 'b-used', label: 'Used' } }[t] || { icon: '📘', badge: 'b-used', label: t }; }
 
+        function photoGalleryHTML(photoField, fallbackIcon) {
+            let imgs = [];
+            if (photoField) { try { const parsed = JSON.parse(photoField); imgs = Array.isArray(parsed) ? parsed : [photoField]; } catch { imgs = [photoField]; } }
+            imgs = imgs.filter(Boolean);
+            if (!imgs.length) return `<div class="bk-img">${fallbackIcon}</div>`;
+            const uid = 'g' + Math.random().toString(36).slice(2, 9);
+            const slides = imgs.map((src, i) => `<img src="${src}" style="width:100%;height:100%;object-fit:cover;display:${i === 0 ? 'block' : 'none'}" data-slide="${i}"/>`).join('');
+            const dots = imgs.length > 1 ? `<div class="img-dots">${imgs.map((_, i) => `<span class="idot${i === 0 ? ' on' : ''}" onclick="event.stopPropagation();switchSlide('${uid}',${i})"></span>`).join('')}</div>` : '';
+            return `<div class="bk-img" id="${uid}" style="position:relative;padding:0">${slides}${dots}</div>`;
+        }
+        function switchSlide(uid, idx) {
+            const box = document.getElementById(uid); if (!box) return;
+            box.querySelectorAll('img').forEach(im => im.style.display = (+im.dataset.slide === idx) ? 'block' : 'none');
+            box.querySelectorAll('.idot').forEach((d, i) => d.classList.toggle('on', i === idx));
+        }
         function listingCardHTML(l) {
             const m = typeMeta(l.type); const d = gs();
             const mine = d.current && String(d.current.mobile) === String(l.mobile);
@@ -2567,7 +2587,7 @@
             const priceHtml = l.price ? `<div class="p-row"><span class="p-now">₹${l.price}</span></div>` : '';
             return `<div class="bk-card" data-stream="${l.stream || 'other'}" data-id="${l.id}" data-mobile="${l.mobile}" data-price="${l.price || 0}" data-city="${(l.city || '').toLowerCase()}" data-type="${l.type}">
                 <button class="fav-btn" onclick="toggleFav(this,'${String(l.title).replace(/'/g, "\\'")}')">♡</button>
-                <div class="bk-img">${m.icon}</div>
+                ${photoGalleryHTML(l.photo, m.icon)}
                 <div class="bk-body">
                     <div style="display:flex;gap:3px;margin-bottom:4px"><span class="badge ${m.badge}">${m.label}</span></div>
                     <div class="bk-title">${escapeHtml(l.title)}</div>
@@ -2612,13 +2632,18 @@
             const grid = document.getElementById('asgnGrid'); grid.dataset.loaded = '1';
             grid.innerHTML = rows.length ? rows.map(assignmentCardHTML).join('') : '<div class="empty-state"><div class="ei">✍️</div><h4>No assignments posted yet</h4></div>';
         }
+        function firstPhoto(photoField) {
+            if (!photoField) return '';
+            try { const p = JSON.parse(photoField); return Array.isArray(p) ? (p[0] || '') : photoField; } catch { return photoField; }
+        }
         function renderMyListings(rows) {
             const d = gs(); const ml = document.getElementById('myListings'); if (!ml) return;
             if (!d.current) { ml.innerHTML = '<div style="color:var(--mt);font-size:.82rem">Login to see your listings.</div>'; return; }
             const mine = (rows || []).filter(l => String(l.mobile) === String(d.current.mobile));
             ml.innerHTML = mine.length ? mine.map(l => {
-                const m = typeMeta(l.type);
-                return `<div class="bk-card" style="margin-bottom:8px"><div class="bk-body"><div class="bk-title">${escapeHtml(l.title)} <span class="badge ${m.badge}">${m.label}</span></div><div class="bk-meta">${escapeHtml(l.city || l.address || '')}${l.price ? ' · ₹' + l.price : ''} · ✅ Saved</div><button class="del-btn" onclick="promptDelete('Listings','${l.id}','${l.mobile}')">🗑 Delete</button></div></div>`;
+                const m = typeMeta(l.type); const thumb = firstPhoto(l.photo);
+                const thumbHtml = thumb ? `<img src="${thumb}" style="width:46px;height:46px;object-fit:cover;border-radius:8px;flex-shrink:0"/>` : `<div style="width:46px;height:46px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1.3rem;background:linear-gradient(135deg,#ede9fe,#fef3c7)">${m.icon}</div>`;
+                return `<div class="bk-card" style="margin-bottom:8px"><div class="bk-body" style="display:flex;gap:9px;align-items:flex-start">${thumbHtml}<div style="flex:1;min-width:0"><div class="bk-title">${escapeHtml(l.title)} <span class="badge ${m.badge}">${m.label}</span></div><div class="bk-meta">${escapeHtml(l.city || l.address || '')}${l.price ? ' · ₹' + l.price : ''} · ✅ Saved</div><button class="del-btn" onclick="promptDelete('Listings','${l.id}','${l.mobile}')">🗑 Delete</button></div></div></div>`;
             }).join('') : '<div style="color:var(--mt);font-size:.82rem">No listings yet.</div>';
         }
 
@@ -2711,8 +2736,8 @@
             const city = addr.split(',')[2]?.trim() || addr.split(',')[0]?.trim() || '—';
             const stream = computeStream();
             let photo = '';
-            const photoFile = document.getElementById('listPhoto')?.files[0];
-            if (photoFile) { try { photo = await resizeImage(photoFile, 300); } catch { } }
+            const photoFiles = Array.from(document.getElementById('listPhoto')?.files || []).slice(0, 4);
+            if (photoFiles.length) { try { const imgs = (await Promise.all(photoFiles.map(f => resizeImage(f, 260, 0.5)))).filter(Boolean); photo = JSON.stringify(capPhotosToSheetLimit(imgs)); } catch { } }
             const row = { name: d.current.name, mobile: d.current.mobile, type: t, title, price, city, address: addr, photo, stream };
             const r = await api('append', { sheet: 'Listings', row });
             setBtn('submitListBtn', false, '📤 Submit Listing');
@@ -2813,7 +2838,16 @@
         }
 
         // ===== PROFILE PICTURE HELPERS =====
-        async function resizeImage(file, maxPx = 200) {
+        function capPhotosToSheetLimit(imgs, maxTotalChars = 42000) {
+            const kept = []; let total = 2; // account for JSON [ ]
+            for (const im of imgs) {
+                const add = im.length + 3; // quotes + comma
+                if (total + add > maxTotalChars) break;
+                kept.push(im); total += add;
+            }
+            return kept;
+        }
+        async function resizeImage(file, maxPx = 200, quality = 0.7) {
             return new Promise(resolve => {
                 const img = new Image(), url = URL.createObjectURL(file);
                 img.onload = () => {
@@ -2822,7 +2856,7 @@
                     const c = document.createElement('canvas'); c.width = w; c.height = h;
                     c.getContext('2d').drawImage(img, 0, 0, w, h);
                     URL.revokeObjectURL(url);
-                    resolve(c.toDataURL('image/jpeg', 0.7));
+                    resolve(c.toDataURL('image/jpeg', quality));
                 };
                 img.onerror = () => resolve('');
                 img.src = url;
