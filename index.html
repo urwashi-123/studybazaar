@@ -1434,6 +1434,25 @@
         .idot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, .6); border: 1px solid rgba(0, 0, 0, .15); cursor: pointer }
         .idot.on { background: var(--pr); border-color: var(--pr) }
 
+        /* photo picker (Sell form) */
+        .photo-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px }
+        .ph-thumb, .ph-add { width: 64px; height: 64px; border-radius: 10px; position: relative; flex-shrink: 0 }
+        .ph-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 10px }
+        .ph-thumb button { position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%; background: var(--er); color: #fff; border: 2px solid #fff; font-size: .65rem; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0 }
+        .ph-add { border: 1.5px dashed var(--bd); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; color: var(--mt); gap: 1px }
+        .ph-add span { font-size: 1.2rem; line-height: 1 }
+        .ph-add small { font-size: .58rem }
+        .ph-add:hover { border-color: var(--pr); color: var(--pr) }
+
+        /* listing detail modal */
+        .ld-gallery img#ldMainImg { width: 100%; height: 220px; object-fit: cover; border-radius: 10px }
+        .ld-thumbs { display: flex; gap: 6px; margin-top: 6px; overflow-x: auto }
+        .ld-thumbs img { width: 48px; height: 48px; object-fit: cover; border-radius: 7px; cursor: pointer; opacity: .6; flex-shrink: 0 }
+        .ld-thumbs img.on { opacity: 1; outline: 2px solid var(--pr) }
+        .ld-rows { border-top: 1px solid var(--bd); margin-top: 4px }
+        .ld-row { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--bd); font-size: .82rem }
+        .ld-row span { color: var(--mt) }
+
         @media (prefers-reduced-motion: reduce) {
             .page.active, .mo-box, .bot-panel.open, .bk-card, .skel-block, .skel-line { animation: none }
         }
@@ -1639,7 +1658,22 @@
                 </div>
                 <div class="flt-group flt-grow">
                     <label>📍 Location</label>
-                    <input type="text" id="fltLocation" placeholder="City / area..." oninput="debounceFilter()" />
+                    <div style="display:flex;gap:5px">
+                        <input type="text" id="fltLocation" placeholder="City / area..."
+                            oninput="onFltLocationTyped()" style="flex:1" />
+                        <button type="button" class="btn btn-sc btn-xs" onclick="useMyLocationForSearch()"
+                            title="Use my current location">📍</button>
+                    </div>
+                    <select id="fltRadius" onchange="applyFilters()" style="margin-top:5px;width:100%">
+                        <option value="0">Any distance</option>
+                        <option value="1">Within 1 km</option>
+                        <option value="2">Within 2 km</option>
+                        <option value="5">Within 5 km</option>
+                        <option value="10">Within 10 km</option>
+                        <option value="25">Within 25 km</option>
+                        <option value="50">Within 50 km</option>
+                    </select>
+                    <div id="fltLocStatus" style="font-size:.68rem;color:var(--mt);margin-top:2px"></div>
                 </div>
                 <div class="flt-group flt-grow">
                     <label>🏷️ Type</label>
@@ -1719,7 +1753,7 @@
                                 <option value="other">📌 Other</option>
                             </select></div>
                         <div id="schoolF" class="hide">
-                            <div class="fg"><label>Class *</label><select>
+                            <div class="fg"><label>Class *</label><select id="schoolClass">
                                     <option>Class 1</option>
                                     <option>Class 2</option>
                                     <option>Class 3</option>
@@ -1733,7 +1767,7 @@
                                     <option>Class 11</option>
                                     <option>Class 12</option>
                                 </select></div>
-                            <div class="fg"><label>Subject *</label><input type="text" placeholder="Subject name" />
+                            <div class="fg"><label>Subject *</label><input type="text" id="schoolSubject" placeholder="Subject name" />
                             </div>
                         </div>
                         <div id="collegeF" class="hide">
@@ -1752,7 +1786,7 @@
                                     <option>PhD</option>
                                     <option>Other</option>
                                 </select></div>
-                            <div class="fg"><label>Semester *</label><select>
+                            <div class="fg"><label>Semester *</label><select id="collegeSem">
                                     <option>Sem 1</option>
                                     <option>Sem 2</option>
                                     <option>Sem 3</option>
@@ -1763,14 +1797,14 @@
                                     <option>Year 2</option>
                                     <option>Year 3</option>
                                 </select></div>
-                            <div class="fg"><label>Subject *</label><input type="text" placeholder="Subject" /></div>
+                            <div class="fg"><label>Subject *</label><input type="text" id="collegeSubject" placeholder="Subject" /></div>
                         </div>
                         <div id="compF" class="hide">
-                            <div class="fg"><label>Exam *</label><input type="text" placeholder="JEE, NEET, UPSC..." />
+                            <div class="fg"><label>Exam *</label><input type="text" id="compExam" placeholder="JEE, NEET, UPSC..." />
                             </div>
                         </div>
                         <div id="othLvF" class="hide">
-                            <div class="fg"><label>Describe *</label><input type="text"
+                            <div class="fg"><label>Describe *</label><input type="text" id="othDesc"
                                     placeholder="e.g. ITI, Polytechnic" /></div>
                         </div>
                         <div id="bookF" class="hide">
@@ -1782,7 +1816,7 @@
                                 </select></div>
                             <div class="fg"><label>Book Title *</label><input type="text" id="bkTitle"
                                     placeholder="Full book name" /></div>
-                            <div class="fg"><label>Author</label><input type="text" placeholder="Author name" /></div>
+                            <div class="fg"><label>Publication / Edition</label><input type="text" id="bookAuthor" placeholder="e.g. Jeevansons Publication" /></div>
                             <div id="usedPG" class="hide">
                                 <div class="fg"><label>Original MRP (₹) *</label><input type="number" id="origP"
                                         oninput="calcMax()" placeholder="Price on book cover" /></div>
@@ -1803,20 +1837,35 @@
                             <div class="fg"><label>Price (₹) *</label><input type="number" id="notesP"
                                     placeholder="Your asking price" /></div>
                         </div>
-                        <!-- SINGLE ADDRESS LINE — no live location -->
                         <div class="fg">
-                            <label>📍 Full Address * <span
-                                    style="font-size:.68rem;color:var(--mt);font-weight:400">(Street, Colony, City,
-                                    State – PIN)</span></label>
-                            <input type="text" id="listAddr"
-                                placeholder="e.g. Sector 14, Model Town, Rohtak, Haryana – 124001" />
+                            <label>🏙️ City / Town *</label>
+                            <div style="display:flex;gap:6px">
+                                <input type="text" id="listCity" placeholder="e.g. Hisar" style="flex:1" />
+                                <button type="button" class="btn btn-sc btn-xs" id="listLocBtn"
+                                    onclick="useMyLocation()" title="Use my current location">📍 Use My Location</button>
+                            </div>
+                            <div id="listLocStatus" style="font-size:.7rem;color:var(--mt);margin-top:3px"></div>
                         </div>
-                        <div class="fg"><label>Photos (up to 4)</label><input type="file" id="listPhoto" accept="image/*" multiple /></div>
-                        <div class="fg"><label>Description</label><textarea rows="2"
+                        <div class="fg">
+                            <label>📍 Landmark / Street <span
+                                    style="font-size:.68rem;color:var(--mt);font-weight:400">(optional — exact meetup
+                                    spot, shown only after buyer chats you)</span></label>
+                            <input type="text" id="listAddr"
+                                placeholder="e.g. Near Malik Chowk" />
+                        </div>
+                        <div class="fg"><label>Photos (up to 4)</label>
+                            <input type="file" id="listPhoto" accept="image/*" multiple style="display:none" onchange="onPhotoFilesPicked(this)" />
+                            <div id="photoPicker" class="photo-picker"></div>
+                        </div>
+                        <div class="fg"><label>Description</label><textarea rows="2" id="listDesc"
                                 placeholder="Any extra details..."></textarea></div>
                         <div
                             style="background:#fffbeb;border:1px solid #fcd34d;border-radius:7px;padding:7px 10px;font-size:.75rem;color:#92400e;margin-bottom:10px">
                             ⚠️ Do NOT share phone number in listing. Share privately in Chat only.</div>
+                        <div
+                            style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:7px;padding:7px 10px;font-size:.75rem;color:#065f46;margin-bottom:10px">
+                            ✅ Once your deal is done, please delete this listing (My Listings → 🗑 Delete) so other
+                            buyers don't keep contacting you for something that's already sold.</div>
                         <div id="premR" class="hide">
                             <div class="info-b">🔒 Premium required to list. <button class="btn btn-pr btn-xs"
                                     onclick="go('pricing')">View Plans</button></div>
@@ -2303,6 +2352,14 @@
     </div>
 
     <!-- DELETE CONFIRM -->
+    <!-- LISTING DETAIL -->
+    <div class="mo" id="moListingDetail">
+        <div class="mo-box" style="max-width:420px">
+            <button class="mo-close" onclick="closeMo('moListingDetail')">×</button>
+            <div id="ldContent"></div>
+        </div>
+    </div>
+
     <div class="mo" id="moDelConfirm">
         <div class="mo-box"><button class="mo-close" onclick="closeMo('moDelConfirm')">×</button>
             <h3>🗑 Confirm Delete</h3>
@@ -2585,19 +2642,41 @@
             const mine = d.current && String(d.current.mobile) === String(l.mobile);
             const canDelete = mine || d.isOwner;
             const priceHtml = l.price ? `<div class="p-row"><span class="p-now">₹${l.price}</span></div>` : '';
-            return `<div class="bk-card" data-stream="${l.stream || 'other'}" data-id="${l.id}" data-mobile="${l.mobile}" data-price="${l.price || 0}" data-city="${(l.city || '').toLowerCase()}" data-type="${l.type}">
+            return `<div class="bk-card" data-stream="${l.stream || 'other'}" data-id="${l.id}" data-mobile="${l.mobile}" data-price="${l.price || 0}" data-city="${(l.city || '').toLowerCase()}" data-type="${l.type}" data-lat="${l.lat || ''}" data-lng="${l.lng || ''}">
                 <button class="fav-btn" onclick="toggleFav(this,'${String(l.title).replace(/'/g, "\\'")}')">♡</button>
-                ${photoGalleryHTML(l.photo, m.icon)}
+                <div onclick="showListingDetail('${l.id}')" style="cursor:pointer">${photoGalleryHTML(l.photo, m.icon)}</div>
                 <div class="bk-body">
                     <div style="display:flex;gap:3px;margin-bottom:4px"><span class="badge ${m.badge}">${m.label}</span></div>
-                    <div class="bk-title">${escapeHtml(l.title)}</div>
+                    <div class="bk-title" onclick="showListingDetail('${l.id}')" style="cursor:pointer">${escapeHtml(l.title)}</div>
                     ${priceHtml}
                     <div class="bk-meta">📍 ${escapeHtml(l.city || l.address || '')}</div>
                     <div style="display:flex;gap:5px;margin-top:6px">
+                        <button class="btn btn-sc btn-xs" onclick="showListingDetail('${l.id}')">🔍 Details</button>
                         <button class="btn btn-pr btn-xs" style="flex:1" onclick="openChatWith('${String(l.name).replace(/'/g, "\\'")}')">💬 Chat</button>
                         ${canDelete ? `<button class="del-btn" onclick="promptDelete('Listings','${l.id}','${l.mobile}')" title="Delete">🗑</button>` : ''}
                     </div>
                 </div></div>`;
+        }
+        function showListingDetail(id) {
+            const d = gs(); const l = (d.listings || []).find(x => String(x.id) === String(id));
+            if (!l) return;
+            const m = typeMeta(l.type);
+            let imgs = []; if (l.photo) { try { const p = JSON.parse(l.photo); imgs = Array.isArray(p) ? p : [l.photo]; } catch { imgs = [l.photo]; } }
+            imgs = imgs.filter(Boolean);
+            const gallery = imgs.length ? `<div class="ld-gallery"><img id="ldMainImg" src="${imgs[0]}"/>${imgs.length > 1 ? `<div class="ld-thumbs">${imgs.map((src, i) => `<img src="${src}" onclick="document.getElementById('ldMainImg').src=this.src;this.parentElement.querySelectorAll('img').forEach(t=>t.classList.remove('on'));this.classList.add('on')" class="${i === 0 ? 'on' : ''}"/>`).join('')}</div>` : ''}</div>` : `<div class="bk-img" style="height:130px">${m.icon}</div>`;
+            const rows = [];
+            rows.push(['Type', m.label]);
+            if (l.condition) rows.push(['Condition', l.condition]);
+            if (l.author) rows.push(['Publication', l.author]);
+            if (l.subject) rows.push(['Subject/Exam', l.subject]);
+            if (l.levelInfo) rows.push(['Class/Sem', l.levelInfo]);
+            if (l.price) rows.push(['Price', '₹' + l.price]);
+            rows.push(['Location', l.city + (l.address ? ' — ' + l.address : '')]);
+            rows.push(['Seller', l.name]);
+            if (l.timestamp) rows.push(['Listed', l.timestamp]);
+            const detailRows = rows.map(([k, v]) => `<div class="ld-row"><span>${escapeHtml(k)}</span><strong>${escapeHtml(v)}</strong></div>`).join('');
+            document.getElementById('ldContent').innerHTML = `${gallery}<h3 style="margin:10px 0 4px">${escapeHtml(l.title)}</h3>${l.description ? `<p style="font-size:.82rem;color:var(--mt);margin-bottom:8px">${escapeHtml(l.description)}</p>` : ''}<div class="ld-rows">${detailRows}</div><button class="btn btn-pr" style="width:100%;margin-top:12px" onclick="closeMo('moListingDetail');openChatWith('${String(l.name).replace(/'/g, "\\'")}')">💬 Chat with Seller</button>`;
+            openMo('moListingDetail');
         }
         function assignmentCardHTML(a) {
             const isR = a.role === 'requester'; const d = gs();
@@ -2647,28 +2726,66 @@
             }).join('') : '<div style="color:var(--mt);font-size:.82rem">No listings yet.</div>';
         }
 
-        // ===== FILTERS — price range, location, type (new/used/notes), plus existing category tags =====
+        // ===== FILTERS — price range, location (text OR live-location radius), type, plus existing category tags =====
+        let searchLatLng = null;
         function applyFilters() {
             const priceMin = parseFloat(document.getElementById('fltPriceMin')?.value) || 0;
             const priceMax = parseFloat(document.getElementById('fltPriceMax')?.value) || Infinity;
             const loc = (document.getElementById('fltLocation')?.value || '').trim().toLowerCase();
+            const radius = parseFloat(document.getElementById('fltRadius')?.value) || 0;
             const type = document.querySelector('#fltType .stag.on')?.dataset.type || 'all';
             const activeStream = document.querySelector('#sf .stag.on')?.getAttribute('onclick')?.match(/fs\(this,'([\w-]+)'\)/)?.[1] || 'all';
+            const useRadius = radius > 0 && searchLatLng;
             document.querySelectorAll('#bookGrid .bk-card[data-id], #notesGrid .bk-card[data-id]').forEach(c => {
                 const price = parseFloat(c.dataset.price) || 0;
                 const city = c.dataset.city || '';
                 const t = c.dataset.type;
                 const okPrice = price >= priceMin && price <= priceMax;
-                const okLoc = !loc || city.includes(loc);
+                let okLoc;
+                if (useRadius) {
+                    const lat = parseFloat(c.dataset.lat), lng = parseFloat(c.dataset.lng);
+                    okLoc = !isNaN(lat) && !isNaN(lng) && haversineKm(searchLatLng.lat, searchLatLng.lng, lat, lng) <= radius;
+                } else { okLoc = !loc || city.includes(loc); }
                 const okType = type === 'all' || t === type;
                 const okStream = activeStream === 'all' || c.dataset.stream === activeStream;
                 c.style.display = (okPrice && okLoc && okType && okStream) ? '' : 'none';
             });
         }
+        function geoErrorMsg(err) {
+            if (err.code === 1) return '⚠️ Location permission blocked. Tap the 🔒/ℹ️ icon next to the address bar → Site settings → Location → Allow, then try again.';
+            if (err.code === 3) return '⚠️ Location timed out — try again (works better outdoors/near a window), or just type your city.';
+            return '⚠️ Could not get location (' + (err.message || 'unknown error') + '). You can type your city manually instead.';
+        }
+        function useMyLocationForSearch() {
+            const status = document.getElementById('fltLocStatus');
+            if (!navigator.geolocation) { status.textContent = '⚠️ Location not supported by this browser.'; return; }
+            status.textContent = '⏳ Getting your location...';
+            navigator.geolocation.getCurrentPosition(async pos => {
+                searchLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                if (document.getElementById('fltRadius').value === '0') document.getElementById('fltRadius').value = '5';
+                status.textContent = '✅ Using your live location';
+                const place = await reverseGeocode(searchLatLng.lat, searchLatLng.lng);
+                if (place) document.getElementById('fltLocation').value = place;
+                applyFilters();
+            }, err => { status.textContent = geoErrorMsg(err); }, { timeout: 15000, maximumAge: 300000, enableHighAccuracy: false });
+        }
+        async function onFltLocationTyped() {
+            searchLatLng = null; // manual typing overrides any previous live location until re-geocoded
+            debounceFilter();
+            const text = document.getElementById('fltLocation').value.trim();
+            const radius = parseFloat(document.getElementById('fltRadius')?.value) || 0;
+            if (text.length > 2 && radius > 0) {
+                document.getElementById('fltLocStatus').textContent = '⏳ Locating "' + text + '"...';
+                const geo = await geocodeCity(text);
+                if (geo) { searchLatLng = geo; document.getElementById('fltLocStatus').textContent = '✅ Found ' + text; applyFilters(); }
+                else document.getElementById('fltLocStatus').textContent = '⚠️ Could not locate — showing text match instead.';
+            }
+        }
         function setTypeFilter(el) { document.querySelectorAll('#fltType .stag').forEach(t => t.classList.remove('on')); el.classList.add('on'); applyFilters(); }
         let fltDebounce;
         function debounceFilter() { clearTimeout(fltDebounce); fltDebounce = setTimeout(applyFilters, 180); }
         function clearFilters() {
+            searchLatLng = null; document.getElementById('fltRadius').value = '0'; document.getElementById('fltLocStatus').textContent = '';
             const pm = document.getElementById('fltPriceMin'), px = document.getElementById('fltPriceMax'), loc = document.getElementById('fltLocation');
             if (pm) pm.value = ''; if (px) px.value = ''; if (loc) loc.value = '';
             document.querySelectorAll('#fltType .stag').forEach((t, i) => t.classList.toggle('on', i === 0));
@@ -2716,32 +2833,92 @@
             const map = { 'bsc cs': 'bsc-cs', 'bsc non-medical': 'bsc-nm', 'ba': 'ba', 'bca': 'bca', 'bba': 'bba', 'bcom': 'bcom', 'btech': 'btech', 'msc': 'msc', 'mca': 'msc', 'mba': 'msc' };
             return map[course] || 'other';
         }
+        function computeLevelSubject() {
+            const lvl = document.getElementById('levelSel').value;
+            if (lvl === 'school') return { subject: document.getElementById('schoolSubject').value.trim(), levelInfo: document.getElementById('schoolClass').value };
+            if (lvl === 'college') return { subject: document.getElementById('collegeSubject').value.trim(), levelInfo: document.getElementById('collegeSem').value };
+            if (lvl === 'competitive') return { subject: document.getElementById('compExam').value.trim(), levelInfo: '' };
+            if (lvl === 'other') return { subject: document.getElementById('othDesc').value.trim(), levelInfo: '' };
+            return { subject: '', levelInfo: '' };
+        }
+
+        // ===== LIVE LOCATION + GEOCODING (OpenStreetMap Nominatim — free, no key needed) =====
+        let listingLatLng = null;
+        function useMyLocation(targetStatusId, targetCityId, onDone) {
+            targetStatusId = targetStatusId || 'listLocStatus'; targetCityId = targetCityId || 'listCity';
+            const status = document.getElementById(targetStatusId);
+            if (!navigator.geolocation) { status.textContent = '⚠️ Location not supported by this browser.'; return; }
+            status.textContent = '⏳ Getting your location...';
+            navigator.geolocation.getCurrentPosition(async pos => {
+                const ll = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                if (targetStatusId === 'listLocStatus') listingLatLng = ll;
+                status.innerHTML = '✅ Location captured!';
+                const cityInput = document.getElementById(targetCityId);
+                if (cityInput && !cityInput.value.trim()) { try { const place = await reverseGeocode(ll.lat, ll.lng); if (place) cityInput.value = place; } catch { } }
+                if (onDone) onDone(ll);
+            }, err => { status.textContent = geoErrorMsg(err); }, { timeout: 15000, maximumAge: 300000, enableHighAccuracy: false });
+        }
+        async function reverseGeocode(lat, lng) {
+            try { const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`); const d = await r.json(); return d.address?.city || d.address?.town || d.address?.village || d.address?.county || ''; } catch { return ''; }
+        }
+        async function geocodeCity(cityText) {
+            try { const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityText)}&limit=1`); const d = await r.json(); if (d && d[0]) return { lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon) }; } catch { }
+            return null;
+        }
+        function haversineKm(lat1, lng1, lat2, lng2) {
+            const R = 6371, dLat = (lat2 - lat1) * Math.PI / 180, dLng = (lng2 - lng1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLng / 2) ** 2;
+            return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        }
+
+        // ===== PHOTO PICKER — accumulates photos one at a time (works with camera OR gallery multi-select) =====
+        let selectedPhotoFiles = [];
+        function resetPhotoPicker() { selectedPhotoFiles = []; renderPhotoPicker(); const inp = document.getElementById('listPhoto'); if (inp) inp.value = ''; }
+        function onPhotoFilesPicked(input) {
+            const files = Array.from(input.files || []);
+            for (const f of files) { if (selectedPhotoFiles.length >= 4) break; selectedPhotoFiles.push(f); }
+            input.value = '';
+            renderPhotoPicker();
+        }
+        function removePhotoAt(idx) { selectedPhotoFiles.splice(idx, 1); renderPhotoPicker(); }
+        function renderPhotoPicker() {
+            const box = document.getElementById('photoPicker'); if (!box) return;
+            let html = selectedPhotoFiles.map((f, i) => `<div class="ph-thumb"><img src="${URL.createObjectURL(f)}" /><button type="button" onclick="removePhotoAt(${i})">✕</button></div>`).join('');
+            if (selectedPhotoFiles.length < 4) html += `<div class="ph-add" onclick="document.getElementById('listPhoto').click()"><span>+</span><small>${selectedPhotoFiles.length ? 'Add more' : 'Add photos'}</small></div>`;
+            box.innerHTML = html;
+        }
+
         async function submitListing() {
             const d = gs();
             if (!document.getElementById('listType').value || !document.getElementById('levelSel').value) { notify('⚠️ Select listing type and level!'); return; }
             if (!d.current) { document.getElementById('premR').classList.remove('hide'); openMo('moReg'); return; }
             if (!d.current.plan || d.current.plan === 'Free') { document.getElementById('premR').classList.remove('hide'); notify('🔒 Premium required!'); setTimeout(() => go('pricing'), 1100); return; }
             const t = document.getElementById('listType').value;
-            let price = '';
+            let price = '', condition = '', author = '';
             if (t === 'used-book') {
                 const o = parseFloat(document.getElementById('origP').value) || 0, s = parseFloat(document.getElementById('sellP').value) || 0;
                 if (o > 0 && s >= o * .6) { notify('⚠️ Price must be below 60% MRP! Max: ₹' + Math.floor(o * .6)); return; }
-                price = s;
-            } else if (t === 'new-book') { price = parseFloat(document.getElementById('newP').value) || ''; }
+                price = s; condition = document.getElementById('condSel').value; author = document.getElementById('bookAuthor').value.trim();
+            } else if (t === 'new-book') { price = parseFloat(document.getElementById('newP').value) || ''; condition = document.getElementById('condSel').value; author = document.getElementById('bookAuthor').value.trim(); }
             else if (t === 'notes') { price = parseFloat(document.getElementById('notesP').value) || ''; }
+            const city = document.getElementById('listCity').value.trim();
             const addr = document.getElementById('listAddr').value.trim();
-            if (!addr) { notify('⚠️ Please enter your address!'); return; }
+            if (!city) { notify('⚠️ Please enter your city/town!'); return; }
             setBtn('submitListBtn', true, 'Submitting...');
             const title = (t === 'notes' ? document.getElementById('notesTitle').value : document.getElementById('bkTitle').value) || '—';
-            const city = addr.split(',')[2]?.trim() || addr.split(',')[0]?.trim() || '—';
             const stream = computeStream();
+            const { subject, levelInfo } = computeLevelSubject();
+            const description = document.getElementById('listDesc').value.trim();
+            let lat = '', lng = '';
+            if (listingLatLng) { lat = listingLatLng.lat; lng = listingLatLng.lng; }
+            else { const geo = await geocodeCity(city); if (geo) { lat = geo.lat; lng = geo.lng; } }
             let photo = '';
-            const photoFiles = Array.from(document.getElementById('listPhoto')?.files || []).slice(0, 4);
-            if (photoFiles.length) { try { const imgs = (await Promise.all(photoFiles.map(f => resizeImage(f, 260, 0.5)))).filter(Boolean); photo = JSON.stringify(capPhotosToSheetLimit(imgs)); } catch { } }
-            const row = { name: d.current.name, mobile: d.current.mobile, type: t, title, price, city, address: addr, photo, stream };
+            if (selectedPhotoFiles.length) { try { const imgs = (await Promise.all(selectedPhotoFiles.map(f => resizeImage(f, 260, 0.5)))).filter(Boolean); photo = JSON.stringify(capPhotosToSheetLimit(imgs)); } catch { } }
+            const row = { name: d.current.name, mobile: d.current.mobile, type: t, title, price, city, address: addr, lat, lng, photo, stream, condition, author, subject, levelInfo, description };
             const r = await api('append', { sheet: 'Listings', row });
             setBtn('submitListBtn', false, '📤 Submit Listing');
             if (r.error) { notify('⚠️ ' + r.error); return; }
+            resetPhotoPicker(); listingLatLng = null; document.getElementById('listLocStatus').textContent = '';
             const listCount = ((d.current.listCount) || 0) + 1; d.current.listCount = listCount; ss(d);
             const ord = ['1st', '2nd', '3rd', '4th', '5th'][Math.min(listCount - 1, 4)] || listCount + 'th';
             notify(`📤 Listing saved! 🏆 ${ord} listing.`);
@@ -3015,7 +3192,7 @@
         }
 
         // ===== INIT =====
-        renderProfile(); loadPublicData();
+        renderProfile(); loadPublicData(); renderPhotoPicker();
     </script>
 </body>
 
