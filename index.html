@@ -2201,17 +2201,29 @@
                         Web app → Execute as: <strong>Me</strong> → Who has access: <strong>Anyone</strong> → Deploy →
                         copy the <code style="background:#ede9fe;padding:1px 5px;border-radius:4px">/exec</code> URL
                     </div>
-                    <div class="fg" style="margin-top:10px"><label>Paste Web App URL</label><input type="text"
+                    <div class="pend-warn" style="margin-top:8px"><strong>⚠️ Step 5 — the important one:</strong> open
+                        <code style="background:#fff;padding:1px 5px;border-radius:4px">index.html</code> in your
+                        GitHub repo and paste this same URL into <code
+                            style="background:#fff;padding:1px 5px;border-radius:4px">DEFAULT_SHEET_URL</code> near
+                        the top of the <code style="background:#fff;padding:1px 5px;border-radius:4px">&lt;script&gt;</code>
+                        tag, then commit. The box below only saves the URL for <em>this one browser</em> — useful for
+                        quickly testing the connection, but every other visitor still needs the URL to be inside the
+                        file itself.</div>
+                    <div class="fg" style="margin-top:10px"><label>Paste Web App URL (to test in this browser)</label><input type="text"
                             id="sheetUrl" placeholder="https://script.google.com/macros/s/.../exec" /></div>
-                    <button class="btn btn-pr" onclick="saveSheetUrl()">💾 Save & Connect</button>
+                    <button class="btn btn-pr" onclick="saveSheetUrl()">💾 Save & Test</button>
                     <div id="sheetStatus" style="margin-top:7px;font-size:.81rem"></div>
                 </div>
                 <div class="card" style="margin-top:14px">
                     <h4 style="color:var(--pr);margin-bottom:12px">⚡ Razorpay Auto-Checkout</h4>
                     <div style="font-size:.82rem;line-height:1.8">Paste your Razorpay <strong>Key ID</strong> below
-                        (starts with <code style="background:#ede9fe;padding:1px 5px;border-radius:4px">rzp_</code>).
-                        This is public and safe to store here. Your <strong>Key Secret</strong> only ever goes in
-                        Apps Script Script Properties above — never here, never in GitHub.</div>
+                        (starts with <code style="background:#ede9fe;padding:1px 5px;border-radius:4px">rzp_</code>)
+                        to test in this browser — then also paste it into <code
+                            style="background:#ede9fe;padding:1px 5px;border-radius:4px">DEFAULT_RAZORPAY_KEY</code>
+                        in <code style="background:#ede9fe;padding:1px 5px;border-radius:4px">index.html</code> so
+                        every visitor gets it. This Key ID is public and safe to store in the file. Your <strong>Key
+                            Secret</strong> only ever goes in Apps Script Script Properties above — never here, never
+                        in GitHub.</div>
                     <div class="fg" style="margin-top:10px"><label>Razorpay Key ID</label><input type="text"
                             id="rzpKey" placeholder="rzp_live_xxxxxxxxxxxx" /></div>
                     <button class="btn btn-pr" onclick="saveRzpKey()">💾 Save Key</button>
@@ -2401,16 +2413,33 @@
         const SK = 'sb_v4';
         const CACHE_KEY = 'sb_cache_v1';
 
-        // ===== BACKEND CONFIG =====
-        let SHEET_URL = localStorage.getItem('https://supabase.com/dashboard/project/mcxbsexojqcelblhmfek/settings/integrations') || '';
-        let RAZORPAY_KEY = localStorage.getItem('sb_publishable_G17ueocSrHWEioypvj1Z2A_0ogavw-2') || '';
+        // ==========================================================================
+        // ===== SITE CONFIG — EDIT THESE TWO LINES ONCE AFTER YOU DEPLOY Code.gs =====
+        // This is what makes the backend work for EVERY visitor, not just your own
+        // browser. Paste your real values between the quotes below, save, commit.
+        // DEFAULT_SHEET_URL   → your Apps Script Web app URL, ends in /exec
+        // DEFAULT_RAZORPAY_KEY → your Razorpay Key ID (starts with rzp_) — this is
+        //                        public/safe. NEVER put your Key Secret here or
+        //                        anywhere in this file — that only goes in Apps
+        //                        Script's Script Properties.
+        // ==========================================================================
+        const DEFAULT_SHEET_URL = '';
+        const DEFAULT_RAZORPAY_KEY = '';
+        // ==========================================================================
+
+        // ===== BACKEND CONFIG — the Owner Panel below can override these per-browser
+        // for quick testing, but the DEFAULT_* values above are what every normal
+        // visitor actually gets. =====
+        let SHEET_URL = localStorage.getItem('sb_sheet_url') || DEFAULT_SHEET_URL;
+        let RAZORPAY_KEY = localStorage.getItem('sb_rzp_key') || DEFAULT_RAZORPAY_KEY;
         window.addEventListener('load', () => {
             const el = document.getElementById('sheetUrl'); if (el && SHEET_URL) el.value = SHEET_URL;
             const rk = document.getElementById('rzpKey'); if (rk && RAZORPAY_KEY) rk.value = RAZORPAY_KEY;
+            if (!DEFAULT_SHEET_URL && document.getElementById('sheetStatus')) document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--warn)">⚠️ DEFAULT_SHEET_URL is still empty in index.html — only this browser will work until you edit that line.</span>';
         });
-        function saveSheetUrl() { const u = document.getElementById('sheetUrl').value.trim(); if (!u) { notify('⚠️ Enter URL!'); return; } SHEET_URL = u; localStorage.setItem('sb_sheet_url', u); document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--ok)">✅ Saved! Testing...</span>'; testSheet(); }
-        async function testSheet() { try { const r = await fetch(SHEET_URL); const d = await r.json(); document.getElementById('sheetStatus').innerHTML = d.status ? '<span style="color:var(--ok)">✅ Connected!</span>' : '<span style="color:var(--er)">❌ Unexpected response.</span>'; } catch { document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--er)">❌ Failed. Re-deploy as Web App → Anyone.</span>'; } }
-        function saveRzpKey() { const k = document.getElementById('rzpKey').value.trim(); if (!k) { notify('⚠️ Enter Key ID!'); return; } RAZORPAY_KEY = k; localStorage.setItem('sb_rzp_key', k); notify('✅ Razorpay Key ID saved!'); }
+        function saveSheetUrl() { const u = document.getElementById('sheetUrl').value.trim(); if (!u) { notify('⚠️ Enter URL!'); return; } SHEET_URL = u; localStorage.setItem('sb_sheet_url', u); document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--ok)">✅ Saved for THIS browser! Testing...</span>'; testSheet(); }
+        async function testSheet() { try { const r = await fetch(SHEET_URL); const d = await r.json(); document.getElementById('sheetStatus').innerHTML = d.status ? '<span style="color:var(--ok)">✅ Connected! Remember to also paste this into DEFAULT_SHEET_URL in index.html so every visitor gets it, not just you.</span>' : '<span style="color:var(--er)">❌ Unexpected response.</span>'; } catch { document.getElementById('sheetStatus').innerHTML = '<span style="color:var(--er)">❌ Failed. Re-deploy as Web App → Anyone.</span>'; } }
+        function saveRzpKey() { const k = document.getElementById('rzpKey').value.trim(); if (!k) { notify('⚠️ Enter Key ID!'); return; } RAZORPAY_KEY = k; localStorage.setItem('sb_rzp_key', k); notify('✅ Saved for this browser — also paste into DEFAULT_RAZORPAY_KEY in index.html for all visitors.'); }
 
         // ===== API HELPER — talks to Apps Script, times out instead of hanging forever =====
         async function api(action, payload, timeoutMs) {
