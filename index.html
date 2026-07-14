@@ -1664,7 +1664,7 @@
                         <button type="button" class="btn btn-sc btn-xs" onclick="useMyLocationForSearch()"
                             title="Use my current location">📍</button>
                     </div>
-                    <select id="fltRadius" onchange="applyFilters()" style="margin-top:5px;width:100%">
+                    <select id="fltRadius" onchange="onFltRadiusChanged()" style="margin-top:5px;width:100%">
                         <option value="0">Any distance</option>
                         <option value="1">Within 1 km</option>
                         <option value="2">Within 2 km</option>
@@ -2375,15 +2375,11 @@
     <div class="mo" id="moLogin">
         <div class="mo-box">
             <button class="mo-close" onclick="closeMo('moLogin')">×</button>
-            <h3>🔐 Login to StudyBazaar</h3>
+            <h3>🎓 Student / User Login</h3>
             <div class="fg"><label>Mobile Number or Email *</label><input type="text" id="liId"
                     placeholder="Your registered mobile or email" /></div>
             <div class="fg"><label>Password *</label><input type="password" id="liPw" placeholder="Your password" />
             </div>
-            <div class="fg"><label>Login as</label><select id="liRole">
-                    <option value="student">🎓 Student / User</option>
-                    <option value="owner">🛡️ Admin / Owner</option>
-                </select></div>
             <div id="liDeviceWarn" class="hide"
                 style="background:#fef2f2;border:1.5px solid #fca5a5;border-radius:8px;padding:9px 12px;font-size:.79rem;color:#991b1b;margin-bottom:10px">
                 ⚠️ <strong>Account already active on another device.</strong> Logging in here will log out the other
@@ -2393,6 +2389,38 @@
             <p style="text-align:center;margin-top:10px;font-size:.81rem;color:var(--mt)">No account? <a
                     onclick="closeMo('moLogin');openMo('moReg')"
                     style="color:var(--pr);cursor:pointer;font-weight:700">Register Free →</a></p>
+            <p style="text-align:center;margin-top:4px;font-size:.79rem"><a
+                    onclick="closeMo('moLogin');openMo('moForgotPw')"
+                    style="color:var(--mt);cursor:pointer;text-decoration:underline">Forgot password?</a></p>
+        </div>
+    </div>
+
+    <!-- FORGOT PASSWORD — students/users only -->
+    <div class="mo" id="moForgotPw">
+        <div class="mo-box">
+            <button class="mo-close" onclick="closeMo('moForgotPw')">×</button>
+            <h3>🔑 Reset Password</h3>
+            <p style="font-size:.81rem;color:var(--mt);margin-bottom:10px">Old passwords can't be shown to anyone —
+                not even the owner — since they're securely encrypted. Verify it's really you below, and set a new
+                one instead.</p>
+            <div class="fg"><label>Registered Mobile *</label><input type="text" id="fpMobile" placeholder="10-digit mobile" /></div>
+            <div class="fg"><label>Registered Email *</label><input type="email" id="fpEmail" placeholder="Your registered email" /></div>
+            <div class="fg"><label>New Password *</label><input type="password" id="fpNewPw" placeholder="At least 4 characters" /></div>
+            <button class="btn btn-pr" style="width:100%" id="fpBtn" onclick="doForgotPassword()">Reset Password</button>
+        </div>
+    </div>
+
+    <!-- OWNER LOGIN — completely separate from student/user login, only reachable via the footer 🛡️ Owner link -->
+    <div class="mo" id="moOwnerLogin">
+        <div class="mo-box">
+            <button class="mo-close" onclick="closeMo('moOwnerLogin')">×</button>
+            <h3>🛡️ Owner / Admin Login</h3>
+            <p style="font-size:.81rem;color:var(--mt);margin-bottom:10px">This is separate from your student
+                account — only the site owner should be here.</p>
+            <div class="fg"><label>Admin Password *</label><input type="password" id="ownPw"
+                    placeholder="Admin password" onkeydown="if(event.key==='Enter')doOwnerLogin()" /></div>
+            <button class="btn btn-pr" style="width:100%" id="ownLoginBtn" onclick="doOwnerLogin()">Login as
+                Owner</button>
         </div>
     </div>
 
@@ -2545,24 +2573,14 @@
         function notify(msg) { const n = document.getElementById('notif'); n.textContent = msg; n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 3800); }
         function setBtn(id, loading, text) { const b = document.getElementById(id); if (!b) return; b.disabled = loading; b.innerHTML = loading ? `<span class="spinner"></span>Please wait...` : text; }
         function genToken() { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
-        function ownerAccess() { document.getElementById('liRole').value = 'owner'; openMo('moLogin'); }
+        function ownerAccess() { document.getElementById('ownPw').value = ''; openMo('moOwnerLogin'); }
 
-        // ===== LOGIN =====
+        // ===== LOGIN (students/users only — owner has a separate login, see doOwnerLogin) =====
         async function doLogin() {
             const id = document.getElementById('liId').value.trim();
             const pw = document.getElementById('liPw').value;
-            const role = document.getElementById('liRole').value;
             if (!id || !pw) { notify('⚠️ Enter your credentials!'); return; }
-            const btn = document.getElementById('loginBtn'); setBtn('loginBtn', true, 'Login');
-            if (role === 'owner') {
-                const r = await api('verifyAdmin', { password: pw });
-                setBtn('loginBtn', false, 'Login');
-                if (r.ok) {
-                    adminPwCache = pw; const d = gs(); d.isOwner = true; ss(d);
-                    closeMo('moLogin'); notify('🛡️ Owner login successful!'); setTimeout(() => go('admin'), 500);
-                } else notify('⚠️ ' + (r.error || 'Invalid admin password!'));
-                return;
-            }
+            setBtn('loginBtn', true, 'Login');
             const r = await api('login', { id, password: pw });
             setBtn('loginBtn', false, 'Login');
             if (r.error || !r.user) { notify('⚠️ ' + (r.error || 'Invalid mobile/email or password!')); return; }
@@ -2571,7 +2589,36 @@
             notify(`Welcome back, ${r.user.name}! 👋`);
         }
 
+        // ===== FORGOT PASSWORD — verifies mobile+email match, then sets a brand new password.
+        // Old passwords are hashed and can never be looked up/recovered — this is by design. =====
+        async function doForgotPassword() {
+            const mobile = document.getElementById('fpMobile').value.trim();
+            const email = document.getElementById('fpEmail').value.trim();
+            const newPw = document.getElementById('fpNewPw').value;
+            if (!mobile || !email || !newPw) { notify('⚠️ Fill all fields!'); return; }
+            if (newPw.length < 4) { notify('⚠️ New password must be at least 4 characters!'); return; }
+            setBtn('fpBtn', true, 'Resetting...');
+            const r = await api('resetPassword', { mobile, email, newPassword: newPw });
+            setBtn('fpBtn', false, 'Reset Password');
+            if (r.error) { notify('⚠️ ' + r.error); return; }
+            closeMo('moForgotPw'); notify('✅ Password reset! You can log in with your new password now.');
+            document.getElementById('liId').value = mobile;
+        }
+
+        // ===== OWNER LOGIN (separate flow — only reachable via the footer "🛡️ Owner" link) =====
+        async function doOwnerLogin() {
+            const pw = document.getElementById('ownPw').value;
+            if (!pw) { notify('⚠️ Enter the admin password!'); return; }
+            setBtn('ownLoginBtn', true, 'Login');
+            const r = await api('verifyAdmin', { password: pw });
+            setBtn('ownLoginBtn', false, 'Login');
+            if (!r.ok) { notify('⚠️ ' + (r.error || 'Invalid admin password!')); return; }
+            adminPwCache = pw; const d = gs(); d.isOwner = true; ss(d);
+            closeMo('moOwnerLogin'); notify('🛡️ Owner login successful!'); setTimeout(() => go('admin'), 400);
+        }
+
         // ===== REGISTER =====
+        function isValidEmail(email) { return /^[^\s@]+@[^\s@]+\.[a-zA-Z]{2,}$/.test(email); }
         async function doRegister() {
             const name = document.getElementById('rName').value.trim();
             const mobile = document.getElementById('rMobile').value.trim();
@@ -2583,11 +2630,12 @@
             const pw = document.getElementById('rPw').value;
             if (!name || !mobile || !email || !dob || !addr || !inst || !aadhar || !pw) { notify('⚠️ All fields are required!'); return; }
             if (!/^\d{10}$/.test(mobile)) { notify('⚠️ Enter valid 10-digit mobile!'); return; }
+            if (!isValidEmail(email)) { notify('⚠️ Enter a valid email address!'); return; }
             setBtn('regBtn', true, 'Creating...');
             let profilePic = '';
             const picFile = document.getElementById('rPic').files[0];
             if (picFile) { try { profilePic = await resizeImage(picFile); } catch { } }
-            const city = addr.split(',')[2]?.trim() || addr.split(',')[0]?.trim() || '—';
+            const city = addr.split(',').pop()?.trim() || addr.trim() || '—';
             const r = await api('register', { name, mobile, email, dob, address: addr, city, institution: inst, aadhar, password: pw, profilePic });
             setBtn('regBtn', false, 'Create Account');
             if (r.error || !r.user) { notify('⚠️ ' + (r.error || 'Registration failed. Try again.')); return; }
@@ -2759,27 +2807,34 @@
         function useMyLocationForSearch() {
             const status = document.getElementById('fltLocStatus');
             if (!navigator.geolocation) { status.textContent = '⚠️ Location not supported by this browser.'; return; }
-            status.textContent = '⏳ Getting your location...';
+            status.textContent = '⏳ Getting your precise location...';
             navigator.geolocation.getCurrentPosition(async pos => {
                 searchLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
                 if (document.getElementById('fltRadius').value === '0') document.getElementById('fltRadius').value = '5';
-                status.textContent = '✅ Using your live location';
+                const acc = Math.round(pos.coords.accuracy || 0);
                 const place = await reverseGeocode(searchLatLng.lat, searchLatLng.lng);
                 if (place) document.getElementById('fltLocation').value = place;
+                status.textContent = `✅ Located${place ? ' near ' + place : ''} (accuracy ~${acc}m)`;
                 applyFilters();
-            }, err => { status.textContent = geoErrorMsg(err); }, { timeout: 15000, maximumAge: 300000, enableHighAccuracy: false });
+            }, err => { status.textContent = geoErrorMsg(err); }, { timeout: 20000, maximumAge: 60000, enableHighAccuracy: true });
         }
-        async function onFltLocationTyped() {
-            searchLatLng = null; // manual typing overrides any previous live location until re-geocoded
+        function onFltLocationTyped() {
+            searchLatLng = null; // typing switches back to plain text matching until radius is explicitly (re)applied
+            document.getElementById('fltLocStatus').textContent = '';
             debounceFilter();
-            const text = document.getElementById('fltLocation').value.trim();
+        }
+        async function onFltRadiusChanged() {
             const radius = parseFloat(document.getElementById('fltRadius')?.value) || 0;
-            if (text.length > 2 && radius > 0) {
-                document.getElementById('fltLocStatus').textContent = '⏳ Locating "' + text + '"...';
-                const geo = await geocodeCity(text);
-                if (geo) { searchLatLng = geo; document.getElementById('fltLocStatus').textContent = '✅ Found ' + text; applyFilters(); }
-                else document.getElementById('fltLocStatus').textContent = '⚠️ Could not locate — showing text match instead.';
-            }
+            const status = document.getElementById('fltLocStatus');
+            if (radius === 0) { searchLatLng = null; status.textContent = ''; applyFilters(); return; }
+            if (searchLatLng) { applyFilters(); return; } // already have a location fix (from the 📍 button)
+            const text = document.getElementById('fltLocation').value.trim();
+            if (!text) { status.textContent = '⚠️ Type a city/area above, or tap 📍, then pick a distance.'; applyFilters(); return; }
+            status.textContent = '⏳ Locating "' + text + '"...';
+            const geo = await geocodeCity(text);
+            if (geo) { searchLatLng = geo; status.textContent = '✅ Searching within ' + radius + 'km of ' + text; }
+            else status.textContent = '⚠️ Could not locate "' + text + '" — showing text match instead.';
+            applyFilters();
         }
         function setTypeFilter(el) { document.querySelectorAll('#fltType .stag').forEach(t => t.classList.remove('on')); el.classList.add('on'); applyFilters(); }
         let fltDebounce;
@@ -2848,21 +2903,33 @@
             targetStatusId = targetStatusId || 'listLocStatus'; targetCityId = targetCityId || 'listCity';
             const status = document.getElementById(targetStatusId);
             if (!navigator.geolocation) { status.textContent = '⚠️ Location not supported by this browser.'; return; }
-            status.textContent = '⏳ Getting your location...';
+            status.textContent = '⏳ Getting your precise location...';
             navigator.geolocation.getCurrentPosition(async pos => {
                 const ll = { lat: pos.coords.latitude, lng: pos.coords.longitude };
                 if (targetStatusId === 'listLocStatus') listingLatLng = ll;
-                status.innerHTML = '✅ Location captured!';
+                const acc = Math.round(pos.coords.accuracy || 0);
                 const cityInput = document.getElementById(targetCityId);
-                if (cityInput && !cityInput.value.trim()) { try { const place = await reverseGeocode(ll.lat, ll.lng); if (place) cityInput.value = place; } catch { } }
+                let place = '';
+                try { place = await reverseGeocode(ll.lat, ll.lng); } catch { }
+                if (place && cityInput) cityInput.value = place; // always sync city to the detected place so it matches what buyers search
+                status.innerHTML = `✅ Location captured${place ? ' — ' + place : ''} (accuracy ~${acc}m). Please double-check the City field above is correct.`;
                 if (onDone) onDone(ll);
-            }, err => { status.textContent = geoErrorMsg(err); }, { timeout: 15000, maximumAge: 300000, enableHighAccuracy: false });
+            }, err => { status.textContent = geoErrorMsg(err); }, { timeout: 20000, maximumAge: 60000, enableHighAccuracy: true });
         }
         async function reverseGeocode(lat, lng) {
-            try { const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12`); const d = await r.json(); return d.address?.city || d.address?.town || d.address?.village || d.address?.county || ''; } catch { return ''; }
+            try {
+                const r = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=12&addressdetails=1`, { headers: { 'Accept-Language': 'en' } });
+                const d = await r.json();
+                return d.address?.city || d.address?.town || d.address?.municipality || d.address?.village || d.address?.county || '';
+            } catch { return ''; }
         }
         async function geocodeCity(cityText) {
-            try { const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityText)}&limit=1`); const d = await r.json(); if (d && d[0]) return { lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon) }; } catch { }
+            try {
+                const q = /india/i.test(cityText) ? cityText : cityText + ', India';
+                const r = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&countrycodes=in&limit=1`, { headers: { 'Accept-Language': 'en' } });
+                const d = await r.json();
+                if (d && d[0]) return { lat: parseFloat(d[0].lat), lng: parseFloat(d[0].lon) };
+            } catch { }
             return null;
         }
         function haversineKm(lat1, lng1, lat2, lng2) {
@@ -2956,12 +3023,14 @@
         // ===== REPORT =====
         async function submitReport() {
             const desc = document.getElementById('repDesc').value.trim(); if (!desc) { notify('⚠️ Describe what happened!'); return; }
+            const repEmail = document.getElementById('repEmail').value.trim();
+            if (repEmail && !isValidEmail(repEmail)) { notify('⚠️ Enter a valid email address (or leave it blank)!'); return; }
             setBtn('repBtn', true, 'Submitting...');
-            const row = { type: document.getElementById('repType').value, reported: document.getElementById('repUser').value, amount: document.getElementById('repAmt').value, desc, email: document.getElementById('repEmail').value };
+            const row = { type: document.getElementById('repType').value, reported: document.getElementById('repUser').value, amount: document.getElementById('repAmt').value, desc, email: repEmail };
             await api('append', { sheet: 'Reports', row });
             setBtn('repBtn', false, '🚨 Submit Report');
             notify('🚨 Report submitted! Team reviews within 24h.');
-            document.getElementById('repDesc').value = '';
+            document.getElementById('repDesc').value = ''; document.getElementById('repEmail').value = '';
         }
 
         // ===== PAYMENT — Razorpay auto checkout. Amount is decided by the SERVER from the plan name —
