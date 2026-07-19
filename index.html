@@ -421,6 +421,7 @@
             position: absolute;
             top: 7px;
             right: 7px;
+            z-index: 5;
             background: rgba(255, 255, 255, .9);
             border: none;
             border-radius: 50%;
@@ -2812,10 +2813,9 @@
                 searchLatLng = { lat: pos.coords.latitude, lng: pos.coords.longitude };
                 if (document.getElementById('fltRadius').value === '0') document.getElementById('fltRadius').value = '5';
                 const acc = Math.round(pos.coords.accuracy || 0);
-                const place = await reverseGeocode(searchLatLng.lat, searchLatLng.lng);
-                if (place) document.getElementById('fltLocation').value = place;
-                status.textContent = `✅ Located${place ? ' near ' + place : ''} (accuracy ~${acc}m)`;
+                status.textContent = `✅ Got your location (accuracy ~${acc}m) — searching nearby listings now.`;
                 applyFilters();
+                reverseGeocode(searchLatLng.lat, searchLatLng.lng).then(place => { if (place) status.textContent += ` Detected area: ${place}.`; });
             }, err => { status.textContent = geoErrorMsg(err); }, { timeout: 20000, maximumAge: 60000, enableHighAccuracy: true });
         }
         function onFltLocationTyped() {
@@ -2908,12 +2908,12 @@
                 const ll = { lat: pos.coords.latitude, lng: pos.coords.longitude };
                 if (targetStatusId === 'listLocStatus') listingLatLng = ll;
                 const acc = Math.round(pos.coords.accuracy || 0);
-                const cityInput = document.getElementById(targetCityId);
-                let place = '';
-                try { place = await reverseGeocode(ll.lat, ll.lng); } catch { }
-                if (place && cityInput) cityInput.value = place; // always sync city to the detected place so it matches what buyers search
-                status.innerHTML = `✅ Location captured${place ? ' — ' + place : ''} (accuracy ~${acc}m). Please double-check the City field above is correct.`;
+                status.innerHTML = `✅ GPS location captured (accuracy ~${acc}m). This makes "near me" search work for buyers.`;
                 if (onDone) onDone(ll);
+                const cityInput = document.getElementById(targetCityId);
+                if (cityInput && !cityInput.value.trim()) {
+                    reverseGeocode(ll.lat, ll.lng).then(place => { if (place && !cityInput.value.trim()) { cityInput.value = place; status.innerHTML += ` Suggested city: <strong>${place}</strong> — please double-check it's right.`; } });
+                }
             }, err => { status.textContent = geoErrorMsg(err); }, { timeout: 20000, maximumAge: 60000, enableHighAccuracy: true });
         }
         async function reverseGeocode(lat, lng) {
